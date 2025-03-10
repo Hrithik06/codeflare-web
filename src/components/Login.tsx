@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-
-const Login = (): React.ReactElement => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+import axios from "axios";
+const Login = (): React.JSX.Element => {
+  const [emailId, setEmailId] = useState("Nathan@Drake.com");
+  const [password, setPassword] = useState("Nathan@1234");
+  // const [emailId, setEmailId] = useState("");
+  // const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    console.log("hi");
-    console.log({
-      email,
-      password,
-    });
+    const response = await axios.post(
+      "http://localhost:7777/login",
+      {
+        emailId,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    // localStorage.setItem("userData", JSON.stringify(response.data.data));
+    // localStorage.clear();
   };
 
   return (
@@ -21,8 +30,8 @@ const Login = (): React.ReactElement => {
         type="email"
         className="input"
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={emailId}
+        onChange={(e) => setEmailId(e.target.value)}
       />
 
       <label className="fieldset-label">Password</label>
@@ -36,7 +45,7 @@ const Login = (): React.ReactElement => {
 
       <button
         className="btn btn-primary mt-4 w-1/3 mx-auto"
-        type="submit"
+        type="button"
         onClick={handleLogin}
       >
         Login
