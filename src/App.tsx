@@ -1,10 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router";
-import Body from "./components/Body";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
 import { Provider } from "react-redux";
+
 import appStore from "./utils/appStore";
-import Feed from "./components/Feed";
+import { Body, ErrorPage, Feed, Login, NotFound, Profile } from "./components";
 // import Container from "./Container";
 function App() {
   return (
@@ -18,6 +16,8 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="profile" element={<Profile />} />
               <Route path="/" element={<Feed />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/error" element={<ErrorPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

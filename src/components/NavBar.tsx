@@ -3,6 +3,8 @@ import { RootState } from "../utils/appStore";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import { clearUser } from "../utils/userSlice";
 import { useNavigate } from "react-router";
+import api from "../utils/axiosInstance";
+import { Link } from "react-router";
 
 const NavBar = (): React.ReactElement => {
   const userData = useAppSelector((store: RootState) => store.user.user);
@@ -11,9 +13,14 @@ const NavBar = (): React.ReactElement => {
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const handleLogout = () => {
-    dispatch(clearUser());
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await api.get("/logout", { withCredentials: true });
+      dispatch(clearUser());
+      navigate("/");
+    } catch {
+      navigate("/error");
+    }
   };
   const handleLogin = () => {
     navigate("/login");
@@ -22,7 +29,9 @@ const NavBar = (): React.ReactElement => {
   return (
     <div className="navbar bg-base-100 shadow-sm px-10 ">
       <div className="flex-1">
-        <a className="text-xl">CodeFlare</a>
+        <Link className="text-xl" to="/">
+          CodeFlare
+        </Link>
       </div>
 
       <>
@@ -53,16 +62,16 @@ const NavBar = (): React.ReactElement => {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <a className="justify-between">
+                  <Link className="justify-between" to="/profile">
                     Profile
                     <span className="badge badge-soft badge-primary">New</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a>Settings</a>
                 </li>
                 <li>
-                  <a onClick={handleLogout}>Logout</a>
+                  <p onClick={handleLogout}>Logout</p>
                 </li>
               </ul>
             </div>

@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router";
+
 import { useAppDispatch } from "../utils/hooks";
 import { clearError, setError, setUser } from "../utils/userSlice";
+import api from "../utils/axiosInstance";
 
-import { BASE_URL } from "../utils/constants";
 const Login = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [emailId, setEmailId] = useState("Elesna@Drake.com");
+  const [emailId, setEmailId] = useState("Elena@Drake.com");
   const [password, setPassword] = useState("Elena@1234");
   // const [emailId, setEmailId] = useState("");
   // const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      await axios
+      await api
         .post(
-          `${BASE_URL}/login`,
+          "/login",
           {
             emailId,
             password,
@@ -53,7 +53,7 @@ const Login = (): React.JSX.Element => {
           }
         });
     } catch (err) {
-      console.error("Error: ", err.message);
+      console.error("Error: ", err);
     }
   };
 
