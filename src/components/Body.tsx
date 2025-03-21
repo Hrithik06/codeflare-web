@@ -14,7 +14,6 @@ const Body = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userData = useAppSelector((store: RootState) => store.user.user);
-  console.log(userData);
   const fetchUser = async () => {
     try {
       const res = await api.get(`profile/view`, {
@@ -64,7 +63,7 @@ const Body = (): React.JSX.Element => {
     <div>
       <NavBar />
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -19,24 +19,24 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser(state: UserState, action: PayloadAction<UserInterface>) {
+    setUser: (state: UserState, action: PayloadAction<UserInterface>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
     },
-    clearUser(state: UserState) {
+    clearUser: (state: UserState) => {
       state.user = null;
       state.isAuthenticated = false;
     },
-    setLoading(state: UserState) {
+    setLoading: (state: UserState) => {
       state.loading = true;
     },
-    clearLoading(state: UserState) {
+    clearLoading: (state: UserState) => {
       state.loading = false;
     },
-    setError(state: UserState, action: PayloadAction<string>) {
+    setError: (state: UserState, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
-    clearError(state: UserState) {
+    clearError: (state: UserState) => {
       state.error = null;
     },
   },

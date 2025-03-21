@@ -6,5 +6,16 @@ import Login from "./Login";
 import NavBar from "./NavBar";
 import NotFound from "./NotFound";
 import Profile from "./Profile";
+import UserCard from "./UserCard";
 
-export { Body, ErrorPage, Feed, Footer, Login, NavBar, NotFound, Profile };
+export {
+  Body,
+  ErrorPage,
+  Feed,
+  Footer,
+  Login,
+  NavBar,
+  NotFound,
+  Profile,
+  UserCard,
+};

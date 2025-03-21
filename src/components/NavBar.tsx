@@ -2,6 +2,7 @@ import React from "react";
 import { RootState } from "../utils/appStore";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import { clearUser } from "../utils/userSlice";
+import { clearFeed } from "../utils/feedSlice";
 import { useNavigate } from "react-router";
 import api from "../utils/axiosInstance";
 import { Link } from "react-router";
@@ -17,6 +18,7 @@ const NavBar = (): React.ReactElement => {
     try {
       await api.get("/logout", { withCredentials: true });
       dispatch(clearUser());
+      dispatch(clearFeed());
       navigate("/");
     } catch {
       navigate("/error");
