@@ -26,8 +26,8 @@ const Feed = (): React.JSX.Element => {
   return (
     <div className="">
       {feed.length > 0 &&
-        feed.map((f) => {
-          return <UserCard user={f} key={f._id} />;
+        feed.map((user) => {
+          return <UserCard user={user} key={user._id} />;
         })}
     </div>
   );

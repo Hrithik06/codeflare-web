@@ -5,14 +5,12 @@ type UserState = {
   user: UserInterface | null;
   isAuthenticated: boolean;
   loading: boolean;
-  error: string | null;
 };
 
 const initialState: UserState = {
   user: null,
   isAuthenticated: false,
   loading: false,
-  error: null,
 };
 
 const userSlice = createSlice({
@@ -33,21 +31,9 @@ const userSlice = createSlice({
     clearLoading: (state: UserState) => {
       state.loading = false;
     },
-    setError: (state: UserState, action: PayloadAction<string>) => {
-      state.error = action.payload;
-    },
-    clearError: (state: UserState) => {
-      state.error = null;
-    },
   },
 });
 
 export default userSlice.reducer;
-export const {
-  setUser,
-  clearUser,
-  setLoading,
-  clearLoading,
-  setError,
-  clearError,
-} = userSlice.actions;
+export const { setUser, clearUser, setLoading, clearLoading } =
+  userSlice.actions;

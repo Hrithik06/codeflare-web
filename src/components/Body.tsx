@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router";
 import { isAxiosError } from "axios";
 
 import { NavBar, Footer } from "./index";
 
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
-import { clearError, setError, setUser } from "../utils/userSlice";
+import { setUser } from "../utils/userSlice";
 import { RootState } from "../utils/appStore";
 import { useNavigate } from "react-router";
 import api from "../utils/axiosInstance";
@@ -14,13 +14,14 @@ const Body = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userData = useAppSelector((store: RootState) => store.user.user);
+  const [error, setError] = useState("");
+
   const fetchUser = async () => {
     try {
       const res = await api.get(`profile/view`, {
         withCredentials: true,
       });
       const userData = res.data.data;
-      dispatch(clearError());
       dispatch(setUser(userData));
       // navigate(-1);
     } catch (err) {
@@ -36,7 +37,7 @@ const Body = (): React.JSX.Element => {
             //If for seomereason provided api end-point doesn't exist
             console.warn("Invalid API endpoint: Check backend routes.");
             // Instead of redirecting, show a user-friendly message
-            dispatch(setError("Something went wrong. Please try again later."));
+            setError("Something went wrong. Please try again later.");
             return navigate("/error");
           }
         } else if (err.request) {
@@ -44,7 +45,7 @@ const Body = (): React.JSX.Element => {
           // `err.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
           console.warn("No response from Server");
-          dispatch(setError("Error: No response from Server "));
+          setError("Error: No response from Server ");
           return navigate("/error");
         }
       }

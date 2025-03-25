@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import NotFound from "./NotFound";
 import Profile from "./Profile";
 import UserCard from "./UserCard";
+import ProfileEdit from "./ProfileEdit";
 
 export {
   Body,
@@ -18,4 +19,5 @@ export {
   NotFound,
   Profile,
   UserCard,
+  ProfileEdit,
 };

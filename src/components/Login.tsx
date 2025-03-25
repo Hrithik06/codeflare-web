@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
-import { clearError, setError, setUser } from "../utils/userSlice";
+import { setUser } from "../utils/userSlice";
+import { useAppDispatch } from "../utils/hooks";
 import api from "../utils/axiosInstance";
 import { emailIdZodSchema, passwordZodSchema } from "../utils/zodSchema";
 import { ZodError } from "zod";
@@ -12,13 +11,11 @@ const Login = (): React.JSX.Element => {
   const navigate = useNavigate();
   const [emailId, setEmailId] = useState("Victor@Sully.com");
   const [password, setPassword] = useState("Victor@1234");
+  const [error, setError] = useState("");
   // const [emailId, setEmailId] = useState("");
   // const [password, setPassword] = useState("");
-  const error = useAppSelector((store) => store.user.error);
   const handleLogin = async () => {
     try {
-      dispatch(clearError());
-
       emailIdZodSchema.parse(emailId);
       passwordZodSchema.parse(password);
 
@@ -54,19 +51,19 @@ const Login = (): React.JSX.Element => {
               errMessage =
                 err?.response?.data?.message || "Something went wrong.";
             }
-            dispatch(setError(errMessage));
+            setError(errMessage);
             console.error(errMessage);
           } else if (err.request) {
             console.log(err.request);
-            dispatch(setError("Error: No response from Server "));
+            setError("Error: No response from Server ");
           } else {
             console.log("Error: ", err?.message);
-            dispatch(setError("Error connecting with server"));
+            setError("Error connecting with server");
           }
         });
     } catch (err) {
       if (err instanceof ZodError) {
-        dispatch(setError(err?.errors[0]?.message));
+        setError(err?.errors[0]?.message);
         return;
       }
       console.error("Error: ", err);
@@ -77,7 +74,7 @@ const Login = (): React.JSX.Element => {
     <form className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box mx-auto">
       <legend className="fieldset-legend text-xl">Login</legend>
 
-      <label className="fieldset-label" htmlFor="emailInput">
+      <label className="fieldset-label" htmlFor="email">
         Email
       </label>
       <input
@@ -86,10 +83,11 @@ const Login = (): React.JSX.Element => {
         placeholder="Email"
         value={emailId}
         onChange={(e) => setEmailId(e.target.value)}
-        id="emailInput"
+        id="email"
+        name="email"
       />
 
-      <label className="fieldset-label" htmlFor="passwordInput">
+      <label className="fieldset-label" htmlFor="password">
         Password
       </label>
       <input
@@ -98,7 +96,8 @@ const Login = (): React.JSX.Element => {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        id="passwordInput"
+        id="password"
+        name="password"
       />
       <p className="text-red-500">{error}</p>
       <button
