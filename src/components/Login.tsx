@@ -9,8 +9,8 @@ import { ZodError } from "zod";
 const Login = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [emailId, setEmailId] = useState("Victor@Sully.com");
-  const [password, setPassword] = useState("Victor@1234");
+  const [emailId, setEmailId] = useState("Jesse@Faden.com");
+  const [password, setPassword] = useState("Jesse@1234");
   const [error, setError] = useState("");
   // const [emailId, setEmailId] = useState("");
   // const [password, setPassword] = useState("");
@@ -80,7 +80,7 @@ const Login = (): React.JSX.Element => {
       <input
         type="email"
         className="input"
-        placeholder="Email"
+        // placeholder="johndoe@company.com"
         value={emailId}
         onChange={(e) => setEmailId(e.target.value)}
         id="email"
@@ -93,7 +93,7 @@ const Login = (): React.JSX.Element => {
       <input
         type="password"
         className="input"
-        placeholder="Password"
+        // placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         id="password"
