@@ -2,7 +2,8 @@ export default interface UserInterface {
   _id?: string;
   firstName: string;
   lastName: string;
-  emailId: string;
+  emailId?: string;
+  password?: string;
   dateOfBirth: Date | string;
   age?: number;
   gender: string;

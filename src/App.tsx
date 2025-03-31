@@ -2,7 +2,15 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import { Provider } from "react-redux";
 
 import appStore from "./utils/appStore";
-import { Body, ErrorPage, Feed, Login, NotFound, Profile } from "./components";
+import {
+  Body,
+  ErrorPage,
+  Feed,
+  Login,
+  NotFound,
+  Profile,
+  Test,
+} from "./components";
 // import Container from "./Container";
 function App() {
   return (
@@ -18,6 +26,7 @@ function App() {
               <Route path="/" element={<Feed />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/error" element={<ErrorPage />} />
+              <Route path="/test" element={<Test />} />
             </Route>
           </Routes>
         </BrowserRouter>

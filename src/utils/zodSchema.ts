@@ -1,10 +1,14 @@
 import { z } from "zod";
 import validator from "validator";
-export const emailIdZodSchema = z.string().trim().toLowerCase().email({
-  message: "Invalid email format",
-});
+export const emailIdZodSchema = z
+  .string({ message: "Email is required" })
+  .trim()
+  .toLowerCase()
+  .email({
+    message: "Invalid email format",
+  });
 export const passwordZodSchema = z
-  .string()
+  .string({ message: "Password is required." })
   .trim()
   .min(8, {
     message: "Password must be at least 8 characters",
@@ -24,7 +28,7 @@ export const passwordZodSchema = z
 
 export const userZodSchema = z.object({
   firstName: z
-    .string()
+    .string({ message: "First Name is required" })
     .trim()
     .min(2, {
       message: "First Name must be at least 2 characters",
@@ -34,7 +38,7 @@ export const userZodSchema = z.object({
       message: "Only alphabets allowed in First Name",
     }),
   lastName: z
-    .string()
+    .string({ message: "Last Name is required" })
     .trim()
     .min(1, {
       message: "Last Name must be at least 1 characters",
@@ -44,17 +48,20 @@ export const userZodSchema = z.object({
       message: "Only alphabets allowed in Last Name",
     }),
   emailId: emailIdZodSchema,
-  password: passwordZodSchema.optional(),
-  dateOfBirth: z.string().date("Please enter a valid date."),
+  password: passwordZodSchema,
+  dateOfBirth: z
+    .string({ message: "Date of Birth is required" })
+    .date("Please enter a valid date."),
   gender: z.enum(["Male", "Female", "Other"], {
     message: "Invalid gender. Allowed values: 'Male', 'Female', 'Other'.",
   }),
-  about: z.string().trim(),
+  about: z.string({ message: "About is required" }).trim(),
   skills: z
-    .array(z.string())
+    .array(z.string({ message: "Skills is required" }))
+    .min(1, { message: "Minimum 1 skill required" })
     .max(20, { message: "Maximum allowed skills are 20" }),
   photoUrl: z
-    .string()
+    .string({ message: "Photo is required" })
     .trim()
     .url() // zod's url() allows localhost also
     .refine((value) => validator.isURL(value, { require_tld: true }), {

@@ -35,7 +35,7 @@ const Body = (): React.JSX.Element => {
           }
           if (err.status === 404) {
             //If for seomereason provided api end-point doesn't exist
-            console.warn("Invalid API endpoint: Check backend routes.");
+            console.error("Invalid API endpoint: Check backend routes.");
             // Instead of redirecting, show a user-friendly message
             setError("Something went wrong. Please try again later.");
             return navigate("/error");
@@ -44,7 +44,7 @@ const Body = (): React.JSX.Element => {
           // The request was made but no response was received
           // `err.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.warn("No response from Server");
+          console.error("No response from Server");
           setError("Error: No response from Server ");
           return navigate("/error");
         }

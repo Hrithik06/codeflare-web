@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { ZodError } from "zod";
 
+import { MultiSelectSearch } from "./index";
 import { userZodSchema } from "../utils/zodSchema";
 import UserInterface from "../interface/UserInterface";
 import { validateDOB } from "../utils/helper";
-import { ZodError } from "zod";
+import api from "../utils/axiosInstance";
 type UserProps = { user: UserInterface };
 
 const ProfileEdit = ({ user }: UserProps) => {
@@ -21,8 +23,15 @@ const ProfileEdit = ({ user }: UserProps) => {
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
   const [error, setError] = useState("");
 
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
+      const userUpdateZodSchema = userZodSchema
+        .omit({
+          emailId: true,
+          password: true,
+        }) // do not let user to update emailId and password here
+        .partial();
+
       setError("");
       const isValidDOB = validateDOB(yearStr, monthStr, dayStr);
 
@@ -30,22 +39,38 @@ const ProfileEdit = ({ user }: UserProps) => {
         setError("Please enter a valid date.");
         return;
       }
-
       const updatedUser: UserInterface = {
         firstName: firstName,
         lastName: lastName,
-        emailId: user.emailId,
         dateOfBirth: `${yearStr}-${monthStr}-${dayStr}`,
         gender: gender,
         about: about,
         photoUrl: photoUrl,
         skills: skills,
       };
-      userZodSchema.parse(updatedUser);
+      userUpdateZodSchema.parse(updatedUser);
+
+      // console.log(updatedUser);
+      const res = await api.patch("/profile/edit", updatedUser, {
+        withCredentials: true,
+      });
+      console.log(res.status);
+      console.log(res.statusText);
+
+      console.log(res);
     } catch (err) {
       if (err instanceof ZodError) {
+        console.error(err);
         setError(err.errors[0].message);
+        return;
       }
+      if (err instanceof Error) {
+        console.error(err);
+        setError(err.message);
+        return;
+      }
+      console.error(err);
+      setError("Unexpected Error. Please Try Again");
     }
   };
   return (
@@ -64,6 +89,7 @@ const ProfileEdit = ({ user }: UserProps) => {
           onChange={(e) => setFirstName(e.target.value)}
           id="firstName"
           name="firstName"
+          autoComplete="given-name"
         />
 
         <label className="fieldset-label" htmlFor="lastName">
@@ -77,6 +103,7 @@ const ProfileEdit = ({ user }: UserProps) => {
           onChange={(e) => setLastName(e.target.value)}
           id="lastName"
           name="lastName"
+          autoComplete="family-name"
         />
 
         <div className="tooltip tooltip-right" data-tip="Cannot be edited">
@@ -93,6 +120,7 @@ const ProfileEdit = ({ user }: UserProps) => {
             disabled
           />
         </div>
+
         <label className="fieldset-label" htmlFor="about">
           About
         </label>
@@ -120,6 +148,7 @@ const ProfileEdit = ({ user }: UserProps) => {
             id="day"
             name="day"
             placeholder="DD"
+            autoComplete="bday-day"
           />
           <input
             type="text"
@@ -133,6 +162,7 @@ const ProfileEdit = ({ user }: UserProps) => {
             id="month"
             name="month"
             placeholder="MM"
+            autoComplete="bday-month"
           />
           <input
             type="text"
@@ -146,10 +176,13 @@ const ProfileEdit = ({ user }: UserProps) => {
             id="year"
             name="year"
             placeholder="YYYY"
+            autoComplete="bday-year"
           />
         </fieldset>
         <fieldset className="fieldset">
-          <legend className="fieldset-label">Gender</legend>
+          <label className="fieldset-label" htmlFor="gender">
+            Gender
+          </label>
           <select
             defaultValue={gender}
             className="select"
@@ -165,7 +198,11 @@ const ProfileEdit = ({ user }: UserProps) => {
             <option>Other</option>
           </select>
 
-          <legend className="fieldset-label">Photo</legend>
+          <MultiSelectSearch />
+
+          <label className="fieldset-label" htmlFor="photo">
+            Photo
+          </label>
           <input type="file" className="file-input" id="photo" name="photo" />
         </fieldset>
         {error.length > 0 && (

@@ -85,6 +85,7 @@ const Login = (): React.JSX.Element => {
         onChange={(e) => setEmailId(e.target.value)}
         id="email"
         name="email"
+        autoComplete="email"
       />
 
       <label className="fieldset-label" htmlFor="password">
@@ -98,6 +99,7 @@ const Login = (): React.JSX.Element => {
         onChange={(e) => setPassword(e.target.value)}
         id="password"
         name="password"
+        autoComplete="current-password"
       />
       <p className="text-red-500">{error}</p>
       <button
@@ -107,6 +109,11 @@ const Login = (): React.JSX.Element => {
       >
         Login
       </button>
+      {error.length > 0 && (
+        <div role="alert" className="alert alert-error alert-soft">
+          <span>{error}</span>
+        </div>
+      )}
     </form>
   );
 };

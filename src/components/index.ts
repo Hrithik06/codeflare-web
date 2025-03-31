@@ -8,6 +8,8 @@ import NotFound from "./NotFound";
 import Profile from "./Profile";
 import UserCard from "./UserCard";
 import ProfileEdit from "./ProfileEdit";
+import MultiSelectSearch from "./MultiSelectSearch";
+import Test from "./Test";
 
 export {
   Body,
@@ -20,4 +22,6 @@ export {
   Profile,
   UserCard,
   ProfileEdit,
+  MultiSelectSearch,
+  Test,
 };
