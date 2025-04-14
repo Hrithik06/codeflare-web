@@ -2,7 +2,7 @@ import MultiSelectSearch from "./MultiSelectSearch";
 
 const Test = () => {
   return (
-    <div>
+    <div className="m-10">
       <MultiSelectSearch />
     </div>
   );
