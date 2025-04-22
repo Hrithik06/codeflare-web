@@ -1,28 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ZodError } from "zod";
 
-import { MultiSelectSearch } from "./index";
+import { MultiSelectSearch, UserCard } from "./index";
 import { userZodSchema } from "../utils/zodSchema";
 import UserInterface from "../interface/UserInterface";
-import { validateDOB } from "../utils/helper";
+import { validateDOB, ageCalculate } from "../utils/helper";
 import api from "../utils/axiosInstance";
 type UserProps = { user: UserInterface };
 
 const ProfileEdit = ({ user }: UserProps) => {
-  const dateOfBirthString: string = user.dateOfBirth.split("T")[0];
-  const [yearStr, setYearStr] = useState(dateOfBirthString.split("-")[0]);
-  const [monthStr, setMonthStr] = useState(dateOfBirthString.split("-")[1]);
-  const [dayStr, setDayStr] = useState(dateOfBirthString.split("-")[2]);
+  const dateOfBirthString: string = user.dateOfBirth.toString().split("T")[0];
+  const [yearStr, setYearStr] = useState<string>(
+    dateOfBirthString.split("-")[0],
+  );
+  const [monthStr, setMonthStr] = useState<string>(
+    dateOfBirthString.split("-")[1],
+  );
+  const [dayStr, setDayStr] = useState<string>(dateOfBirthString.split("-")[2]);
+  const [fullDate, setFullDate] = useState<string>(dateOfBirthString);
+  const [age, setAge] = useState(user.age);
 
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
+  const [firstName, setFirstName] = useState<string>(user.firstName);
+  const [lastName, setLastName] = useState<string>(user.lastName);
   // const [emailId, setEmailId] = useState(user.emailId);
-  const [gender, setGender] = useState(user.gender);
-  const [about, setAbout] = useState(user.about);
-  const [skills, setSkills] = useState(user.skills);
+  const [gender, setGender] = useState<string>(user.gender);
+  const [about, setAbout] = useState<string>(user.about);
+  const [skills, setSkills] = useState<string[]>(user.skills);
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
 
+  useEffect(() => {
+    setFullDate(`${yearStr}-${monthStr}-${dayStr}`);
+    if (validateDOB(yearStr, monthStr, dayStr)) {
+      setAge(ageCalculate(fullDate));
+      setError("");
+    } else {
+      setError("Invalid Date of Birth");
+    }
+  }, [dayStr, monthStr, yearStr, fullDate, error]);
+  // useEffect(() => {
+  //   const newAge = ageCalculate(fullDate);
+  //   console.log(newAge);
+  // }, [fullDate]);
   const handleSave = async () => {
     try {
       const userUpdateZodSchema = userZodSchema
@@ -73,9 +92,10 @@ const ProfileEdit = ({ user }: UserProps) => {
       setError("Unexpected Error. Please Try Again");
     }
   };
+
   return (
-    <>
-      <form className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box mx-auto">
+    <div className="grid grid-cols-2">
+      <form className="fieldset w-md bg-base-200 border border-base-300 p-4 rounded-box mx-auto">
         <legend className="fieldset-legend text-xl">Profile</legend>
 
         <label className="fieldset-label" htmlFor="firstName">
@@ -83,7 +103,7 @@ const ProfileEdit = ({ user }: UserProps) => {
         </label>
         <input
           type="text"
-          className="input"
+          className="input w-full"
           // placeholder="John"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
@@ -97,7 +117,7 @@ const ProfileEdit = ({ user }: UserProps) => {
         </label>
         <input
           type="text"
-          className="input"
+          className="input w-full"
           // placeholder="Doe"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
@@ -112,7 +132,7 @@ const ProfileEdit = ({ user }: UserProps) => {
           </label>
           <input
             type="email"
-            className="input disabled:border-gray-600"
+            className="input disabled:border-gray-600 w-full"
             value={user.emailId}
             id="emailId"
             name="emailId"
@@ -121,21 +141,8 @@ const ProfileEdit = ({ user }: UserProps) => {
           />
         </div>
 
-        <label className="fieldset-label" htmlFor="about">
-          About
-        </label>
-        <textarea
-          className="textarea"
-          placeholder="Bio"
-          value={about}
-          onChange={(e) => setAbout(e.target.value)}
-          id="about"
-          name="about"
-        ></textarea>
-
-        <fieldset className="fieldset flex">
+        <fieldset className="fieldset flex ">
           <legend className="fieldset-label">Date of Birth</legend>
-
           <input
             type="text"
             className="input"
@@ -179,13 +186,14 @@ const ProfileEdit = ({ user }: UserProps) => {
             autoComplete="bday-year"
           />
         </fieldset>
+
         <fieldset className="fieldset">
           <label className="fieldset-label" htmlFor="gender">
             Gender
           </label>
           <select
             defaultValue={gender}
-            className="select"
+            className="select w-full"
             onChange={(e) => {
               setGender(e.target.value);
             }}
@@ -193,12 +201,23 @@ const ProfileEdit = ({ user }: UserProps) => {
             name="gender"
           >
             <option disabled={true}>Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
+            <option>Man</option>
+            <option>Woman</option>
+            <option>Non-binary</option>
           </select>
+          <label className="fieldset-label" htmlFor="about">
+            About
+          </label>
+          <textarea
+            className="textarea w-full"
+            placeholder="Bio"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+            id="about"
+            name="about"
+          ></textarea>
 
-          <MultiSelectSearch />
+          <MultiSelectSearch label="Skills" initialSkills={skills} />
 
           <label className="fieldset-label" htmlFor="photo">
             Photo
@@ -217,8 +236,24 @@ const ProfileEdit = ({ user }: UserProps) => {
         >
           Save
         </button>
+        {error.length > 0 ? error : null}
       </form>
-    </>
+
+      <div>
+        <UserCard
+          user={{
+            firstName,
+            lastName,
+            gender,
+            about,
+            skills,
+            photoUrl,
+            age,
+            dateOfBirth: fullDate,
+          }}
+        />
+      </div>
+    </div>
   );
 };
 export default ProfileEdit;

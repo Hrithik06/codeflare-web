@@ -4,7 +4,7 @@ type UserProps = {
   user: UserInterface;
 };
 const UserCard = ({ user }: UserProps): React.JSX.Element => {
-  const { firstName, lastName, photoUrl, about } = user;
+  const { firstName, lastName, photoUrl, about, age, gender } = user;
   return (
     <div className="card bg-base-100 w-96 shadow-sm">
       <figure className="h-3/4">
@@ -12,6 +12,7 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
       </figure>
       <div className="card-body h-1/4">
         <h2 className="card-title">{`${firstName} ${lastName}`}</h2>
+        <h3 className="card-actions">{`${age}, ${gender}`}</h3>
         <p>{about}</p>
         <div className="card-actions justify-evenly ">
           <button className="btn btn-primary">

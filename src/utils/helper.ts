@@ -1,6 +1,6 @@
 import validator from "validator";
 
-const ageCalculate = (dob: Date) => {
+const ageCalculate = (dob: Date | string) => {
   const today = new Date();
   const birthDate = new Date(dob);
   let age = today.getFullYear() - birthDate.getFullYear();
@@ -36,4 +36,4 @@ const validateDOB = (yearStr: string, monthStr: string, dayStr: string) => {
   return true;
 };
 
-export { validateDOB };
+export { validateDOB, ageCalculate };

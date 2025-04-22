@@ -7,7 +7,7 @@ export const skillsData = [
       "HTML",
       "CSS",
       "JavaScript",
-      "React",
+      "React.js",
       "Vue.js",
       "Angular",
       "TypeScript",

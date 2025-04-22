@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect, useState } from "react";
 
-import { skillsData } from "./utils/constants";
+import { skillsData } from "../utils/constants";
 let skillsArr: Array<string> = []; //contains only skills from skillsData
 
 skillsData.map((category) => {
@@ -14,22 +14,17 @@ const skillsUniqueSet = new Set<string>(skillsArr);
 //Re-assign to skillsArr, now "skillsArr" contains only unique values
 skillsArr = Array.from(skillsUniqueSet);
 
-
-const initialState = { userSkills: [], skillList: skillsArr };
-
 type State = {
-    userSkills:string[],
-    skillList:string[]
-}
+  userSkills: string[];
+  skillList: string[];
+};
 
-type AppActions = {
-  type: 'ADD' | 'REMOVE';
-  payload: string;
-}
+type AppActions =
+  | { type: "ADD"; payload: string }
+  | { type: "REMOVE"; payload: string }
+  | { type: "SET_INITIAL"; payload: string[] };
 
-
-
-function skillsReducer(state:State, action:AppActions) {
+function skillsReducer(state: State, action: AppActions): State {
   const { type, payload } = action;
   const { userSkills, skillList } = state;
   switch (type) {
@@ -54,16 +49,40 @@ function skillsReducer(state:State, action:AppActions) {
         skillList: [...skillList, skillValueToRemove],
       };
     }
+
+    //TODO: remove skills from DB from skillList so they don't come up in Search
+    case "SET_INITIAL": {
+      const initialSkillsFromDB = payload;
+      const newSkillList = initialSkillsFromDB.map(
+        (value) => !skillList.includes(value),
+      );
+      console.log(newSkillList);
+      return {
+        userSkills: [...initialSkillsFromDB],
+        skillList,
+      };
+    }
+    default:
+      return state;
   }
 }
-const MultiSelectSearch = (): React.JSX.Element => {
+const initialState: State = { userSkills: [], skillList: skillsArr };
+type MultiSelectSearchProps = { label: string; initialSkills: string[] };
+const MultiSelectSearch = ({
+  label,
+  initialSkills,
+}: MultiSelectSearchProps): React.JSX.Element => {
   const [searchTxt, setSearchTxt] = useState("");
 
   const [state, dispatch] = useReducer(skillsReducer, initialState);
 
   const [searchResults, setSearchResults] = useState<string[]>([]);
 
-
+  useEffect(() => {
+    if (initialSkills.length > 0) {
+      dispatch({ type: "SET_INITIAL", payload: initialSkills });
+    }
+  }, []);
   useEffect(() => {
     if (searchTxt.length === 0) {
       setSearchResults([]);
@@ -87,11 +106,9 @@ const MultiSelectSearch = (): React.JSX.Element => {
 
   const handleAddSkill = (e: React.MouseEvent<HTMLLIElement>) => {
     const clickedSkill = e.currentTarget.textContent;
-   clickedSkill && dispatch({type:"ADD", payload:clickedSkill})
-   //Removing the selected pill from search
-   setSearchResults(
-        searchResults.filter(option=>option!==clickedSkill)
-    )
+    if (clickedSkill) dispatch({ type: "ADD", payload: clickedSkill });
+    //Removing the selected pill from search
+    setSearchResults(searchResults.filter((option) => option !== clickedSkill));
   };
 
   /**
@@ -103,28 +120,34 @@ const MultiSelectSearch = (): React.JSX.Element => {
   */
   const handleRemoveSkill = (skill: string) => {
     const clickedSkill = skill;
-   clickedSkill && dispatch({type:"REMOVE", payload:clickedSkill})
+    if (clickedSkill) dispatch({ type: "REMOVE", payload: clickedSkill });
 
-   //Removed Pill should be added back to searchResults only if it includes searchText
-   if(searchTxt!=="" && clickedSkill.toLocaleLowerCase().includes(searchTxt.toLocaleLowerCase())){
-    setSearchResults([...searchResults,clickedSkill])
-   }
+    //Removed Pill should be added back to searchResults only if it includes searchText
+    if (
+      searchTxt !== "" &&
+      clickedSkill.toLocaleLowerCase().includes(searchTxt.toLocaleLowerCase())
+    ) {
+      setSearchResults([...searchResults, clickedSkill]);
+    }
   };
 
   return (
     <fieldset className="fieldset">
       <label className="fieldset-label" htmlFor="skills">
-        Skills
+        {label}
       </label>
       {state.userSkills.length > 0 && (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1 mb-2">
           {state.userSkills.map((skill) => (
             <div
-              className="flex items-center text-xs border bg-blue-500 rounded-md p-2 border-gray-500 text-gray-700"
+              className="btn btn-sm text-xs btn-primary rounded-full "
               key={skill}
             >
               {skill}
-              <button onClick={() => handleRemoveSkill(skill)} className="hover:cursor-pointer">
+              <button
+                onClick={() => handleRemoveSkill(skill)}
+                className="hover:cursor-pointer"
+              >
                 <svg
                   className="swap-on fill-current "
                   xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +170,6 @@ const MultiSelectSearch = (): React.JSX.Element => {
           type="text"
           placeholder="Skills"
           className="input w-full p-2 rounded focus"
-          
           value={searchTxt}
           onChange={(e) => {
             handleSearch(e);
@@ -161,7 +183,7 @@ const MultiSelectSearch = (): React.JSX.Element => {
           <ul className="list bg-base-100 rounded-box shadow-md max-h-48 overflow-y-scroll">
             {searchResults.map((skill) => (
               <li
-                className="list-row hover:cursor-pointer px-1"
+                className="list-row hover:cursor-pointer"
                 onClick={(e) => handleAddSkill(e)}
                 key={skill}
               >
