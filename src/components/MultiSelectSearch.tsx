@@ -1,26 +1,40 @@
 import React, { useReducer, useEffect, useState } from "react";
 
-import { skillsData } from "../utils/constants";
-let skills: Array<string> = []; //contains only skills from skillsData
+import { skillsData } from "./utils/constants";
+let skillsArr: Array<string> = []; //contains only skills from skillsData
 
-skillsData.map((value) => {
-  value.skills.map((s) => {
-    skills.push(s);
+skillsData.map((category) => {
+  category.skills.map((s) => {
+    skillsArr.push(s);
   });
 });
 
 //Get only unique skills
-const skillsUniqueSet = new Set<string>(skills);
-//Re-assign to skills, now "skills" contains only unique values
-skills = Array.from(skillsUniqueSet);
-const initialState = { userSkills: [], skillList: skills };
+const skillsUniqueSet = new Set<string>(skillsArr);
+//Re-assign to skillsArr, now "skillsArr" contains only unique values
+skillsArr = Array.from(skillsUniqueSet);
 
-function skillsReducer(state, action) {
+
+const initialState = { userSkills: [], skillList: skillsArr };
+
+type State = {
+    userSkills:string[],
+    skillList:string[]
+}
+
+type AppActions = {
+  type: 'ADD' | 'REMOVE';
+  payload: string;
+}
+
+
+
+function skillsReducer(state:State, action:AppActions) {
   const { type, payload } = action;
   const { userSkills, skillList } = state;
   switch (type) {
     case "ADD": {
-      const skillValueToAdd = payload.value;
+      const skillValueToAdd = payload;
       const newSkillList = skillList.filter(
         (v: string) => v !== skillValueToAdd,
       );
@@ -31,8 +45,8 @@ function skillsReducer(state, action) {
     }
 
     case "REMOVE": {
-      const skillValueToRemove = payload.value;
-      const newUserSkillList = skillList.filter(
+      const skillValueToRemove = payload;
+      const newUserSkillList = userSkills.filter(
         (v: string) => v !== skillValueToRemove,
       );
       return {
@@ -47,21 +61,21 @@ const MultiSelectSearch = (): React.JSX.Element => {
 
   const [state, dispatch] = useReducer(skillsReducer, initialState);
 
-  // const [searchResults, setSearchResults] = useState<string[]>([]);
-  // const [userSkills, setUserSkills] = useState<string[]>([]);
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+
 
   useEffect(() => {
-    // if (searchTxt.length === 0) {
-    //   setSearchResults([]);
-    //   return;
-    // }
+    if (searchTxt.length === 0) {
+      setSearchResults([]);
+      return;
+    }
 
     const timerId = setTimeout(() => {
-      const filtered = skills.filter((value: string) =>
+      const filtered = state.skillList.filter((value: string) =>
         value.toLowerCase().includes(searchTxt.toLowerCase()),
       );
 
-      // setSearchResults(filtered);
+      setSearchResults(filtered);
     }, 500);
 
     return () => clearTimeout(timerId);
@@ -73,14 +87,11 @@ const MultiSelectSearch = (): React.JSX.Element => {
 
   const handleAddSkill = (e: React.MouseEvent<HTMLLIElement>) => {
     const clickedSkill = e.currentTarget.textContent;
-    if (clickedSkill) {
-      setUserSkills([...userSkills, clickedSkill]);
-      setSearchResults(
-        searchResults.filter(
-          (skill) => skill.toLowerCase() !== clickedSkill.toLowerCase(),
-        ),
-      );
-    }
+   clickedSkill && dispatch({type:"ADD", payload:clickedSkill})
+   //Removing the selected pill from search
+   setSearchResults(
+        searchResults.filter(option=>option!==clickedSkill)
+    )
   };
 
   /**
@@ -92,14 +103,12 @@ const MultiSelectSearch = (): React.JSX.Element => {
   */
   const handleRemoveSkill = (skill: string) => {
     const clickedSkill = skill;
-    console.log(clickedSkill);
-    if (clickedSkill.length > 0) {
-      const updatedUserSkills = userSkills.filter(
-        (value) => value.toLowerCase() !== clickedSkill.toLowerCase(),
-      );
-      setUserSkills(updatedUserSkills);
-      setSearchResults([...searchResults, clickedSkill]);
-    }
+   clickedSkill && dispatch({type:"REMOVE", payload:clickedSkill})
+
+   //Removed Pill should be added back to searchResults only if it includes searchText
+   if(searchTxt!=="" && clickedSkill.toLocaleLowerCase().includes(searchTxt.toLocaleLowerCase())){
+    setSearchResults([...searchResults,clickedSkill])
+   }
   };
 
   return (
@@ -107,20 +116,20 @@ const MultiSelectSearch = (): React.JSX.Element => {
       <label className="fieldset-label" htmlFor="skills">
         Skills
       </label>
-      {userSkills.length > 0 && (
+      {state.userSkills.length > 0 && (
         <div className="flex flex-wrap gap-1">
-          {userSkills.map((skill) => (
+          {state.userSkills.map((skill) => (
             <div
-              className="flex border rounded-md p-2 border-gray-500"
+              className="flex items-center text-xs border bg-blue-500 rounded-md p-2 border-gray-500 text-gray-700"
               key={skill}
             >
               {skill}
-              <button onClick={() => handleRemoveSkill(skill)}>
+              <button onClick={() => handleRemoveSkill(skill)} className="hover:cursor-pointer">
                 <svg
-                  className="swap-on fill-current"
+                  className="swap-on fill-current "
                   xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
+                  width="16"
+                  height="16"
                   viewBox="0 0 512 512"
                 >
                   <polygon
@@ -137,7 +146,8 @@ const MultiSelectSearch = (): React.JSX.Element => {
         <input
           type="text"
           placeholder="Skills"
-          className="input w-full"
+          className="input w-full p-2 rounded focus"
+          
           value={searchTxt}
           onChange={(e) => {
             handleSearch(e);
@@ -151,7 +161,7 @@ const MultiSelectSearch = (): React.JSX.Element => {
           <ul className="list bg-base-100 rounded-box shadow-md max-h-48 overflow-y-scroll">
             {searchResults.map((skill) => (
               <li
-                className="list-row hover:cursor-pointer"
+                className="list-row hover:cursor-pointer px-1"
                 onClick={(e) => handleAddSkill(e)}
                 key={skill}
               >
