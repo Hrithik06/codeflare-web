@@ -58,6 +58,12 @@ const ProfileEdit = ({ user }: UserProps) => {
         setError("Please enter a valid date.");
         return;
       }
+
+      if (skills.length < 2) {
+        setError("Add at least 2 skills");
+        console.log("HII");
+        return;
+      }
       const updatedUser: UserInterface = {
         firstName: firstName,
         lastName: lastName,
@@ -69,14 +75,9 @@ const ProfileEdit = ({ user }: UserProps) => {
       };
       userUpdateZodSchema.parse(updatedUser);
 
-      // console.log(updatedUser);
-      const res = await api.patch("/profile/edit", updatedUser, {
-        withCredentials: true,
-      });
-      console.log(res.status);
-      console.log(res.statusText);
-
-      console.log(res);
+      // await api.patch("/profile/edit", updatedUser, {
+      //   withCredentials: true,
+      // });
     } catch (err) {
       if (err instanceof ZodError) {
         console.error(err);
@@ -217,7 +218,11 @@ const ProfileEdit = ({ user }: UserProps) => {
             name="about"
           ></textarea>
 
-          <MultiSelectSearch label="Skills" initialSkills={skills} />
+          <MultiSelectSearch
+            label="Skills"
+            initialSkills={skills}
+            setSkills={setSkills}
+          />
 
           <label className="fieldset-label" htmlFor="photo">
             Photo
