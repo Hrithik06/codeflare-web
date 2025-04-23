@@ -59,11 +59,11 @@ const ProfileEdit = ({ user }: UserProps) => {
         return;
       }
 
-      if (skills.length < 2) {
-        setError("Add at least 2 skills");
-        console.log("HII");
-        return;
-      }
+      // TODO: Show Error when skills are less than 2
+      // if (skills.length < 2) {
+      //   setError("Add at least 2 skills");
+      //   return;
+      // }
       const updatedUser: UserInterface = {
         firstName: firstName,
         lastName: lastName,
