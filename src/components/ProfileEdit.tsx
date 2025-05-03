@@ -1,28 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ZodError } from "zod";
-
-import { MultiSelectSearch } from "./index";
+import { setError, setUser } from "../utils/userSlice";
+import { MultiSelectSearch, UserCard } from "./index";
 import { userZodSchema } from "../utils/zodSchema";
 import UserInterface from "../interface/UserInterface";
-import { validateDOB } from "../utils/helper";
+import { validateDOB, ageCalculate } from "../utils/helper";
 import api from "../utils/axiosInstance";
+import { AxiosError } from "axios";
+
+import { useAppDispatch, useAppSelector } from "../utils/hooks";
 type UserProps = { user: UserInterface };
 
 const ProfileEdit = ({ user }: UserProps) => {
-  const dateOfBirthString: string = user.dateOfBirth.split("T")[0];
-  const [yearStr, setYearStr] = useState(dateOfBirthString.split("-")[0]);
-  const [monthStr, setMonthStr] = useState(dateOfBirthString.split("-")[1]);
-  const [dayStr, setDayStr] = useState(dateOfBirthString.split("-")[2]);
+  const dispatch = useAppDispatch();
+  const dateOfBirthString: string = user.dateOfBirth.toString().split("T")[0];
+  const [yearStr, setYearStr] = useState<string>(
+    dateOfBirthString.split("-")[0],
+  );
+  const [monthStr, setMonthStr] = useState<string>(
+    dateOfBirthString.split("-")[1],
+  );
+  const [dayStr, setDayStr] = useState<string>(dateOfBirthString.split("-")[2]);
+  const [fullDate, setFullDate] = useState<string>(dateOfBirthString);
+  const [age, setAge] = useState(user.age);
 
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
-  // const [emailId, setEmailId] = useState(user.emailId);
-  const [gender, setGender] = useState(user.gender);
-  const [about, setAbout] = useState(user.about);
-  const [skills, setSkills] = useState(user.skills);
+  const [firstName, setFirstName] = useState<string>(user.firstName);
+  const [lastName, setLastName] = useState<string>(user.lastName);
+
+  const [gender, setGender] = useState<string>(user.gender);
+  const [about, setAbout] = useState<string>(user.about);
+  const [skills, setSkills] = useState<string[]>(user.skills);
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
-  const [error, setError] = useState("");
 
+  const errorMsg = useAppSelector((state) => state.user.error);
+
+  useEffect(() => {
+    setFullDate(`${yearStr}-${monthStr}-${dayStr}`);
+    if (validateDOB(yearStr, monthStr, dayStr)) {
+      setAge(ageCalculate(fullDate));
+    }
+    // else {
+    //   dispatch(setError("Invalid Date of Birth"));
+    // }
+  }, [dayStr, monthStr, yearStr, fullDate]);
+
+  // useEffect(() => {
+  //   const newAge = ageCalculate(fullDate);
+  //   console.log(newAge);
+  // }, [fullDate]);
   const handleSave = async () => {
     try {
       const userUpdateZodSchema = userZodSchema
@@ -32,11 +57,17 @@ const ProfileEdit = ({ user }: UserProps) => {
         }) // do not let user to update emailId and password here
         .partial();
 
-      setError("");
+      dispatch(setError(""));
       const isValidDOB = validateDOB(yearStr, monthStr, dayStr);
 
       if (!isValidDOB) {
-        setError("Please enter a valid date.");
+        dispatch(setError("Please enter a valid date."));
+        return;
+      }
+
+      //Show Error when skills are less than 2
+      if (skills.length < 2) {
+        dispatch(setError("Add at least 2 skills"));
         return;
       }
       const updatedUser: UserInterface = {
@@ -50,32 +81,36 @@ const ProfileEdit = ({ user }: UserProps) => {
       };
       userUpdateZodSchema.parse(updatedUser);
 
-      // console.log(updatedUser);
-      const res = await api.patch("/profile/edit", updatedUser, {
-        withCredentials: true,
-      });
-      console.log(res.status);
-      console.log(res.statusText);
-
-      console.log(res);
+      await api
+        .patch("/profile/edit", updatedUser, {
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setUser(res.data.data)));
     } catch (err) {
       if (err instanceof ZodError) {
         console.error(err);
-        setError(err.errors[0].message);
+        dispatch(setError(err.errors[0].message));
+        return;
+      }
+      if (err instanceof AxiosError) {
+        console.error(err);
+        console.log(err.message);
+        dispatch(setError(err.message));
         return;
       }
       if (err instanceof Error) {
         console.error(err);
-        setError(err.message);
+        dispatch(setError(err.message));
         return;
       }
       console.error(err);
-      setError("Unexpected Error. Please Try Again");
+      dispatch(setError("Unexpected Error. Please Try Again"));
     }
   };
+
   return (
-    <>
-      <form className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box mx-auto">
+    <div className="p-4 flex justify-evenly">
+      <form className="fieldset w-md bg-base-200 border border-base-300 p-4 rounded-box">
         <legend className="fieldset-legend text-xl">Profile</legend>
 
         <label className="fieldset-label" htmlFor="firstName">
@@ -83,7 +118,7 @@ const ProfileEdit = ({ user }: UserProps) => {
         </label>
         <input
           type="text"
-          className="input"
+          className="input w-full"
           // placeholder="John"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
@@ -97,7 +132,7 @@ const ProfileEdit = ({ user }: UserProps) => {
         </label>
         <input
           type="text"
-          className="input"
+          className="input w-full"
           // placeholder="Doe"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
@@ -112,7 +147,7 @@ const ProfileEdit = ({ user }: UserProps) => {
           </label>
           <input
             type="email"
-            className="input disabled:border-gray-600"
+            className="input disabled:border-gray-600 w-full"
             value={user.emailId}
             id="emailId"
             name="emailId"
@@ -121,21 +156,8 @@ const ProfileEdit = ({ user }: UserProps) => {
           />
         </div>
 
-        <label className="fieldset-label" htmlFor="about">
-          About
-        </label>
-        <textarea
-          className="textarea"
-          placeholder="Bio"
-          value={about}
-          onChange={(e) => setAbout(e.target.value)}
-          id="about"
-          name="about"
-        ></textarea>
-
-        <fieldset className="fieldset flex">
+        <fieldset className="fieldset flex ">
           <legend className="fieldset-label">Date of Birth</legend>
-
           <input
             type="text"
             className="input"
@@ -179,13 +201,14 @@ const ProfileEdit = ({ user }: UserProps) => {
             autoComplete="bday-year"
           />
         </fieldset>
+
         <fieldset className="fieldset">
           <label className="fieldset-label" htmlFor="gender">
             Gender
           </label>
           <select
             defaultValue={gender}
-            className="select"
+            className="select w-full"
             onChange={(e) => {
               setGender(e.target.value);
             }}
@@ -193,21 +216,36 @@ const ProfileEdit = ({ user }: UserProps) => {
             name="gender"
           >
             <option disabled={true}>Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
+            <option>Man</option>
+            <option>Woman</option>
+            <option>Non-binary</option>
           </select>
+          <label className="fieldset-label" htmlFor="about">
+            About
+          </label>
+          <textarea
+            className="textarea w-full"
+            placeholder="Bio"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+            id="about"
+            name="about"
+          ></textarea>
 
-          <MultiSelectSearch />
+          <MultiSelectSearch
+            label="Skills"
+            initialSkills={skills}
+            setSkills={setSkills}
+          />
 
           <label className="fieldset-label" htmlFor="photo">
             Photo
           </label>
           <input type="file" className="file-input" id="photo" name="photo" />
         </fieldset>
-        {error.length > 0 && (
+        {errorMsg && errorMsg.length > 0 && (
           <div role="alert" className="alert alert-error alert-soft">
-            <span>{error}</span>
+            <span>{errorMsg}</span>
           </div>
         )}
         <button
@@ -218,7 +256,22 @@ const ProfileEdit = ({ user }: UserProps) => {
           Save
         </button>
       </form>
-    </>
+
+      <div>
+        <UserCard
+          user={{
+            firstName,
+            lastName,
+            gender,
+            about,
+            skills,
+            photoUrl,
+            age,
+            dateOfBirth: fullDate,
+          }}
+        />
+      </div>
+    </div>
   );
 };
 export default ProfileEdit;

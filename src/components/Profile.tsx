@@ -3,7 +3,7 @@ import { ProfileEdit } from "./index";
 import { useAppSelector } from "../utils/hooks";
 const Profile = (): React.ReactElement => {
   const user = useAppSelector((store) => store.user.user);
-  return <div>{user && <ProfileEdit user={user} />}</div>;
+  return <>{user && <ProfileEdit user={user} />}</>;
 };
 
 export default Profile;
