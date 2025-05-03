@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { ZodError } from "zod";
-
+import { setError, setUser } from "../utils/userSlice";
 import { MultiSelectSearch, UserCard } from "./index";
 import { userZodSchema } from "../utils/zodSchema";
 import UserInterface from "../interface/UserInterface";
 import { validateDOB, ageCalculate } from "../utils/helper";
 import api from "../utils/axiosInstance";
+import { AxiosError } from "axios";
+
+import { useAppDispatch, useAppSelector } from "../utils/hooks";
 type UserProps = { user: UserInterface };
 
 const ProfileEdit = ({ user }: UserProps) => {
+  const dispatch = useAppDispatch();
   const dateOfBirthString: string = user.dateOfBirth.toString().split("T")[0];
   const [yearStr, setYearStr] = useState<string>(
     dateOfBirthString.split("-")[0],
@@ -22,22 +26,24 @@ const ProfileEdit = ({ user }: UserProps) => {
 
   const [firstName, setFirstName] = useState<string>(user.firstName);
   const [lastName, setLastName] = useState<string>(user.lastName);
-  // const [emailId, setEmailId] = useState(user.emailId);
+
   const [gender, setGender] = useState<string>(user.gender);
   const [about, setAbout] = useState<string>(user.about);
   const [skills, setSkills] = useState<string[]>(user.skills);
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
-  const [error, setError] = useState<string>("");
+
+  const errorMsg = useAppSelector((state) => state.user.error);
 
   useEffect(() => {
     setFullDate(`${yearStr}-${monthStr}-${dayStr}`);
     if (validateDOB(yearStr, monthStr, dayStr)) {
       setAge(ageCalculate(fullDate));
-      setError("");
-    } else {
-      setError("Invalid Date of Birth");
     }
-  }, [dayStr, monthStr, yearStr, fullDate, error]);
+    // else {
+    //   dispatch(setError("Invalid Date of Birth"));
+    // }
+  }, [dayStr, monthStr, yearStr, fullDate]);
+
   // useEffect(() => {
   //   const newAge = ageCalculate(fullDate);
   //   console.log(newAge);
@@ -51,19 +57,19 @@ const ProfileEdit = ({ user }: UserProps) => {
         }) // do not let user to update emailId and password here
         .partial();
 
-      setError("");
+      dispatch(setError(""));
       const isValidDOB = validateDOB(yearStr, monthStr, dayStr);
 
       if (!isValidDOB) {
-        setError("Please enter a valid date.");
+        dispatch(setError("Please enter a valid date."));
         return;
       }
 
-      // TODO: Show Error when skills are less than 2
-      // if (skills.length < 2) {
-      //   setError("Add at least 2 skills");
-      //   return;
-      // }
+      //Show Error when skills are less than 2
+      if (skills.length < 2) {
+        dispatch(setError("Add at least 2 skills"));
+        return;
+      }
       const updatedUser: UserInterface = {
         firstName: firstName,
         lastName: lastName,
@@ -75,28 +81,36 @@ const ProfileEdit = ({ user }: UserProps) => {
       };
       userUpdateZodSchema.parse(updatedUser);
 
-      // await api.patch("/profile/edit", updatedUser, {
-      //   withCredentials: true,
-      // });
+      await api
+        .patch("/profile/edit", updatedUser, {
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setUser(res.data.data)));
     } catch (err) {
       if (err instanceof ZodError) {
         console.error(err);
-        setError(err.errors[0].message);
+        dispatch(setError(err.errors[0].message));
+        return;
+      }
+      if (err instanceof AxiosError) {
+        console.error(err);
+        console.log(err.message);
+        dispatch(setError(err.message));
         return;
       }
       if (err instanceof Error) {
         console.error(err);
-        setError(err.message);
+        dispatch(setError(err.message));
         return;
       }
       console.error(err);
-      setError("Unexpected Error. Please Try Again");
+      dispatch(setError("Unexpected Error. Please Try Again"));
     }
   };
 
   return (
-    <div className="grid grid-cols-2">
-      <form className="fieldset w-md bg-base-200 border border-base-300 p-4 rounded-box mx-auto">
+    <div className="p-4 flex justify-evenly">
+      <form className="fieldset w-md bg-base-200 border border-base-300 p-4 rounded-box">
         <legend className="fieldset-legend text-xl">Profile</legend>
 
         <label className="fieldset-label" htmlFor="firstName">
@@ -229,9 +243,9 @@ const ProfileEdit = ({ user }: UserProps) => {
           </label>
           <input type="file" className="file-input" id="photo" name="photo" />
         </fieldset>
-        {error.length > 0 && (
+        {errorMsg && errorMsg.length > 0 && (
           <div role="alert" className="alert alert-error alert-soft">
-            <span>{error}</span>
+            <span>{errorMsg}</span>
           </div>
         )}
         <button
@@ -241,7 +255,6 @@ const ProfileEdit = ({ user }: UserProps) => {
         >
           Save
         </button>
-        {error.length > 0 ? error : null}
       </form>
 
       <div>

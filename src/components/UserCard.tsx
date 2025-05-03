@@ -6,7 +6,7 @@ type UserProps = {
 const UserCard = ({ user }: UserProps): React.JSX.Element => {
   const { firstName, lastName, photoUrl, about, age, gender, skills } = user;
   return (
-    <div className="card bg-base-100 w-96 shadow-sm">
+    <div className="card bg-base-100 w-80 shadow-sm">
       <figure className="h-3/4">
         <img src={photoUrl} alt="photo" className="w-full" />
       </figure>
@@ -19,7 +19,7 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
         <div className="flex justify-start gap-1">
           {skills.slice(0, 2).map((x) => (
             <span
-              className="border rounded-full border-gray-500 inline-block px-2"
+              className="bg-gray-800 border rounded-full border-gray-500 inline-block px-2"
               key={x}
             >
               {x}
@@ -28,7 +28,7 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
         </div>
         {/* </div> */}
         <div className="card-actions justify-evenly ">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -44,7 +44,7 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
               />
             </svg>
           </button>
-          <button className="btn btn-success">
+          <button className="btn btn-success rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
