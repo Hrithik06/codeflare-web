@@ -32,7 +32,9 @@ const ProfileEdit = ({ user }: UserProps) => {
   const [skills, setSkills] = useState<string[]>(user.skills);
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
 
-  const errorMsg = useAppSelector((state) => state.user.error);
+  const [showToast, setShowToast] = useState(false);
+
+  const errorMsg = useAppSelector((store) => store.user.error);
 
   useEffect(() => {
     setFullDate(`${yearStr}-${monthStr}-${dayStr}`);
@@ -85,7 +87,17 @@ const ProfileEdit = ({ user }: UserProps) => {
         .patch("/profile/edit", updatedUser, {
           withCredentials: true,
         })
-        .then((res) => dispatch(setUser(res.data.data)));
+        .then((res) => {
+          if (res.data.success) {
+            dispatch(setUser(res.data.data));
+
+            setShowToast(true);
+
+            setTimeout(() => {
+              setShowToast(false);
+            }, 3000);
+          }
+        });
     } catch (err) {
       if (err instanceof ZodError) {
         console.error(err);
@@ -95,7 +107,8 @@ const ProfileEdit = ({ user }: UserProps) => {
       if (err instanceof AxiosError) {
         console.error(err);
         console.log(err.message);
-        dispatch(setError(err.message));
+        console.log(err?.response.data.message);
+        dispatch(setError(err?.response.data.message || err.message));
         return;
       }
       if (err instanceof Error) {
@@ -109,169 +122,192 @@ const ProfileEdit = ({ user }: UserProps) => {
   };
 
   return (
-    <div className="p-4 flex justify-evenly">
-      <form className="fieldset w-md bg-base-200 border border-base-300 p-4 rounded-box">
-        <legend className="fieldset-legend text-xl">Profile</legend>
+    <>
+      <div className="p-4 flex justify-evenly">
+        <form className="fieldset w-md bg-base-200 border border-base-300 p-4 rounded-box">
+          <legend className="fieldset-legend text-xl">Profile</legend>
 
-        <label className="fieldset-label" htmlFor="firstName">
-          First Name
-        </label>
-        <input
-          type="text"
-          className="input w-full"
-          // placeholder="John"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          id="firstName"
-          name="firstName"
-          autoComplete="given-name"
-        />
-
-        <label className="fieldset-label" htmlFor="lastName">
-          Last Name
-        </label>
-        <input
-          type="text"
-          className="input w-full"
-          // placeholder="Doe"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          id="lastName"
-          name="lastName"
-          autoComplete="family-name"
-        />
-
-        <div className="tooltip tooltip-right" data-tip="Cannot be edited">
-          <label className="fieldset-label" htmlFor="lastName">
-            Email
+          <label className="fieldset-label" htmlFor="firstName">
+            First Name
           </label>
           <input
-            type="email"
-            className="input disabled:border-gray-600 w-full"
-            value={user.emailId}
-            id="emailId"
-            name="emailId"
-            readOnly
-            disabled
+            type="text"
+            className="input w-full"
+            // placeholder="John"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            id="firstName"
+            name="firstName"
+            autoComplete="given-name"
+          />
+
+          <label className="fieldset-label" htmlFor="lastName">
+            Last Name
+          </label>
+          <input
+            type="text"
+            className="input w-full"
+            // placeholder="Doe"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            id="lastName"
+            name="lastName"
+            autoComplete="family-name"
+          />
+
+          <div className="tooltip tooltip-right" data-tip="Cannot be edited">
+            <label className="fieldset-label" htmlFor="lastName">
+              Email
+            </label>
+            <input
+              type="email"
+              className="input disabled:border-gray-600 w-full"
+              value={user.emailId}
+              id="emailId"
+              name="emailId"
+              readOnly
+              disabled
+            />
+          </div>
+
+          <fieldset className="fieldset flex ">
+            <legend className="fieldset-label">Date of Birth</legend>
+            <input
+              type="text"
+              className="input"
+              minLength={2}
+              maxLength={2}
+              value={dayStr}
+              onChange={(e) => {
+                setDayStr(e.target.value);
+              }}
+              id="day"
+              name="day"
+              placeholder="DD"
+              autoComplete="bday-day"
+            />
+            <input
+              type="text"
+              className="input"
+              minLength={2}
+              maxLength={2}
+              value={monthStr}
+              onChange={(e) => {
+                setMonthStr(e.target.value);
+              }}
+              id="month"
+              name="month"
+              placeholder="MM"
+              autoComplete="bday-month"
+            />
+            <input
+              type="text"
+              className="input"
+              minLength={4}
+              maxLength={4}
+              value={yearStr}
+              onChange={(e) => {
+                setYearStr(e.target.value);
+              }}
+              id="year"
+              name="year"
+              placeholder="YYYY"
+              autoComplete="bday-year"
+            />
+          </fieldset>
+
+          <fieldset className="fieldset">
+            <label className="fieldset-label" htmlFor="gender">
+              Gender
+            </label>
+            <select
+              defaultValue={gender}
+              className="select w-full"
+              onChange={(e) => {
+                setGender(e.target.value);
+              }}
+              id="gender"
+              name="gender"
+            >
+              <option disabled={true}>Select Gender</option>
+              <option>Man</option>
+              <option>Woman</option>
+              <option>Non-binary</option>
+            </select>
+            <label className="fieldset-label" htmlFor="about">
+              About
+            </label>
+            <textarea
+              className="textarea w-full"
+              placeholder="Bio"
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
+              id="about"
+              name="about"
+            ></textarea>
+
+            <MultiSelectSearch
+              label="Skills"
+              initialSkills={skills}
+              setSkills={setSkills}
+            />
+
+            <label className="fieldset-label" htmlFor="photo">
+              Photo
+            </label>
+            <input type="file" className="file-input" id="photo" name="photo" />
+          </fieldset>
+          {errorMsg && errorMsg.length > 0 && (
+            <div role="alert" className="alert alert-error alert-soft">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="h-6 w-6 shrink-0 stroke-current"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span>{errorMsg}</span>
+            </div>
+          )}
+          <button
+            className="btn btn-primary mt-4 w-1/3 mx-auto"
+            type="button"
+            onClick={handleSave}
+          >
+            Save
+          </button>
+        </form>
+
+        <div>
+          <UserCard
+            user={{
+              firstName,
+              lastName,
+              gender,
+              about,
+              skills,
+              photoUrl,
+              age,
+              dateOfBirth: fullDate,
+            }}
           />
         </div>
-
-        <fieldset className="fieldset flex ">
-          <legend className="fieldset-label">Date of Birth</legend>
-          <input
-            type="text"
-            className="input"
-            minLength={2}
-            maxLength={2}
-            value={dayStr}
-            onChange={(e) => {
-              setDayStr(e.target.value);
-            }}
-            id="day"
-            name="day"
-            placeholder="DD"
-            autoComplete="bday-day"
-          />
-          <input
-            type="text"
-            className="input"
-            minLength={2}
-            maxLength={2}
-            value={monthStr}
-            onChange={(e) => {
-              setMonthStr(e.target.value);
-            }}
-            id="month"
-            name="month"
-            placeholder="MM"
-            autoComplete="bday-month"
-          />
-          <input
-            type="text"
-            className="input"
-            minLength={4}
-            maxLength={4}
-            value={yearStr}
-            onChange={(e) => {
-              setYearStr(e.target.value);
-            }}
-            id="year"
-            name="year"
-            placeholder="YYYY"
-            autoComplete="bday-year"
-          />
-        </fieldset>
-
-        <fieldset className="fieldset">
-          <label className="fieldset-label" htmlFor="gender">
-            Gender
-          </label>
-          <select
-            defaultValue={gender}
-            className="select w-full"
-            onChange={(e) => {
-              setGender(e.target.value);
-            }}
-            id="gender"
-            name="gender"
-          >
-            <option disabled={true}>Select Gender</option>
-            <option>Man</option>
-            <option>Woman</option>
-            <option>Non-binary</option>
-          </select>
-          <label className="fieldset-label" htmlFor="about">
-            About
-          </label>
-          <textarea
-            className="textarea w-full"
-            placeholder="Bio"
-            value={about}
-            onChange={(e) => setAbout(e.target.value)}
-            id="about"
-            name="about"
-          ></textarea>
-
-          <MultiSelectSearch
-            label="Skills"
-            initialSkills={skills}
-            setSkills={setSkills}
-          />
-
-          <label className="fieldset-label" htmlFor="photo">
-            Photo
-          </label>
-          <input type="file" className="file-input" id="photo" name="photo" />
-        </fieldset>
-        {errorMsg && errorMsg.length > 0 && (
-          <div role="alert" className="alert alert-error alert-soft">
-            <span>{errorMsg}</span>
-          </div>
-        )}
-        <button
-          className="btn btn-primary mt-4 w-1/3 mx-auto"
-          type="button"
-          onClick={handleSave}
-        >
-          Save
-        </button>
-      </form>
-
-      <div>
-        <UserCard
-          user={{
-            firstName,
-            lastName,
-            gender,
-            about,
-            skills,
-            photoUrl,
-            age,
-            dateOfBirth: fullDate,
-          }}
-        />
       </div>
-    </div>
+
+      {showToast ? (
+        <div className="toast toast-center toast-top">
+          <div className="alert alert-success">
+            <span>Profile updated successfully.</span>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 };
 export default ProfileEdit;

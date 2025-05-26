@@ -9,7 +9,10 @@ import Profile from "./Profile";
 import UserCard from "./UserCard";
 import ProfileEdit from "./ProfileEdit";
 import MultiSelectSearch from "./MultiSelectSearch";
-import Test from "./Test";
+import Connections from "./Connections";
+import Requests from "./Requests";
+import ConnectionCard from "./ConnectionCard";
+import ActionButtons from "./ActionButtons";
 
 export {
   Body,
@@ -23,5 +26,8 @@ export {
   UserCard,
   ProfileEdit,
   MultiSelectSearch,
-  Test,
+  Connections,
+  Requests,
+  ConnectionCard,
+  ActionButtons,
 };
