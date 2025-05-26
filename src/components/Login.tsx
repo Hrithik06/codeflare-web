@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { setUser } from "../utils/userSlice";
-import { useAppDispatch } from "../utils/hooks";
+import { clearLoading, setLoading, setUser } from "../utils/userSlice";
+import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import api from "../utils/axiosInstance";
 import { emailIdZodSchema, passwordZodSchema } from "../utils/zodSchema";
 import { ZodError } from "zod";
+import { RootState } from "../utils/appStore";
 
 const Login = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [emailId, setEmailId] = useState("Jesse@Faden.com");
-  const [password, setPassword] = useState("Jesse@1234");
+  const [emailId, setEmailId] = useState("Nathan@Drake.com");
+  const [password, setPassword] = useState("Nathan@1234");
   const [error, setError] = useState("");
   // const [emailId, setEmailId] = useState("");
   // const [password, setPassword] = useState("");
+  const loading = useAppSelector((store: RootState) => store.user.loading);
   const handleLogin = async () => {
     try {
       emailIdZodSchema.parse(emailId);
       passwordZodSchema.parse(password);
-
+      dispatch(setLoading());
       await api
         .post(
           "/login",
@@ -32,17 +34,18 @@ const Login = (): React.JSX.Element => {
         )
         .then((response) => {
           const userData = response?.data?.data;
-
           if (
             response.status === 200 &&
             response.statusText === "OK" &&
             userData
           ) {
             dispatch(setUser(userData));
+            dispatch(clearLoading());
             navigate("/");
           }
         })
         .catch((err) => {
+          dispatch(clearLoading());
           if (err.response) {
             let errMessage;
             if (err?.response?.data?.errors) {
@@ -71,7 +74,7 @@ const Login = (): React.JSX.Element => {
   };
 
   return (
-    <form className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box mx-auto">
+    <form className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box mx-auto my-20">
       <legend className="fieldset-legend text-xl">Login</legend>
 
       <label className="fieldset-label" htmlFor="email">
@@ -80,7 +83,6 @@ const Login = (): React.JSX.Element => {
       <input
         type="email"
         className="input"
-        // placeholder="johndoe@company.com"
         value={emailId}
         onChange={(e) => setEmailId(e.target.value)}
         id="email"
@@ -94,23 +96,38 @@ const Login = (): React.JSX.Element => {
       <input
         type="password"
         className="input"
-        // placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         id="password"
         name="password"
         autoComplete="current-password"
       />
-      <p className="text-red-500">{error}</p>
       <button
         className="btn btn-primary mt-4 w-1/3 mx-auto"
         type="button"
         onClick={handleLogin}
       >
-        Login
+        {loading ? (
+          <span className="loading loading-bars loading-xs"></span>
+        ) : (
+          "Login"
+        )}
       </button>
       {error.length > 0 && (
         <div role="alert" className="alert alert-error alert-soft">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="h-6 w-6 shrink-0 stroke-current"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
           <span>{error}</span>
         </div>
       )}

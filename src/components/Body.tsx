@@ -61,7 +61,7 @@ const Body = (): React.JSX.Element => {
     }
   }, []);
   return (
-    <div>
+    <div data-theme={"light"} className="min-h-screen">
       <NavBar />
       <Outlet />
       {/* <Footer /> */}

@@ -6,19 +6,23 @@ import { clearFeed } from "../utils/feedSlice";
 import { useNavigate } from "react-router";
 import api from "../utils/axiosInstance";
 import { Link } from "react-router";
+import { clearConnections } from "../utils/connectionSlice";
 
 const NavBar = (): React.ReactElement => {
   const userData = useAppSelector((store: RootState) => store.user.user);
   const isAuthenticated = useAppSelector(
     (store: RootState) => store.user.isAuthenticated,
   );
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       await api.get("/logout", { withCredentials: true });
       dispatch(clearUser());
       dispatch(clearFeed());
+      dispatch(clearConnections());
       navigate("/");
     } catch {
       navigate("/error");
@@ -70,8 +74,12 @@ const NavBar = (): React.ReactElement => {
                   </Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link to="/connections">Connections</Link>
                 </li>
+                <li>
+                  <Link to="/requests">Requests</Link>
+                </li>
+                <li></li>
                 <li>
                   <p onClick={handleLogout}>Logout</p>
                 </li>

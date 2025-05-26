@@ -9,7 +9,8 @@ import {
   Login,
   NotFound,
   Profile,
-  Test,
+  Connections,
+  Requests,
 } from "./components";
 // import Container from "./Container";
 function App() {
@@ -23,10 +24,11 @@ function App() {
             <Route path="/" element={<Body />}>
               <Route path="login" element={<Login />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="connections" element={<Connections />} />
+              <Route path="requests" element={<Requests />} />
               <Route path="/" element={<Feed />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/error" element={<ErrorPage />} />
-              <Route path="/test" element={<Test />} />
             </Route>
           </Routes>
         </BrowserRouter>
