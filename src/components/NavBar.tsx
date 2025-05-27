@@ -23,7 +23,7 @@ const NavBar = (): React.ReactElement => {
       dispatch(clearUser());
       dispatch(clearFeed());
       dispatch(clearConnections());
-      navigate("/");
+      navigate("/login");
     } catch {
       navigate("/error");
     }

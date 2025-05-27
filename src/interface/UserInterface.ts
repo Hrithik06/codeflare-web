@@ -1,5 +1,5 @@
 export default interface UserInterface {
-  _id?: string;
+  _id: string;
   firstName: string;
   lastName: string;
   emailId?: string;
