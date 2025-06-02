@@ -6,7 +6,7 @@ const ErrorPage = (): React.JSX.Element => {
   useEffect(() => {
     const timeOutId = setTimeout(() => {
       navigate("/");
-    }, 5000);
+    }, 2000);
     return () => {
       clearTimeout(timeOutId);
     };

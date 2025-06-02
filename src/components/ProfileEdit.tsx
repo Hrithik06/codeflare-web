@@ -13,12 +13,13 @@ type UserProps = { user: UserInterface };
 
 const ProfileEdit = ({ user }: UserProps) => {
   const dispatch = useAppDispatch();
-  const dateOfBirthString: string = user.dateOfBirth.toString().split("T")[0];
+  const dateOfBirthString: string =
+    user.dateOfBirth?.toString().split("T")[0] || "";
   const [yearStr, setYearStr] = useState<string>(
-    dateOfBirthString.split("-")[0],
+    dateOfBirthString.split("-")[0] || ""
   );
   const [monthStr, setMonthStr] = useState<string>(
-    dateOfBirthString.split("-")[1],
+    dateOfBirthString.split("-")[1] || ""
   );
   const [dayStr, setDayStr] = useState<string>(dateOfBirthString.split("-")[2]);
   const [fullDate, setFullDate] = useState<string>(dateOfBirthString);
@@ -52,12 +53,11 @@ const ProfileEdit = ({ user }: UserProps) => {
   // }, [fullDate]);
   const handleSave = async () => {
     try {
-      const userUpdateZodSchema = userZodSchema
-        .omit({
-          emailId: true,
-          password: true,
-        }) // do not let user to update emailId and password here
-        .partial();
+      const userUpdateZodSchema = userZodSchema.omit({
+        emailId: true,
+        password: true,
+      }); // do not let user to update emailId and password here
+      //  .partial();
 
       dispatch(setError(""));
       const isValidDOB = validateDOB(yearStr, monthStr, dayStr);
@@ -66,13 +66,28 @@ const ProfileEdit = ({ user }: UserProps) => {
         dispatch(setError("Please enter a valid date."));
         return;
       }
+      if (!["Man", "Woman", "Non-binary"].includes(gender)) {
+        console.log(gender);
+        dispatch(
+          setError(
+            "Invalid gender. Allowed values: 'Man', 'Woman', 'Non-binary'."
+          )
+        );
+        return;
+      }
 
+      if (about === undefined || about.length < 10 || about?.length > 200) {
+        dispatch(setError("About must be between 10-200 characters"));
+        return;
+      }
       //Show Error when skills are less than 2
       if (skills.length < 2) {
         dispatch(setError("Add at least 2 skills"));
         return;
       }
+
       const updatedUser: UserInterface = {
+        _id: user._id,
         firstName: firstName,
         lastName: lastName,
         dateOfBirth: `${yearStr}-${monthStr}-${dayStr}`,
@@ -81,6 +96,7 @@ const ProfileEdit = ({ user }: UserProps) => {
         photoUrl: photoUrl,
         skills: skills,
       };
+      console.log("Updated User: ", updatedUser);
       userUpdateZodSchema.parse(updatedUser);
 
       await api
@@ -107,8 +123,8 @@ const ProfileEdit = ({ user }: UserProps) => {
       if (err instanceof AxiosError) {
         console.error(err);
         console.log(err.message);
-        console.log(err?.response.data.message);
-        dispatch(setError(err?.response.data.message || err.message));
+        console.log(err?.response?.data.message);
+        dispatch(setError(err?.response?.data.message || err.message));
         return;
       }
       if (err instanceof Error) {
@@ -173,6 +189,7 @@ const ProfileEdit = ({ user }: UserProps) => {
           <fieldset className="fieldset flex ">
             <legend className="fieldset-label">Date of Birth</legend>
             <input
+              required
               type="text"
               className="input"
               minLength={2}
@@ -187,6 +204,7 @@ const ProfileEdit = ({ user }: UserProps) => {
               autoComplete="bday-day"
             />
             <input
+              required
               type="text"
               className="input"
               minLength={2}
@@ -201,6 +219,7 @@ const ProfileEdit = ({ user }: UserProps) => {
               autoComplete="bday-month"
             />
             <input
+              required
               type="text"
               className="input"
               minLength={4}
@@ -229,7 +248,7 @@ const ProfileEdit = ({ user }: UserProps) => {
               id="gender"
               name="gender"
             >
-              <option disabled={true}>Select Gender</option>
+              <option>Select Gender</option>
               <option>Man</option>
               <option>Woman</option>
               <option>Non-binary</option>
@@ -238,6 +257,7 @@ const ProfileEdit = ({ user }: UserProps) => {
               About
             </label>
             <textarea
+              required
               className="textarea w-full"
               placeholder="Bio"
               value={about}
@@ -287,6 +307,7 @@ const ProfileEdit = ({ user }: UserProps) => {
         <div>
           <UserCard
             user={{
+              _id: user._id,
               firstName,
               lastName,
               gender,

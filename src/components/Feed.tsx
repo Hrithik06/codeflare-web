@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import api from "../utils/axiosInstance";
 
@@ -13,17 +13,16 @@ const Feed = (): React.JSX.Element => {
   const navigate = useNavigate();
   const feed = useAppSelector((store: RootState) => store.feed);
   const loading = useAppSelector((store: RootState) => store.user.loading);
-  const isAuthenticated = useAppSelector(
-    (store: RootState) => store.user.isAuthenticated,
-  );
+  // const isAuthenticated = useAppSelector(
+  //   (store: RootState) => store.user.isAuthenticated
+  // );
+  const [error, setError] = useState(""); //TODO: Implement error handling and proper UI feedback
   const getFeed = async () => {
     if (feed.length !== 0) {
       dispatch(clearLoading());
       return;
     }
-    // if (!isAuthenticated) {
-    //   navigate("/login");
-    // }
+
     dispatch(setLoading());
     await api
       .get("/user/feed", {
@@ -39,12 +38,37 @@ const Feed = (): React.JSX.Element => {
       })
       .catch((err) => {
         dispatch(clearLoading());
+        if (err.response) {
+          if (err.response.status === 401) {
+            navigate("/login");
+          } else if (err.response.status === 404) {
+            // setError("No New Users found");
+            console.error("No New Users found");
+            navigate("/login");
+          } else {
+            const errorMessage =
+              err.response.data?.message || "An error occurred";
+            console.error(errorMessage);
+            setError(errorMessage);
+
+            // alert(errorMessage);
+          }
+        } else {
+          console.error("Network error or server is down");
+          // alert("Network error or server is down");
+          setError("Network error or server is down");
+          navigate("/login");
+        }
+
         console.error(err);
       });
   };
   useEffect(() => {
     getFeed();
   }, []);
+  // if (!isAuthenticated) {
+  //   navigate("/login");
+  // }
   if (loading) {
     return (
       <div className="flex justify-center mx-auto my-10">
@@ -52,13 +76,19 @@ const Feed = (): React.JSX.Element => {
       </div>
     );
   }
-  // if (feed.length === 0) {
-  //   return (
-  //     <div>
-  //       <p>No New Users found</p>
-  //     </div>
-  //   );
-  // }
+
+  if (error.length > 0) {
+    return (
+      <div className="text-center p-10">
+        <div className="toast toast-center toast-top">
+          <div className="alert alert-success">
+            <span>{error}</span>
+          </div>
+        </div>
+        <h1 className="text-3xl">{error}</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center mx-auto">

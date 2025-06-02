@@ -27,8 +27,10 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
       </figure>
       <div className="card-body h-1/4">
         <h2 className="card-title">{`${firstName} ${lastName}`}</h2>
-        <h3 className="card-actions">{`${age}, ${gender}`}</h3>
-        <p>{about}</p>
+        <h3 className="card-actions">{`${age || "Age"}, ${
+          gender || "Gender"
+        }`}</h3>
+        <p>{about || "Bio"}</p>
         {/* <div className="flex justify-start gap-2 ">
           <span className="italic">Top Skills:</span> */}
         <div className="flex justify-start gap-1">
