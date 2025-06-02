@@ -13,9 +13,9 @@ const Feed = (): React.JSX.Element => {
   const navigate = useNavigate();
   const feed = useAppSelector((store: RootState) => store.feed);
   const loading = useAppSelector((store: RootState) => store.user.loading);
-  // const isAuthenticated = useAppSelector(
-  //   (store: RootState) => store.user.isAuthenticated
-  // );
+  const isAuthenticated = useAppSelector(
+    (store: RootState) => store.user.isAuthenticated
+  );
   const [error, setError] = useState(""); //TODO: Implement error handling and proper UI feedback
   const getFeed = async () => {
     if (feed.length !== 0) {
@@ -66,9 +66,9 @@ const Feed = (): React.JSX.Element => {
   useEffect(() => {
     getFeed();
   }, []);
-  // if (!isAuthenticated) {
-  //   navigate("/login");
-  // }
+  if (!isAuthenticated) {
+    navigate("/login");
+  }
   if (loading) {
     return (
       <div className="flex justify-center mx-auto my-10">
