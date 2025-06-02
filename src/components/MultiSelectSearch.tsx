@@ -31,7 +31,7 @@ function skillsReducer(state: State, action: AppActions): State {
     case "ADD": {
       const skillValueToAdd = payload;
       const newSkillList = skillList.filter(
-        (v: string) => v !== skillValueToAdd,
+        (v: string) => v !== skillValueToAdd
       );
       return {
         userSkills: [...userSkills, skillValueToAdd],
@@ -42,7 +42,7 @@ function skillsReducer(state: State, action: AppActions): State {
     case "REMOVE": {
       const skillValueToRemove = payload;
       const newUserSkillList = userSkills.filter(
-        (v: string) => v !== skillValueToRemove,
+        (v: string) => v !== skillValueToRemove
       );
       return {
         userSkills: [...newUserSkillList],
@@ -54,7 +54,7 @@ function skillsReducer(state: State, action: AppActions): State {
     case "SET_INITIAL": {
       const initialSkillsFromDB = payload;
       const newSkillList = skillList.filter(
-        (x) => !initialSkillsFromDB.includes(x),
+        (x) => !initialSkillsFromDB.includes(x)
       );
       //  console.log(newSkillList);
       return {
@@ -99,7 +99,7 @@ const MultiSelectSearch = ({
 
     const timerId = setTimeout(() => {
       const filtered = state.skillList.filter((value: string) =>
-        value.toLowerCase().includes(searchTxt.toLowerCase()),
+        value.toLowerCase().includes(searchTxt.toLowerCase())
       );
       setSearchResults(filtered);
     }, 500);

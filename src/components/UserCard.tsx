@@ -1,10 +1,25 @@
 import React from "react";
 import UserInterface from "../interface/UserInterface";
+import api from "../utils/axiosInstance";
+import { useAppDispatch } from "../utils/hooks";
+import { removeUserFromFeed } from "../utils/feedSlice";
 type UserProps = {
   user: UserInterface;
 };
 const UserCard = ({ user }: UserProps): React.JSX.Element => {
-  const { firstName, lastName, photoUrl, about, age, gender, skills } = user;
+  const dispatch = useAppDispatch();
+  const { _id, firstName, lastName, photoUrl, about, age, gender, skills } =
+    user;
+  const handleSendRequest = async (status: string) => {
+    await api
+      .post(`/request/send/${status}/${_id}`, {}, { withCredentials: true })
+      .then((res) => {
+        dispatch(removeUserFromFeed(_id));
+        console.log(res);
+      })
+      .catch((err) => console.error(err));
+  };
+
   return (
     <div className="card w-80 shadow-sm m-4 bg-white dark:bg-zinc-900">
       <figure className="h-3/4">
@@ -12,8 +27,10 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
       </figure>
       <div className="card-body h-1/4">
         <h2 className="card-title">{`${firstName} ${lastName}`}</h2>
-        <h3 className="card-actions">{`${age}, ${gender}`}</h3>
-        <p>{about}</p>
+        <h3 className="card-actions">{`${age || "Age"}, ${
+          gender || "Gender"
+        }`}</h3>
+        <p>{about || "Bio"}</p>
         {/* <div className="flex justify-start gap-2 ">
           <span className="italic">Top Skills:</span> */}
         <div className="flex justify-start gap-1">
@@ -27,8 +44,12 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
           ))}
         </div>
         {/* </div> */}
-        <div className="card-actions justify-evenly ">
-          <button className="btn btn-primary rounded-full">
+        <div className="card-actions justify-evenly">
+          <button
+            className="btn btn-primary rounded-full"
+            name="ignored-btn"
+            onClick={() => handleSendRequest("ignored")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -44,7 +65,11 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
               />
             </svg>
           </button>
-          <button className="btn btn-success rounded-full">
+          <button
+            className="btn btn-success rounded-full"
+            name="interested-btn"
+            onClick={() => handleSendRequest("interested")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

@@ -56,7 +56,7 @@ const Connection = (): React.JSX.Element => {
         {loading ? (
           <span className="loading loading-bars loading-xl"></span>
         ) : connections.length === 0 ? (
-          <p>No New Requests</p>
+          <p>No Connections Found</p>
         ) : (
           connections.map((connection) => (
             <ConnectionCard

@@ -55,7 +55,7 @@ export const userZodSchema = z.object({
   gender: z.enum(["Man", "Woman", "Non-binary"], {
     message: "Invalid gender. Allowed values: 'Man', 'Woman', 'Non-binary'.",
   }),
-  about: z.string({ message: "About is required" }).trim(),
+  about: z.string({ message: "About is required" }).trim().min(10, { message: "About must be at least 10 characters" }).max(200, { message: "About cannot exceed 200 characters" }),
   skills: z
     .array(z.string({ message: "Skills is required" }))
     .min(1, { message: "Minimum 1 skill required" })
