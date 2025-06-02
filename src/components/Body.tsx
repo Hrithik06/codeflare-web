@@ -15,7 +15,7 @@ const Body = (): React.JSX.Element => {
   const navigate = useNavigate();
   const userData = useAppSelector((store: RootState) => store.user.user);
   // const [error, setError] = useState("");
-  //TODO: handle error
+  //TODO: handle error everywhere in the app
   const fetchUser = async () => {
     try {
       const res = await api.get(`profile/view`, {
