@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Outlet } from "react-router";
 import { isAxiosError } from "axios";
 
@@ -14,8 +14,8 @@ const Body = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userData = useAppSelector((store: RootState) => store.user.user);
-  const [error, setError] = useState("");
-
+  // const [error, setError] = useState("");
+  //TODO: handle error
   const fetchUser = async () => {
     try {
       const res = await api.get(`profile/view`, {
@@ -37,7 +37,7 @@ const Body = (): React.JSX.Element => {
             //If for seomereason provided api end-point doesn't exist
             console.error("Invalid API endpoint: Check backend routes.");
             // Instead of redirecting, show a user-friendly message
-            setError("Something went wrong. Please try again later.");
+            // setError("Something went wrong. Please try again later.");
             return navigate("/error");
           }
         } else if (err.request) {
@@ -45,26 +45,26 @@ const Body = (): React.JSX.Element => {
           // `err.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
           console.error("No response from Server");
-          setError("Error: No response from Server ");
+          // setError("Error: No response from Server ");
           return navigate("/error");
         }
       }
       // Something happened in setting up the request that triggered an Error
-      console.log("Unexpected Error: ", err.message);
+      console.log("Unexpected Error: ", err);
     }
   };
   React.useEffect(() => {
     try {
       if (!userData) fetchUser();
-    } catch (err) {
-      console.error("Error: ", err.message);
+    } catch (err: Error | any) {
+      console.error("Error: ", err?.message);
     }
   }, []);
   return (
     <div data-theme={"light"} className="min-h-screen">
       <NavBar />
       <Outlet />
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

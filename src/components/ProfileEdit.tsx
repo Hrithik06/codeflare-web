@@ -31,7 +31,7 @@ const ProfileEdit = ({ user }: UserProps) => {
   const [gender, setGender] = useState<string>(user.gender);
   const [about, setAbout] = useState<string>(user.about);
   const [skills, setSkills] = useState<string[]>(user.skills);
-  const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
+  // const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
 
   const [showToast, setShowToast] = useState(false);
 
@@ -93,7 +93,7 @@ const ProfileEdit = ({ user }: UserProps) => {
         dateOfBirth: `${yearStr}-${monthStr}-${dayStr}`,
         gender: gender,
         about: about,
-        photoUrl: photoUrl,
+        photoUrl: user.photoUrl,
         skills: skills,
       };
       console.log("Updated User: ", updatedUser);
@@ -313,7 +313,7 @@ const ProfileEdit = ({ user }: UserProps) => {
               gender,
               about,
               skills,
-              photoUrl,
+              photoUrl: user.photoUrl,
               age,
               dateOfBirth: fullDate,
             }}

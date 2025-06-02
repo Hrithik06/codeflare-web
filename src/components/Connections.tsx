@@ -22,6 +22,7 @@ const Connection = (): React.JSX.Element => {
       })
       .catch((err) => {
         // TODO: Error Handling code
+        console.error("Error fetching connections: ", err);
         dispatch(clearLoading());
       });
   };
