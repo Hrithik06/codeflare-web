@@ -41,10 +41,7 @@ const NotFound = (): React.JSX.Element => {
       <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
         Internal Server Error.
       </p> */}
-            <img
-              src="public/404_Not_Found_Error.svg"
-              className="w-1/2 m-auto"
-            />
+            <img src="/404_Not_Found_Error.svg" className="w-1/2 m-auto" />
             <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
               <h1 className="text-3xl">Page Not Found</h1>
               <p>Redirecting to home in {redirectIn} </p>

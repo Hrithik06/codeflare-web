@@ -24,7 +24,7 @@ const ErrorPage = (): React.JSX.Element => {
               Internal Server Error.
             </p> */}
             <img
-              src="public/500_Internal_Server_Error.svg"
+              src="/500_Internal_Server_Error.svg"
               className="w-1/2 m-auto"
             />
             <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
