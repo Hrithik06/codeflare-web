@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { clearLoading, setLoading, setUser } from "../utils/userSlice";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
@@ -6,7 +6,7 @@ import api from "../utils/axiosInstance";
 import { emailIdZodSchema, passwordZodSchema } from "../utils/zodSchema";
 import { ZodError } from "zod";
 import { RootState } from "../utils/appStore";
-
+useEffect;
 const Login = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -19,9 +19,9 @@ const Login = (): React.JSX.Element => {
   const [isLogin, setIsLogin] = useState(true);
 
   const loading = useAppSelector((store: RootState) => store.user.loading);
-  // const isAuthenticated = useAppSelector(
-  //   (store: RootState) => store.user.isAuthenticated,
-  // );
+  const isAuthenticated = useAppSelector(
+    (store: RootState) => store.user.isAuthenticated
+  );
   const handleLogin = async () => {
     try {
       emailIdZodSchema.parse(emailId);
@@ -80,7 +80,6 @@ const Login = (): React.JSX.Element => {
     }
   };
   const handleSignUp = async () => {
-    console.log("Sign Up");
     await api
       .post(
         "/signup",
@@ -101,10 +100,9 @@ const Login = (): React.JSX.Element => {
         }
       });
   };
-  // useEffect(() => {
-  //   console.log(isAuthenticated);
-  //   if (isAuthenticated) navigate("/");
-  // }, [isAuthenticated, navigate]);
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  }, [isAuthenticated, navigate]);
   //TODO: when user is loggedIn and visits the /login page it should not come to Login Page redirect to home(feed)
   return (
     <form className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box mx-auto my-20">

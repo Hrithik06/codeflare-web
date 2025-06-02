@@ -64,11 +64,11 @@ const Feed = (): React.JSX.Element => {
       });
   };
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
     getFeed();
   }, []);
-  if (!isAuthenticated) {
-    navigate("/login");
-  }
   if (loading) {
     return (
       <div className="flex justify-center mx-auto my-10">

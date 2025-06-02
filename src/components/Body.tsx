@@ -3,7 +3,6 @@ import { Outlet } from "react-router";
 import { isAxiosError } from "axios";
 
 import { NavBar, Footer } from "./index";
-
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import { setUser } from "../utils/userSlice";
 import { RootState } from "../utils/appStore";
