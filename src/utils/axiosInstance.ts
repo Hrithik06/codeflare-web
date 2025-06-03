@@ -8,7 +8,7 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // whatever you want to do with the error
+    //TODO: whatever you want to do with the error
     throw error;
   },
 );
