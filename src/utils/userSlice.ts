@@ -21,7 +21,9 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state: UserState, action: PayloadAction<UserInterface>) => {
       state.user = action.payload;
-      state.isAuthenticated = true;
+      if (action.payload !== undefined && action.payload !== null) {
+        state.isAuthenticated = true;
+      }
     },
     clearUser: (state: UserState) => {
       state.user = null;

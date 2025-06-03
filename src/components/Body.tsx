@@ -13,6 +13,7 @@ const Body = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userData = useAppSelector((store: RootState) => store.user.user);
+
   // const [error, setError] = useState("");
   //TODO: handle error everywhere in the app
   const fetchUser = async () => {
@@ -21,6 +22,7 @@ const Body = (): React.JSX.Element => {
         withCredentials: true,
       });
       const userData = res.data.data;
+
       dispatch(setUser(userData));
       // navigate(-1);
     } catch (err) {

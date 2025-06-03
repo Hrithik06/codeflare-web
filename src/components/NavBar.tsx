@@ -11,7 +11,7 @@ import { clearConnections } from "../utils/connectionSlice";
 const NavBar = (): React.ReactElement => {
   const userData = useAppSelector((store: RootState) => store.user.user);
   const isAuthenticated = useAppSelector(
-    (store: RootState) => store.user.isAuthenticated,
+    (store: RootState) => store.user.isAuthenticated
   );
 
   const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ const NavBar = (): React.ReactElement => {
       </div>
 
       <>
-        {isAuthenticated ? (
+        {isAuthenticated && userData ? (
           <div className="flex gap-2 items-center">
             <div>Hi 👋, {userData?.firstName} </div>
             <div className="dropdown dropdown-end">

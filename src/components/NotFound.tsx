@@ -43,8 +43,7 @@ const NotFound = (): React.JSX.Element => {
       </p> */}
             <img src="/404_Not_Found_Error.svg" className="w-1/2 m-auto" />
             <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-              <h1 className="text-3xl">Page Not Found</h1>
-              <p>Redirecting to home in {redirectIn} </p>
+              Redirecting to home in {redirectIn}
             </p>
             <button className="btn btn-primary" onClick={() => navigate("/")}>
               Go back to Home
