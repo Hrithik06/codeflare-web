@@ -1,32 +1,39 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Provider } from "react-redux";
+import { Suspense, lazy } from "react";
 
 import appStore from "./utils/appStore";
-import {
-  Body,
-  ErrorPage,
-  Feed,
-  Login,
-  NotFound,
-  Profile,
-  Connections,
-  Requests,
-  ContactUs,
-  PrivacyPolicy,
-  RefundPolicy,
-  TermsOfService,
-} from "./components";
-// import Container from "./Container";
+import { Body, Login, Loader } from "./components"; // These load instantly
+
+// Lazy-loaded components
+const Feed = lazy(() => import("./components/Feed"));
+const Profile = lazy(() => import("./components/Profile"));
+const Connections = lazy(() => import("./components/Connections"));
+const Requests = lazy(() => import("./components/Requests"));
+const ContactUs = lazy(() => import("./components/ContactUs"));
+const PrivacyPolicy = lazy(() => import("./components/PrivacyPolicy"));
+const RefundPolicy = lazy(() => import("./components/RefundPolicy"));
+const TermsOfService = lazy(() => import("./components/TermsOfService"));
+const NotFound = lazy(() => import("./components/NotFound"));
+const ErrorPage = lazy(() => import("./components/ErrorPage"));
+
 function App() {
   return (
-    <>
-      {/* <Container> */}
-      {/* </Container> */}
-      <Provider store={appStore}>
-        <BrowserRouter>
+    <Provider store={appStore}>
+      <BrowserRouter>
+        {/* Suspense for all lazy-loaded routes */}
+        <Suspense
+          fallback={
+            <div className="flex p-10 w-full justify-around ">
+              <Loader />
+            </div>
+          }
+        >
           <Routes>
             <Route path="/" element={<Body />}>
               <Route path="login" element={<Login />} />
+              {/* No suspense, loads instantly */}
+              <Route index element={<Feed />} />
               <Route path="profile" element={<Profile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="requests" element={<Requests />} />
@@ -34,14 +41,13 @@ function App() {
               <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route path="refunds" element={<RefundPolicy />} />
               <Route path="terms-of-service" element={<TermsOfService />} />
-              <Route path="/" element={<Feed />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/error" element={<ErrorPage />} />
             </Route>
+            <Route path="/error" element={<ErrorPage />} />
           </Routes>
-        </BrowserRouter>
-      </Provider>
-    </>
+        </Suspense>
+      </BrowserRouter>
+    </Provider>
   );
 }
 

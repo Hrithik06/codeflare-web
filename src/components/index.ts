@@ -17,6 +17,7 @@ import ContactUs from "./ContactUs";
 import PrivacyPolicy from "./PrivacyPolicy";
 import RefundPolicy from "./RefundPolicy";
 import TermsOfService from "./TermsOfService";
+import Loader from "./Loader";
 
 
 
@@ -39,5 +40,6 @@ export {
   ContactUs,
   PrivacyPolicy,
   RefundPolicy,
-  TermsOfService
+  TermsOfService,
+  Loader
 };
