@@ -11,6 +11,10 @@ import {
   Profile,
   Connections,
   Requests,
+  ContactUs,
+  PrivacyPolicy,
+  RefundPolicy,
+  TermsOfService,
 } from "./components";
 // import Container from "./Container";
 function App() {
@@ -26,6 +30,10 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="requests" element={<Requests />} />
+              <Route path="contact-us" element={<ContactUs />} />
+              <Route path="privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="refunds" element={<RefundPolicy />} />
+              <Route path="terms-of-service" element={<TermsOfService />} />
               <Route path="/" element={<Feed />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/error" element={<ErrorPage />} />

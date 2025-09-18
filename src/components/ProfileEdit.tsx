@@ -155,6 +155,8 @@ const ProfileEdit = ({ user }: UserProps) => {
             id="firstName"
             name="firstName"
             autoComplete="given-name"
+            minLength={1}
+            maxLength={20}
           />
 
           <label className="fieldset-label" htmlFor="lastName">
@@ -169,6 +171,8 @@ const ProfileEdit = ({ user }: UserProps) => {
             id="lastName"
             name="lastName"
             autoComplete="family-name"
+            minLength={1}
+            maxLength={20}
           />
 
           <div className="tooltip tooltip-right" data-tip="Cannot be edited">

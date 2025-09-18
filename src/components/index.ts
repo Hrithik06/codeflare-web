@@ -13,6 +13,12 @@ import Connections from "./Connections";
 import Requests from "./Requests";
 import ConnectionCard from "./ConnectionCard";
 import ActionButtons from "./ActionButtons";
+import ContactUs from "./ContactUs";
+import PrivacyPolicy from "./PrivacyPolicy";
+import RefundPolicy from "./RefundPolicy";
+import TermsOfService from "./TermsOfService";
+
+
 
 export {
   Body,
@@ -30,4 +36,8 @@ export {
   Requests,
   ConnectionCard,
   ActionButtons,
+  ContactUs,
+  PrivacyPolicy,
+  RefundPolicy,
+  TermsOfService
 };

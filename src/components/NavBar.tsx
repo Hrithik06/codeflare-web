@@ -36,7 +36,7 @@ const NavBar = (): React.ReactElement => {
     <div className="navbar bg-base-100 shadow-sm px-10 ">
       <div className="flex-1">
         <Link className="text-xl" to="/">
-          CodeFlare
+          GitTogether
         </Link>
       </div>
 
