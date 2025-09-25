@@ -33,8 +33,6 @@ const userSlice = createSlice({
       state.loading = true;
     },
     clearLoading: (state: UserState) => {
-      console.log("clearLoading Redux");
-
       state.loading = false;
     },
     setError: (state: UserState, action: PayloadAction<string>) => {
