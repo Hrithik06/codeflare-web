@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 const PrivacyPolicy = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -79,13 +80,10 @@ const PrivacyPolicy = () => {
       <p className="mb-4">
         You have the right to access, modify, or request deletion of your
         personal data. To exercise these rights, please contact us at{" "}
-        <a
-          href="mailto:support@example.com"
-          className="text-blue-600 underline"
-        >
-          support@example.com
-        </a>
-        .
+        <Link to={"/contact-us"} className="text-blue-600 underline">
+          contact us
+        </Link>
+        ; ; .
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">
@@ -101,13 +99,10 @@ const PrivacyPolicy = () => {
       <p>
         If you have any questions about this Privacy Policy, please reach out to
         us at{" "}
-        <a
-          href="mailto:support@example.com"
-          className="text-blue-600 underline"
-        >
-          support@example.com
-        </a>
-        .
+        <Link to={"/contact-us"} className="text-blue-600 underline">
+          contact us
+        </Link>
+        ; ; .
       </p>
     </div>
   );

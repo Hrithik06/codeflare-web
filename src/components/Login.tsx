@@ -48,6 +48,7 @@ const Login = (): React.JSX.Element => {
           ) {
             dispatch(setUser(userData));
             dispatch(clearLoading());
+            console.log("clearLoading");
             navigate("/");
           }
         })
