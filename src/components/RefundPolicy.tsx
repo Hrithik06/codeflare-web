@@ -7,7 +7,7 @@ const RefundPolicy = () => {
 
       <p className="mb-4">
         At <strong>GitTogether</strong>, all sales are final. Once a payment is
-        made, it is <strong>non-refundable</strong> and
+        made, it is <strong>non-refundable</strong> and{" "}
         <strong>non-cancellable</strong> under any circumstances.
       </p>
 
@@ -24,7 +24,7 @@ const RefundPolicy = () => {
         <Link to={"/contact-us"} className="text-blue-600 underline">
           contact us
         </Link>
-        ; ; .
+        .
       </p>
     </div>
   );

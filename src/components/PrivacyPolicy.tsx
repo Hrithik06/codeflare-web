@@ -83,7 +83,7 @@ const PrivacyPolicy = () => {
         <Link to={"/contact-us"} className="text-blue-600 underline">
           contact us
         </Link>
-        ; ; .
+        .
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">
@@ -102,7 +102,7 @@ const PrivacyPolicy = () => {
         <Link to={"/contact-us"} className="text-blue-600 underline">
           contact us
         </Link>
-        ; ; .
+        .
       </p>
     </div>
   );

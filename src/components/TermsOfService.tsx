@@ -52,7 +52,7 @@ const TermsOfService = () => {
         <Link to={"/contact-us"} className="text-blue-600 underline">
           contact us
         </Link>
-        ; ; .
+        .
       </p>
     </div>
   );
