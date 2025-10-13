@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 const TermsOfService = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -48,12 +49,9 @@ const TermsOfService = () => {
       <h2 className="text-xl font-semibold mt-6 mb-2">6. Contact Us</h2>
       <p>
         For questions about these Terms & Conditions, please contact us at{" "}
-        <a
-          href="mailto:support@example.com"
-          className="text-blue-600 underline"
-        >
-          support@example.com
-        </a>
+        <Link to={"/contact-us"} className="text-blue-600 underline">
+          contact us
+        </Link>
         .
       </p>
     </div>
