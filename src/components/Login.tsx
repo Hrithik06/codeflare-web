@@ -214,7 +214,7 @@ const Login = (): React.JSX.Element => {
                 />
               </svg>
             )}
-          </button>isAuthenticated
+          </button>
         </div>
       </>
 
