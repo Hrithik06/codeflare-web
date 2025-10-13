@@ -1,25 +1,33 @@
 import { useState } from "react";
-import { Link } from "react-router";
+// import { Link } from "react-router";
 import api from "../utils/axiosInstance";
+import { useAppSelector } from "../utils/hooks";
+import { RootState } from "../utils/appStore";
 export default function Example() {
   const [subjectTxt, setSubjectTxt] = useState("");
   const [messageTxt, setMessageTxt] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  
+  const isAuthenticated = useAppSelector((store:RootState)=>store.user.isAuthenticated);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(subjectTxt, messageTxt);
     await api
       .post(
         "/contact-us",
-        { subjectTxt, messageTxt },
+        { "subject":subjectTxt,"message": messageTxt },
         { withCredentials: true }
       )
       .then((response) => {
         console.log(response);
+      }).catch((err)=>{
+        console.error(err.response.data);
+        console.error(err.response.data.errors[0].message);
+        setErrorMsg(err.response.data.errors[0].message);
       });
   };
   return (
-    <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
+    <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">
       <div
         aria-hidden="true"
         className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -40,61 +48,26 @@ export default function Example() {
           Have a question? or just want to say hi👋
         </p>
       </div>
-      <form className="mx-auto mt-16 max-w-xl sm:mt-20" onSubmit={handleSubmit}>
+      { (errorMsg.length > 0 || !isAuthenticated )&& (
+        <div role="alert" className="mx-auto mt-4 max-w-xl alert alert-error alert-soft">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="h-6 w-6 shrink-0 stroke-current"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+        {!isAuthenticated?<span>Please login before sending a message</span> : <span>{errorMsg}</span>}
+        </div>)}
+      <form className="mx-auto max-w-xl sm:mt-12" onSubmit={handleSubmit} >  <fieldset >
+
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-          {/* <div>
-            <label
-              htmlFor="first-name"
-              className="block text-sm/6 font-semibold text-gray-900"
-            >
-              First name
-            </label>
-            <div className="mt-2.5">
-              <input
-                id="first-name"
-                name="first-name"
-                type="text"
-                autoComplete="given-name"
-                className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-              />
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="last-name"
-              className="block text-sm/6 font-semibold text-gray-900"
-            >
-              Last name
-            </label>
-            <div className="mt-2.5">
-              <input
-                id="last-name"
-                name="last-name"
-                type="text"
-                autoComplete="family-name"
-                className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-              />
-            </div>
-          </div> */}
-
-          {/* <div className="sm:col-span-2">
-            <label
-              htmlFor="email"
-              className="block text-sm/6 font-semibold text-gray-900"
-            >
-              Email
-            </label>
-            <div className="mt-2.5">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-              />
-            </div>
-          </div> */}
-
           <div className="sm:col-span-2">
             <label
               htmlFor="message"
@@ -111,6 +84,9 @@ export default function Example() {
                 value={subjectTxt}
                 placeholder="Subject"
                 onChange={(e) => setSubjectTxt(e.target.value)}
+                disabled={!isAuthenticated}
+                minLength={10}
+                maxLength={60}
               />
             </div>
           </div>
@@ -129,11 +105,15 @@ export default function Example() {
                 rows={4}
                 className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                 value={messageTxt}
+                disabled={!isAuthenticated}
                 onChange={(e) => setMessageTxt(e.target.value)}
+                placeholder="Hi👋"
+                minLength={10}
+                maxLength={300}
               />
             </div>
           </div>
-          <div className="flex gap-x-4 sm:col-span-2">
+          {/* <div className="flex gap-x-4 sm:col-span-2">
             <div className="flex h-6 items-center">
               <div className="group relative inline-flex w-8 shrink-0 rounded-full bg-gray-200 p-px inset-ring inset-ring-gray-900/5 outline-offset-2 outline-indigo-600 transition-colors duration-200 ease-in-out has-checked:bg-indigo-600 has-focus-visible:outline-2">
                 <span className="size-4 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-3.5" />
@@ -142,6 +122,7 @@ export default function Example() {
                   name="agree-to-policies"
                   type="checkbox"
                   aria-label="Agree to policies"
+                  disabled={!isAuthenticated}
                   className="absolute inset-0 appearance-none focus:outline-hidden"
                 />
               </div>
@@ -159,16 +140,17 @@ export default function Example() {
               </Link>
               .
             </label>
-          </div>
+          </div> */}
         </div>
         <div className="mt-10">
           <button
             type="submit"
             className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            disabled={!isAuthenticated}
           >
             Let's talk
           </button>
-        </div>
+        </div></fieldset>
       </form>
     </div>
   );

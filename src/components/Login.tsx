@@ -6,7 +6,6 @@ import api from "../utils/axiosInstance";
 import { emailIdZodSchema, passwordZodSchema } from "../utils/zodSchema";
 import { ZodError } from "zod";
 import { RootState } from "../utils/appStore";
-useEffect;
 const Login = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -48,7 +47,6 @@ const Login = (): React.JSX.Element => {
           ) {
             dispatch(setUser(userData));
             dispatch(clearLoading());
-            console.log("clearLoading");
             navigate("/");
           }
         })
@@ -216,7 +214,7 @@ const Login = (): React.JSX.Element => {
                 />
               </svg>
             )}
-          </button>
+          </button>isAuthenticated
         </div>
       </>
 
@@ -248,7 +246,6 @@ const Login = (): React.JSX.Element => {
           {isLogin ? "Sign Up" : "Login"}
         </button>
       </p>
-
       {error.length > 0 && (
         <div role="alert" className="alert alert-error alert-soft">
           <svg
@@ -266,6 +263,7 @@ const Login = (): React.JSX.Element => {
           </svg>
           <span>{error}</span>
         </div>
+
       )}
     </form>
   );
