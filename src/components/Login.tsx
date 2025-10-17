@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { clearLoading, setLoading, setUser } from "../utils/userSlice";
+import {  setUser } from "../utils/userSlice";
+// import { clearLoading, setLoading } from "../utils/userSlice";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import api from "../utils/axiosInstance";
 import { emailIdZodSchema, passwordZodSchema } from "../utils/zodSchema";
@@ -16,8 +17,8 @@ const Login = (): React.JSX.Element => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-
-  const loading = useAppSelector((store: RootState) => store.user.loading);
+const [loading, setLoading] = useState(false)
+  // const loading = useAppSelector((store: RootState) => store.user.loading);
   const isAuthenticated = useAppSelector(
     (store: RootState) => store.user.isAuthenticated
   );
@@ -26,7 +27,8 @@ const Login = (): React.JSX.Element => {
       emailIdZodSchema.parse(emailId);
       passwordZodSchema.parse(password);
       setShowPassword(false);
-      dispatch(setLoading());
+      // dispatch(setLoading());
+      setLoading(true);
       await api
         .post(
           "/login",
@@ -46,12 +48,16 @@ const Login = (): React.JSX.Element => {
             userData
           ) {
             dispatch(setUser(userData));
-            dispatch(clearLoading());
+            // dispatch(clearLoading());
+      setLoading(false);
+
             navigate("/");
           }
         })
         .catch((err) => {
-          dispatch(clearLoading());
+          // dispatch(clearLoading());
+      setLoading(false);
+
           if (err.response) {
             let errMessage;
             if (err?.response?.data?.errors) {
