@@ -5,25 +5,29 @@ import api from "../utils/axiosInstance";
 import { UserCard } from "./index";
 import { addFeed } from "../utils/feedSlice";
 import { RootState } from "../utils/appStore";
-import { setLoading, clearLoading } from "../utils/userSlice";
+// import { setLoading, clearLoading } from "../utils/userSlice";
 import { useNavigate } from "react-router";
 
 const Feed = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const feed = useAppSelector((store: RootState) => store.feed);
-  const loading = useAppSelector((store: RootState) => store.user.loading);
+  const [loading, setLoading] = useState(false)
+  // const loading = useAppSelector((store: RootState) => store.user.loading);
   const isAuthenticated = useAppSelector(
     (store: RootState) => store.user.isAuthenticated
   );
   const [error, setError] = useState(""); //TODO: Implement error handling and proper UI feedback
   const getFeed = async () => {
     if (feed.length !== 0) {
-      dispatch(clearLoading());
+      // dispatch(clearLoading());
+      setLoading(false);
       return;
     }
 
-    dispatch(setLoading());
+    // dispatch(setLoading());
+    setLoading(true);
+
     await api
       .get("/user/feed", {
         params: {
@@ -34,10 +38,12 @@ const Feed = (): React.JSX.Element => {
       })
       .then((res) => {
         dispatch(addFeed(res.data.data));
-        dispatch(clearLoading());
+        // dispatch(clearLoading());
+        setLoading(false);
       })
       .catch((err) => {
-        dispatch(clearLoading());
+        // dispatch(clearLoading());
+        setLoading(false);
         if (err.response) {
           if (err.response.status === 401) {
             navigate("/login");
