@@ -8,9 +8,7 @@ import { RootState } from "../utils/appStore";
 // import { setLoading, clearLoading } from "../utils/userSlice";
 import { useNavigate } from "react-router";
 
-const Feed = (): React.JSX.Element => {
-          console.log("ON HOME/FEED PAGE");
-  
+const Feed = (): React.JSX.Element => {  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const feed = useAppSelector((store: RootState) => store.feed);

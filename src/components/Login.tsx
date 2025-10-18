@@ -29,6 +29,8 @@ const [loading, setLoading] = useState(false)
       setShowPassword(false);
       // dispatch(setLoading());
       setLoading(true);
+      console.log("loading before api call: ",loading);
+      
       await api
         .post(
           "/login",
