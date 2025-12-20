@@ -1,29 +1,37 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import api from "../utils/axiosInstance";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import { addConnections } from "../utils/connectionSlice";
-import { clearLoading, setLoading } from "../utils/userSlice";
+// import { clearLoading, setLoading } from "../utils/userSlice";
 import { RootState } from "../utils/appStore";
 import { ConnectionCard } from "./";
 
 const Connection = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const connections = useAppSelector((store: RootState) => store.connections);
-  const loading = useAppSelector((store: RootState) => store.user.loading);
+  // const loading = useAppSelector((store: RootState) => store.user.loading);
+  const [loading, setLoading] = useState(false)
+  
   const fetchConnection = async () => {
-    dispatch(setLoading());
+    // dispatch(setLoading());
+      setLoading(true);
+
     await api
       .get("/user/connections", { withCredentials: true })
       .then((res) => {
         if (res.data.success) {
           dispatch(addConnections(res.data.data));
-          dispatch(clearLoading());
+          // dispatch(clearLoading());
+      setLoading(false);
+
         }
       })
       .catch((err) => {
         // TODO: Error Handling code
         console.error("Error fetching connections: ", err);
-        dispatch(clearLoading());
+        // dispatch(clearLoading());
+      setLoading(false);
+
       });
   };
   const handleMessage = async () => {

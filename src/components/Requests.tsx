@@ -1,25 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../utils/axiosInstance";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import { addRequests, removeRequest } from "../utils/requestSlice";
 import { RootState } from "../utils/appStore";
 import { ConnectionCard } from "./index";
-import { clearLoading, setLoading } from "../utils/userSlice";
+// import { clearLoading, setLoading } from "../utils/userSlice";
 const Requests = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const requests = useAppSelector((store: RootState) => store.requests);
-  const loading = useAppSelector((store: RootState) => store.user.loading);
+  // const loading = useAppSelector((store: RootState) => store.user.loading);
+const [loading, setLoading] = useState(false)
 
   const fetchRequests = async () => {
-    dispatch(setLoading());
+    // dispatch(setLoading());
+    setLoading(true);
     await api
       .get("/user/requests/recieved", { withCredentials: true })
       .then((res) => {
         dispatch(addRequests(res.data.data));
-        dispatch(clearLoading());
+        // dispatch(clearLoading());
+        setLoading(false);
       })
       .catch((err) => {
-        dispatch(clearLoading());
+        // dispatch(clearLoading());
+        setLoading(false);
         console.error(err);
       });
   };

@@ -29,6 +29,8 @@ const [loading, setLoading] = useState(false)
       setShowPassword(false);
       // dispatch(setLoading());
       setLoading(true);
+      console.log("loading before api call: ",loading);
+      
       await api
         .post(
           "/login",
@@ -41,20 +43,27 @@ const [loading, setLoading] = useState(false)
           }
         )
         .then((response) => {
+          console.log("response");
           const userData = response?.data?.data;
           if (
             response.status === 200 &&
             response.statusText === "OK" &&
             userData
           ) {
+            console.log("if all ok");
+          console.log("loading before dispatch: ",loading);
+
             dispatch(setUser(userData));
             // dispatch(clearLoading());
-      setLoading(false);
+            setLoading(false);
+          console.log("loading after dispatch before navigate: ",loading);
 
             navigate("/");
           }
         })
         .catch((err) => {
+          console.log("loading catch section: ",loading);
+          
           // dispatch(clearLoading());
       setLoading(false);
 
