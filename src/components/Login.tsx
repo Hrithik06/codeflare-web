@@ -45,13 +45,16 @@ const Login = (): React.JSX.Element => {
 					console.log("Response.Data: ", response?.data);
 					console.log("Response.Data: ", response?.data?.data);
 					const userData = response?.data?.data;
-					if (
-						response.status === 200 &&
-						response.statusText === "OK" &&
-						userData
-					) {
+					/**
+					 * NOTE: DONOT check for these as it can be inconsistent
+					 * statusText is optional sometimes its statusText="" thats why it was failing in prod(EC2)
+					 * proxies rewrite it
+					 * browsers treat it inconsistently
+					 * Axios already rejects non-2xx by default
+					 * response.status === 200 && response.statusText === "OK"
+					 */
+					if (userData) {
 						console.log("dispatch User");
-
 						dispatch(setUser(userData));
 						// dispatch(clearLoading());
 						setLoading(false);
