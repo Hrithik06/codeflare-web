@@ -29,8 +29,6 @@ const Login = (): React.JSX.Element => {
 			setShowPassword(false);
 			// dispatch(setLoading());
 			setLoading(true);
-			console.log("loading before api call: ", loading);
-
 			await api
 				.post(
 					"/login",
@@ -43,7 +41,9 @@ const Login = (): React.JSX.Element => {
 					},
 				)
 				.then((response) => {
-					console.log("response");
+					console.log("Response: ", response);
+					console.log("Response.Data: ", response?.data);
+					console.log("Response.Data: ", response?.data?.data);
 					const userData = response?.data?.data;
 					if (
 						response.status === 200 &&
