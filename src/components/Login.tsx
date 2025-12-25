@@ -41,9 +41,6 @@ const Login = (): React.JSX.Element => {
 					},
 				)
 				.then((response) => {
-					console.log("Response: ", response);
-					console.log("Response.Data: ", response?.data);
-					console.log("Response.Data: ", response?.data?.data);
 					const userData = response?.data?.data;
 					/**
 					 * NOTE: DONOT check for these as it can be inconsistent
@@ -54,7 +51,6 @@ const Login = (): React.JSX.Element => {
 					 * response.status === 200 && response.statusText === "OK"
 					 */
 					if (userData) {
-						console.log("dispatch User");
 						dispatch(setUser(userData));
 						// dispatch(clearLoading());
 						setLoading(false);
