@@ -18,28 +18,28 @@ import PrivacyPolicy from "./PrivacyPolicy";
 import RefundPolicy from "./RefundPolicy";
 import TermsOfService from "./TermsOfService";
 import Loader from "./Loader";
-
-
+import UploadAndDisplayImage from "./UploadAndDisplayImage";
 
 export {
-  Body,
-  ErrorPage,
-  Feed,
-  Footer,
-  Login,
-  NavBar,
-  NotFound,
-  Profile,
-  UserCard,
-  ProfileEdit,
-  MultiSelectSearch,
-  Connections,
-  Requests,
-  ConnectionCard,
-  ActionButtons,
-  ContactUs,
-  PrivacyPolicy,
-  RefundPolicy,
-  TermsOfService,
-  Loader
+	Body,
+	ErrorPage,
+	Feed,
+	Footer,
+	Login,
+	NavBar,
+	NotFound,
+	Profile,
+	UserCard,
+	ProfileEdit,
+	MultiSelectSearch,
+	Connections,
+	Requests,
+	ConnectionCard,
+	ActionButtons,
+	ContactUs,
+	PrivacyPolicy,
+	RefundPolicy,
+	TermsOfService,
+	Loader,
+	UploadAndDisplayImage,
 };
