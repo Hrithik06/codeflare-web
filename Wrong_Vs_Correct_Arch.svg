@@ -1,0 +1,199 @@
+<svg width="1600" height="980" viewBox="0 0 1600 980" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box {
+      fill: #111827;
+      stroke: #6366f1;
+      stroke-width: 2;
+      rx: 12;
+    }
+    .layout {
+      fill: none;
+      stroke: #374151;
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+      rx: 16;
+    }
+    .text {
+      fill: #e5e7eb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      fill: #a5b4fc;
+    }
+    .subtitle {
+      font-size: 15px;
+      font-weight: bold;
+      fill: #93c5fd;
+    }
+    .label {
+      font-size: 13px;
+      fill: #93c5fd;
+      font-weight: bold;
+    }
+    .arrow {
+      stroke: #9ca3af;
+      stroke-width: 2;
+      marker-end: url(#arrowhead);
+    }
+    .arrow-red {
+      stroke: #ef4444;
+      stroke-width: 2;
+      marker-end: url(#arrowhead-red);
+    }
+    .note {
+      fill: #fbbf24;
+      font-size: 13px;
+    }
+    .danger {
+      fill: #f87171;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .fail {
+      fill: #fecaca;
+      font-size: 13px;
+      font-weight: bold;
+    }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#9ca3af" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444" />
+    </marker>
+  </defs>
+
+  <!-- MAIN TITLE -->
+  <text x="800" y="40" text-anchor="middle" class="title">
+    Wrong vs Correct Authentication and Onboarding Architecture
+  </text>
+
+  <!-- ================= LEFT SIDE: WRONG ================= -->
+
+  <text x="400" y="80" text-anchor="middle" class="subtitle">
+    ❌ WRONG ARCHITECTURE
+  </text>
+
+  <!-- Layout -->
+  <rect x="80" y="120" width="640" height="700" class="layout" />
+  <text x="90" y="110" class="label">Single Layout (Auth + App mixed)</text>
+
+  <!-- Login -->
+  <rect x="280" y="180" width="240" height="80" class="box" />
+  <text x="400" y="215" text-anchor="middle" class="text">/login</text>
+
+  <!-- Signup -->
+  <rect x="280" y="300" width="240" height="80" class="box" />
+  <text x="400" y="335" text-anchor="middle" class="text">/signup</text>
+
+  <!-- Profile -->
+  <rect x="280" y="460" width="240" height="80" class="box" />
+  <text x="400" y="495" text-anchor="middle" class="text">/profile</text>
+
+  <!-- Redirect rule -->
+  <rect x="220" y="600" width="360" height="90" class="box" />
+  <text x="400" y="630" text-anchor="middle" class="danger">
+    if (isAuthenticated)
+  </text>
+  <text x="400" y="655" text-anchor="middle" class="danger">
+    redirect("/")
+  </text>
+
+  <!-- Arrows -->
+  <line x1="400" y1="260" x2="400" y2="300" class="arrow" />
+  <line x1="400" y1="380" x2="400" y2="460" class="arrow" />
+
+  <!-- Forbidden loop -->
+  <line x1="400" y1="540" x2="400" y2="600" class="arrow-red" />
+  <line x1="400" y1="690" x2="400" y2="180" class="arrow-red" />
+
+  <!-- Failure callouts -->
+  <text x="400" y="750" text-anchor="middle" class="fail">
+    ❌ WHY THIS FAILS
+  </text>
+  <text x="400" y="775" text-anchor="middle" class="fail">
+    • Signup becomes authenticated
+  </text>
+  <text x="400" y="795" text-anchor="middle" class="fail">
+    • Global redirect fires
+  </text>
+  <text x="400" y="815" text-anchor="middle" class="fail">
+    • /profile is overridden
+  </text>
+  <text x="400" y="835" text-anchor="middle" class="fail">
+    • Infinite redirect loop (ouroboros)
+  </text>
+
+  <!-- ================= RIGHT SIDE: CORRECT ================= -->
+
+  <text x="1200" y="80" text-anchor="middle" class="subtitle">
+    ✅ CORRECT ARCHITECTURE
+  </text>
+
+  <!-- AuthLayout -->
+  <rect x="880" y="120" width="520" height="260" class="layout" />
+  <text x="890" y="110" class="label">AuthLayout (Policy Only)</text>
+
+  <!-- Login -->
+  <rect x="1040" y="160" width="200" height="80" class="box" />
+  <text x="1140" y="195" text-anchor="middle" class="text">/login</text>
+  <text x="1140" y="215" text-anchor="middle" class="danger">
+    ❌ blocked when authenticated
+  </text>
+
+  <!-- Signup -->
+  <rect x="1040" y="270" width="200" height="80" class="box" />
+  <text x="1140" y="305" text-anchor="middle" class="text">/signup</text>
+  <text x="1140" y="325" text-anchor="middle" class="note">
+    ✔ transition flow
+  </text>
+
+  <!-- Body -->
+  <rect x="880" y="420" width="520" height="360" class="layout" />
+  <text x="890" y="410" class="label">Body (App + Onboarding)</text>
+
+  <!-- Profile -->
+  <rect x="1040" y="460" width="200" height="80" class="box" />
+  <text x="1140" y="495" text-anchor="middle" class="text">/profile</text>
+  <text x="1140" y="515" text-anchor="middle" class="note">
+    onboarding
+  </text>
+
+  <!-- Feed -->
+  <rect x="1040" y="600" width="200" height="80" class="box" />
+  <text x="1140" y="635" text-anchor="middle" class="text">/</text>
+  <text x="1140" y="655" text-anchor="middle" class="note">
+    app home
+  </text>
+
+  <!-- Arrows -->
+  <line x1="1140" y1="240" x2="1140" y2="270" class="arrow" />
+  <line x1="1140" y1="350" x2="1140" y2="460" class="arrow" />
+  <line x1="1140" y1="540" x2="1140" y2="600" class="arrow" />
+
+  <!-- Forbidden login path -->
+  <line x1="1140" y1="160" x2="1140" y2="120" class="arrow-red" />
+
+  <!-- Success callouts -->
+  <text x="1140" y="800" text-anchor="middle" class="note">
+    ✔ WHY THIS WORKS
+  </text>
+  <text x="1140" y="825" text-anchor="middle" class="note">
+    • Login is a gate
+  </text>
+  <text x="1140" y="845" text-anchor="middle" class="note">
+    • Signup is a transition
+  </text>
+  <text x="1140" y="865" text-anchor="middle" class="note">
+    • Onboarding is uninterrupted
+  </text>
+  <text x="1140" y="885" text-anchor="middle" class="note">
+    • No global redirects
+  </text>
+
+</svg>

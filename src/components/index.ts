@@ -19,7 +19,8 @@ import RefundPolicy from "./RefundPolicy";
 import TermsOfService from "./TermsOfService";
 import Loader from "./Loader";
 import UploadAndDisplayImage from "./UploadAndDisplayImage";
-
+import AuthLayout from "./AuthLayout";
+import YouAreIn from "./YouAreIn";
 export {
 	Body,
 	ErrorPage,
@@ -42,4 +43,6 @@ export {
 	TermsOfService,
 	Loader,
 	UploadAndDisplayImage,
+	AuthLayout,
+	YouAreIn,
 };

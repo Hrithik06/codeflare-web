@@ -7,6 +7,7 @@ import api from "../utils/axiosInstance";
 import { Loader } from "../components/";
 import axios from "axios";
 // Define a functional component named UploadAndDisplayImage
+
 const UploadAndDisplayImage = () => {
 	type UploadStatus = "idle" | "selected" | "uploading" | "uploaded" | "error";
 	const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
