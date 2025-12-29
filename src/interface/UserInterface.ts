@@ -1,4 +1,9 @@
-export default interface UserInterface {
+export interface UploadedImageMeta {
+	key: string;
+	contentType: string;
+	isUserUploaded: boolean;
+}
+export interface UserInterface {
 	_id: string;
 	firstName: string;
 	lastName: string;
@@ -8,6 +13,7 @@ export default interface UserInterface {
 	age?: number;
 	gender: string;
 	about: string;
-	photoUrl: string;
+	// photoUrl: string;
 	skills: string[];
+	profileImageMeta: UploadedImageMeta;
 }

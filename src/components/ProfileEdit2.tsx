@@ -2,7 +2,7 @@ import { useState } from "react";
 import UploadAndDisplayImage2 from "./UploadAndDisplayImage2";
 import UserCard from "./UserCard";
 import api from "../utils/axiosInstance";
-import UserInterface from "../interface/UserInterface";
+import { UserInterface } from "../interface/UserInterface";
 
 type UploadedImageMeta = {
 	key: string;
@@ -38,6 +38,7 @@ export default function ProfileEdit2({ user }: UserProps) {
 					lastName,
 					about,
 					photoUrl,
+					profileImageMeta,
 				}}
 			/>
 

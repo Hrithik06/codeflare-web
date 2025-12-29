@@ -17,7 +17,7 @@ const UploadAndDisplayImage = () => {
 	const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 	const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle");
 	const [uploadMeta, setUploadMeta] = useState<{
-		profileImageKey: string;
+		key: string;
 		contentType: string;
 	} | null>(null);
 
@@ -41,7 +41,7 @@ const UploadAndDisplayImage = () => {
 			contentType: file.type,
 		});
 
-		const { s3UploadUrl, profileImageKey, contentType } = presignRes.data.data;
+		const { s3UploadUrl, key, contentType } = presignRes.data.data;
 
 		// 2. upload
 		await axios.put(s3UploadUrl, file, {
@@ -50,12 +50,12 @@ const UploadAndDisplayImage = () => {
 
 		// 3. preview
 		const previewRes = await api.post("/profile/download-url", {
-			profileImageKey,
+			key,
 			contentType,
 		});
 
 		setPhotoUrl(previewRes.data.data.s3DownloadUrl);
-		setUploadMeta({ profileImageKey, contentType });
+		setUploadMeta({ key, contentType });
 		setUploadStatus("uploaded");
 	};
 	const handleSaveProfile = async () => {

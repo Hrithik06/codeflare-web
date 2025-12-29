@@ -73,6 +73,10 @@ function App() {
 
 					{/* APP ROUTES */}
 					<Route path="/" element={<Body />}>
+						<Route
+							path="upload-and-display-image"
+							element={<UploadAndDisplayImage />}
+						/>
 						{/* No suspense, loads instantly */}
 						<Route index element={<Feed />} />
 						<Route path="profile" element={<Profile />} />
@@ -82,10 +86,7 @@ function App() {
 						<Route path="privacy-policy" element={<PrivacyPolicy />} />
 						<Route path="refunds" element={<RefundPolicy />} />
 						<Route path="terms-of-service" element={<TermsOfService />} />
-						<Route
-							path="upload-and-display-image"
-							element={<UploadAndDisplayImage />}
-						/>
+
 						<Route path="*" element={<NotFound />} />
 					</Route>
 					<Route path="/error" element={<ErrorPage />} />

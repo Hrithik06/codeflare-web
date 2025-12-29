@@ -5,7 +5,9 @@ type UploadedImageMeta = {
 	key: string;
 	contentType: string;
 };
+import { setUser } from "../utils/userSlice";
 
+import { useAppDispatch } from "../utils/hooks";
 type Props = {
 	onPreviewReady: React.Dispatch<React.SetStateAction<string | null>>;
 	onImageReady: React.Dispatch<React.SetStateAction<UploadedImageMeta | null>>;
@@ -23,21 +25,20 @@ function validateImage(file: File) {
 	}
 }
 
-const UploadAndDisplayImage2: React.FC<Props> = ({
-	onPreviewReady,
-	onImageReady,
-}) => {
+// onPreviewReady,
+// onImageReady,
+const UploadAndDisplayImage2: React.FC<Props> = ({}) => {
 	const [status, setStatus] = useState<
 		"idle" | "uploading" | "error" | "uploaded"
 	>("idle");
-
+	const dispatch = useAppDispatch();
 	const handleFileChange = async (file: File) => {
 		try {
 			validateImage(file);
 
 			// STEP 3 — local preview immediately
-			const localPreviewUrl = URL.createObjectURL(file);
-			onPreviewReady(localPreviewUrl);
+			// const localPreviewUrl = URL.createObjectURL(file);
+			// onPreviewReady(localPreviewUrl);
 
 			setStatus("uploading");
 
@@ -49,26 +50,26 @@ const UploadAndDisplayImage2: React.FC<Props> = ({
 				},
 				{ withCredentials: true },
 			);
-			console.log(presignRes);
-			const { s3UploadUrl, profileImageKey, contentType } =
-				presignRes.data.data;
-			console.log(s3UploadUrl, profileImageKey, contentType);
+			const { s3UploadUrl, key, contentType } = presignRes.data.data;
 			// STEP 5 — upload to S3
-			await axios.put(s3UploadUrl, file, {
+			const s3Res = await axios.put(s3UploadUrl, file, {
 				headers: {
 					"Content-Type": contentType,
 				},
 			});
 
-			// STEP 6 — get presigned GET for preview
-			const previewRes = await api.post("/profile/download-url", {
-				profileImageKey,
-				contentType,
-			});
-
+			if (s3Res.status === 200) {
+				console.log("S3 Upload Success");
+				const confirmRes = await api.post(
+					"/profile/image/confirm",
+					{ key, contentType },
+					{ withCredentials: true },
+				);
+				dispatch(setUser(confirmRes.data.data));
+			}
 			// STEP 7 — switch preview to S3 + notify parent
-			onPreviewReady(previewRes.data.data.s3DownloadUrl);
-			onImageReady({ key: profileImageKey, contentType });
+
+			// onImageReady({ key, contentType });
 
 			setStatus("uploaded");
 		} catch (err) {
@@ -81,6 +82,7 @@ const UploadAndDisplayImage2: React.FC<Props> = ({
 		<div>
 			<input
 				type="file"
+				className="file-input"
 				accept="image/jpeg,image/png"
 				onChange={(e) => {
 					if (e.target.files?.[0]) {
