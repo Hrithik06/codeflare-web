@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAppSelector } from "../utils/hooks";
 
 import { setUser } from "../utils/userSlice";
