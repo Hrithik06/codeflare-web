@@ -1,6 +1,6 @@
 import UploadAndDisplayImage2 from "./UploadAndDisplayImage2";
 import api from "../utils/axiosInstance";
-import { UserInterface, UploadedImageMeta } from "../interface/UserInterface";
+import { UserInterface } from "../interface/UserInterface";
 import { useEffect, useState } from "react";
 import { ZodError } from "zod";
 import { setError, setUser } from "../utils/userSlice";
@@ -13,9 +13,6 @@ import { useAppDispatch, useAppSelector } from "../utils/hooks";
 type UserProps = { user: UserInterface };
 
 export default function TempProfileEdit({ user }: UserProps) {
-	// const [photoUrl, setPhotoUrl] = useState<string | null>(user.photoUrl);
-	const [profileImageMeta, setProfileImageMeta] =
-		useState<null | UploadedImageMeta>(user?.profileImageMeta);
 	const dispatch = useAppDispatch();
 	const dateOfBirthString: string =
 		user.dateOfBirth?.toString().split("T")[0] || "";
@@ -35,7 +32,6 @@ export default function TempProfileEdit({ user }: UserProps) {
 	const [gender, setGender] = useState<string>(user.gender);
 	const [about, setAbout] = useState<string>(user.about);
 	const [skills, setSkills] = useState<string[]>(user.skills);
-	// const [photoUrl, setPhotoUrl] = useState(user.photoUrl);//TODO: photoUrl
 
 	const [showToast, setShowToast] = useState(false);
 
@@ -92,9 +88,7 @@ export default function TempProfileEdit({ user }: UserProps) {
 				dateOfBirth: `${yearStr}-${monthStr}-${dayStr}`,
 				gender: gender,
 				about: about,
-				// photoUrl, //TODO: photoUrl
 				skills: skills,
-				profileImageMeta,
 			};
 			userUpdateZodSchema.parse(updatedUser);
 
@@ -272,9 +266,13 @@ export default function TempProfileEdit({ user }: UserProps) {
 							setSkills={setSkills}
 						/>
 
-						<label className="fieldset-label" htmlFor="photo">
+						<label className="fieldset-label" htmlFor="profileImage">
 							Photo
 						</label>
+						<UploadAndDisplayImage2
+						// onPreviewReady={setPhotoUrl}
+						// onImageReady={setProfileImageMeta}
+						/>
 						{/*<input type="file" className="file-input" id="photo" name="photo" />*/}
 					</fieldset>
 					{errorMsg && errorMsg.length > 0 && (
@@ -295,10 +293,7 @@ export default function TempProfileEdit({ user }: UserProps) {
 							<span>{errorMsg}</span>
 						</div>
 					)}
-					<UploadAndDisplayImage2
-					// onPreviewReady={setPhotoUrl}
-					// onImageReady={setProfileImageMeta}
-					/>
+
 					<button
 						className="btn btn-primary mt-4 w-1/3 mx-auto"
 						type="button"
@@ -320,7 +315,8 @@ export default function TempProfileEdit({ user }: UserProps) {
 							// photoUrl,
 							age,
 							dateOfBirth: fullDate,
-							profileImageMeta,
+							profileImageMeta: user.profileImageMeta,
+							updatedAt: user.updatedAt,
 						}}
 					/>
 				</div>

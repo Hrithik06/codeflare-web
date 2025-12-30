@@ -2,6 +2,7 @@ export interface UploadedImageMeta {
 	key: string;
 	contentType: string;
 	isUserUploaded: boolean;
+	imageVersion: number;
 }
 export interface UserInterface {
 	_id: string;
@@ -13,7 +14,7 @@ export interface UserInterface {
 	age?: number;
 	gender: string;
 	about: string;
-	// photoUrl: string;
 	skills: string[];
-	profileImageMeta: UploadedImageMeta;
+	profileImageMeta?: UploadedImageMeta;
+	updatedAt?: string;
 }

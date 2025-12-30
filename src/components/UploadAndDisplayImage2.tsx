@@ -1,17 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
 import api from "../utils/axiosInstance";
-type UploadedImageMeta = {
-	key: string;
-	contentType: string;
-};
+// type UploadedImageMeta = {
+// 	key: string;
+// 	contentType: string;
+// };
 import { setUser } from "../utils/userSlice";
 
 import { useAppDispatch } from "../utils/hooks";
-type Props = {
-	onPreviewReady: React.Dispatch<React.SetStateAction<string | null>>;
-	onImageReady: React.Dispatch<React.SetStateAction<UploadedImageMeta | null>>;
-};
+// type Props = {
+// 	onPreviewReady: React.Dispatch<React.SetStateAction<string | null>>;
+// 	onImageReady: React.Dispatch<React.SetStateAction<UploadedImageMeta | null>>;
+// };
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
@@ -27,7 +27,7 @@ function validateImage(file: File) {
 
 // onPreviewReady,
 // onImageReady,
-const UploadAndDisplayImage2: React.FC<Props> = ({}) => {
+const UploadAndDisplayImage2 = () => {
 	const [status, setStatus] = useState<
 		"idle" | "uploading" | "error" | "uploaded"
 	>("idle");
@@ -79,8 +79,9 @@ const UploadAndDisplayImage2: React.FC<Props> = ({}) => {
 	};
 
 	return (
-		<div>
+		<>
 			<input
+				id="profileImage"
 				type="file"
 				className="file-input"
 				accept="image/jpeg,image/png"
@@ -94,7 +95,7 @@ const UploadAndDisplayImage2: React.FC<Props> = ({}) => {
 			{status === "uploading" && <p>Uploading image…</p>}
 			{status === "uploaded" && <p>Image uploaded ✓</p>}
 			{status === "error" && <p>Upload failed</p>}
-		</div>
+		</>
 	);
 };
 export default UploadAndDisplayImage2;

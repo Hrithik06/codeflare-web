@@ -21,16 +21,15 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
 		profileImageMeta,
 	} = user;
 	const [profileImageURL, setProfileImageURL] = useState<string>(DEFAULT_IMAGE);
-	console.log("profileImageMeta: ", profileImageMeta);
 
 	const downloadProfileImg = async () => {
 		if (!profileImageMeta || !profileImageMeta.isUserUploaded) return;
+
 		const { key, contentType } = profileImageMeta;
 		const previewRes = await api.post("/profile/download-url", {
 			key,
 			contentType,
 		});
-		console.log(previewRes.data.data.s3DownloadUrl);
 		setProfileImageURL(previewRes.data.data.s3DownloadUrl);
 	};
 	const handleSendRequest = async (status: string) => {
@@ -42,15 +41,21 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
 			})
 			.catch((err) => console.error(err));
 	};
+
 	useEffect(() => {
-		if (!profileImageMeta || !profileImageMeta.isUserUploaded) {
-			// default avatar path
+		// if (!profileImageMeta || !profileImageMeta.isUserUploaded) {
+		// 	// default avatar path
+		// 	setProfileImageURL(DEFAULT_IMAGE);
+		// 	return;
+		// }
+		if (!profileImageMeta?.key) {
 			setProfileImageURL(DEFAULT_IMAGE);
 			return;
 		}
 
 		downloadProfileImg();
-	}, [profileImageMeta]);
+		// key is stable by backend contract; imageVersion is the invalidation signal
+	}, [profileImageMeta?.imageVersion]);
 
 	return (
 		<div className="card w-80 shadow-sm m-4 bg-white dark:bg-zinc-900">

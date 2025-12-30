@@ -100,8 +100,8 @@ const Feed = (): React.JSX.Element => {
 		<div className="flex justify-center mx-auto">
 			<div className="">
 				{feed.length > 0 ? (
-					feed.map((user) => {
-						return <UserCard user={user} key={user._id} />;
+					feed.map((profile) => {
+						return <UserCard user={profile} key={profile._id} />;
 					})
 				) : (
 					<div>
