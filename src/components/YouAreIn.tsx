@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 //TODO: Should not load if there is no error and user directly enters /notfound in address bar
-const NotFound = (): React.JSX.Element => {
+const YouAreIn = (): React.JSX.Element => {
 	const navigate = useNavigate();
 
 	const [redirectIn, setRedirectIn] = useState(5);
@@ -21,7 +21,7 @@ const NotFound = (): React.JSX.Element => {
 		}, 1000);
 
 		const timeOutId = setTimeout(() => {
-			navigate("/");
+			navigate("/profile");
 		}, 5000);
 
 		return () => {
@@ -41,12 +41,15 @@ const NotFound = (): React.JSX.Element => {
       <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
         Internal Server Error.
       </p> */}
-						<img src="/404_Not_Found_Error.svg" className="w-1/2 m-auto" />
+						<img src="/You_Are_Already_Inside.svg" className="w-1/2 m-auto" />
 						<p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-							Redirecting to home in {redirectIn}
+							Redirecting to profile in {redirectIn}
 						</p>
-						<button className="btn btn-primary" onClick={() => navigate("/")}>
-							Go back to Home
+						<button
+							className="btn btn-primary"
+							onClick={() => navigate("/profile")}
+						>
+							Go to Profile
 						</button>
 					</div>
 				</div>
@@ -54,4 +57,4 @@ const NotFound = (): React.JSX.Element => {
 		</>
 	);
 };
-export default NotFound;
+export default YouAreIn;

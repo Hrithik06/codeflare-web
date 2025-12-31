@@ -1,0 +1,172 @@
+<svg width="1200" height="980" viewBox="0 0 1200 980" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box {
+      fill: #111827;
+      stroke: #6366f1;
+      stroke-width: 2;
+      rx: 12;
+    }
+    .layout {
+      fill: none;
+      stroke: #374151;
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+      rx: 16;
+    }
+    .text {
+      fill: #e5e7eb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+    }
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      fill: #a5b4fc;
+    }
+    .label {
+      font-size: 13px;
+      fill: #93c5fd;
+      font-weight: bold;
+    }
+    .arrow {
+      stroke: #9ca3af;
+      stroke-width: 2;
+      marker-end: url(#arrowhead);
+    }
+    .arrow-red {
+      stroke: #ef4444;
+      stroke-width: 2;
+      marker-end: url(#arrowhead-red);
+    }
+    .note {
+      fill: #fbbf24;
+      font-size: 13px;
+    }
+    .danger {
+      fill: #f87171;
+      font-size: 13px;
+      font-weight: bold;
+    }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#9ca3af" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">
+    Authentication • Routing • Onboarding — Layouts and Forbidden Paths
+  </text>
+
+  <!-- App Start -->
+  <rect x="500" y="80" width="200" height="60" class="box" />
+  <text x="600" y="115" text-anchor="middle" class="text">App Start</text>
+
+  <!-- Bootstrap -->
+  <rect x="460" y="170" width="280" height="70" class="box" />
+  <text x="600" y="200" text-anchor="middle" class="text">
+    Auth Bootstrap
+  </text>
+  <text x="600" y="220" text-anchor="middle" class="note">
+    GET /profile/view
+  </text>
+
+  <!-- Decision -->
+  <rect x="500" y="280" width="200" height="60" class="box" />
+  <text x="600" y="315" text-anchor="middle" class="text">
+    isAuthenticated ?
+  </text>
+
+  <!-- AuthLayout boundary -->
+  <rect x="80" y="380" width="520" height="300" class="layout" />
+  <text x="90" y="370" class="label">AuthLayout (Policy Boundary)</text>
+
+  <!-- Auth UI -->
+  <rect x="200" y="420" width="280" height="80" class="box" />
+  <text x="340" y="455" text-anchor="middle" class="text">
+    Auth UI (shared)
+  </text>
+  <text x="340" y="475" text-anchor="middle" class="note">
+    Login / Signup Component
+  </text>
+
+  <!-- Login -->
+  <rect x="120" y="540" width="220" height="80" class="box" />
+  <text x="230" y="575" text-anchor="middle" class="text">
+    /login
+  </text>
+  <text x="230" y="595" text-anchor="middle" class="danger">
+    ❌ FORBIDDEN when authenticated
+  </text>
+
+  <!-- Signup -->
+  <rect x="360" y="540" width="220" height="80" class="box" />
+  <text x="470" y="575" text-anchor="middle" class="text">
+    /signup
+  </text>
+  <text x="470" y="595" text-anchor="middle" class="note">
+    ✔ Transition flow (allowed)
+  </text>
+
+  <!-- Body boundary -->
+  <rect x="680" y="380" width="440" height="380" class="layout" />
+  <text x="690" y="370" class="label">Body (App Layout)</text>
+
+  <!-- App Routes -->
+  <rect x="760" y="420" width="280" height="80" class="box" />
+  <text x="900" y="455" text-anchor="middle" class="text">
+    App Routes
+  </text>
+  <text x="900" y="475" text-anchor="middle" class="note">
+    Protected by auth
+  </text>
+
+  <!-- Profile -->
+  <rect x="760" y="540" width="280" height="80" class="box" />
+  <text x="900" y="575" text-anchor="middle" class="text">
+    /profile
+  </text>
+  <text x="900" y="595" text-anchor="middle" class="note">
+    Onboarding (post-signup)
+  </text>
+
+  <!-- Feed -->
+  <rect x="760" y="660" width="280" height="80" class="box" />
+  <text x="900" y="695" text-anchor="middle" class="text">
+    /
+  </text>
+  <text x="900" y="715" text-anchor="middle" class="note">
+    Feed / App Home
+  </text>
+
+  <!-- Arrows -->
+  <line x1="600" y1="140" x2="600" y2="170" class="arrow" />
+  <line x1="600" y1="240" x2="600" y2="280" class="arrow" />
+
+  <!-- Decision arrows -->
+  <line x1="500" y1="310" x2="340" y2="420" class="arrow" />
+  <line x1="700" y1="310" x2="900" y2="420" class="arrow" />
+
+  <!-- Auth UI arrows -->
+  <line x1="340" y1="500" x2="230" y2="540" class="arrow" />
+  <line x1="340" y1="500" x2="470" y2="540" class="arrow" />
+
+  <!-- Forbidden login path -->
+  <line x1="230" y1="540" x2="900" y2="420" class="arrow-red" />
+
+  <!-- Signup to Profile -->
+  <line x1="470" y1="620" x2="760" y2="580" class="arrow" />
+
+  <!-- Profile to Feed -->
+  <line x1="900" y1="620" x2="900" y2="660" class="arrow" />
+
+  <!-- Footer note -->
+  <text x="600" y="900" text-anchor="middle" class="note">
+    Key Insight: AuthLayout defines policy (what is forbidden). Body defines flow (where users go next).
+  </text>
+</svg>

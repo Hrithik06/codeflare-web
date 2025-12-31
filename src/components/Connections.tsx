@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../utils/axiosInstance";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 import { addConnections } from "../utils/connectionSlice";
@@ -7,83 +7,81 @@ import { RootState } from "../utils/appStore";
 import { ConnectionCard } from "./";
 
 const Connection = (): React.JSX.Element => {
-  const dispatch = useAppDispatch();
-  const connections = useAppSelector((store: RootState) => store.connections);
-  // const loading = useAppSelector((store: RootState) => store.user.loading);
-  const [loading, setLoading] = useState(false)
-  
-  const fetchConnection = async () => {
-    // dispatch(setLoading());
-      setLoading(true);
+	const dispatch = useAppDispatch();
+	const connections = useAppSelector((store: RootState) => store.connections);
+	// const loading = useAppSelector((store: RootState) => store.user.loading);
+	const [loading, setLoading] = useState(false);
 
-    await api
-      .get("/user/connections", { withCredentials: true })
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(addConnections(res.data.data));
-          // dispatch(clearLoading());
-      setLoading(false);
+	const fetchConnection = async () => {
+		// dispatch(setLoading());
+		setLoading(true);
 
-        }
-      })
-      .catch((err) => {
-        // TODO: Error Handling code
-        console.error("Error fetching connections: ", err);
-        // dispatch(clearLoading());
-      setLoading(false);
+		await api
+			.get("/user/connections", { withCredentials: true })
+			.then((res) => {
+				if (res.data.success) {
+					dispatch(addConnections(res.data.data));
+					// dispatch(clearLoading());
+					setLoading(false);
+				}
+			})
+			.catch((err) => {
+				// TODO: Error Handling code
+				console.error("Error fetching connections: ", err);
+				// dispatch(clearLoading());
+				setLoading(false);
+			});
+	};
+	const handleMessage = async () => {
+		console.log("handleMessage");
+	};
+	const handleRemoveConnection = async () => {
+		console.log("handleRemoveConnection");
+	};
+	useEffect(() => {
+		fetchConnection();
+	}, []);
 
-      });
-  };
-  const handleMessage = async () => {
-    console.log("handleMessage");
-  };
-  const handleRemoveConnection = async () => {
-    console.log("handleRemoveConnection");
-  };
-  useEffect(() => {
-    fetchConnection();
-  }, []);
+	// if (loading) {
+	//   return (
+	//     <div className="flex justify-center m-10">
+	//       <span className="loading loading-bars loading-xl bg-primary"></span>
+	//     </div>
+	//   );
+	// }
+	// if (connections.length === 0)
+	//   return (
+	//     <div className="m-10">
+	//       <h3 className="text-4xl text-center">No Connections Found</h3>
+	//     </div>
+	//   );
 
-  // if (loading) {
-  //   return (
-  //     <div className="flex justify-center m-10">
-  //       <span className="loading loading-bars loading-xl bg-primary"></span>
-  //     </div>
-  //   );
-  // }
-  // if (connections.length === 0)
-  //   return (
-  //     <div className="m-10">
-  //       <h3 className="text-4xl text-center">No Connections Found</h3>
-  //     </div>
-  //   );
-
-  return (
-    <div className="flex flex-col items-center">
-      <h3 className="text-5xl text-center my-6">Connections</h3>
-      <div>
-        {loading ? (
-          <span className="loading loading-bars loading-xl"></span>
-        ) : connections.length === 0 ? (
-          <p>No Connections Found</p>
-        ) : (
-          connections.map((connection) => (
-            <ConnectionCard
-              user={connection}
-              btnType={"Message"}
-              key={connection._id}
-              actions={[
-                { label: "Message", onClick: handleMessage, type: "success" },
-                {
-                  label: "Remove",
-                  onClick: handleRemoveConnection,
-                  toolTipLabel: "Remove Connection",
-                },
-              ]}
-            />
-          ))
-        )}
-        {/* {connections.map((connection) => {
+	return (
+		<div className="flex flex-col items-center">
+			<h3 className="text-5xl text-center my-6">Connections</h3>
+			<div>
+				{loading ? (
+					<span className="loading loading-bars loading-xl"></span>
+				) : connections.length === 0 ? (
+					<p>No Connections Found</p>
+				) : (
+					connections.map((connection) => (
+						<ConnectionCard
+							user={connection}
+							btnType={"Message"}
+							key={connection._id}
+							actions={[
+								{ label: "Message", onClick: handleMessage, type: "success" },
+								{
+									label: "Remove",
+									onClick: handleRemoveConnection,
+									toolTipLabel: "Remove Connection",
+								},
+							]}
+						/>
+					))
+				)}
+				{/* {connections.map((connection) => {
           const { firstName, lastName, photoUrl, _id, about } = connection;
           return (
             <div
@@ -121,8 +119,8 @@ const Connection = (): React.JSX.Element => {
             </div>
           );
         })}*/}
-      </div>
-    </div>
-  );
+			</div>
+		</div>
+	);
 };
 export default Connection;

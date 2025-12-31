@@ -1,27 +1,31 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAppSelector } from "../utils/hooks";
+
 import { setUser } from "../utils/userSlice";
-// import { clearLoading, setLoading } from "../utils/userSlice";
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
+// import { clearLoading, setLoading } from "../utils/userSlice";	setIsLogin((prev) => !prev);
+import { YouAreIn } from "./index";
+import { useAppDispatch } from "../utils/hooks";
 import api from "../utils/axiosInstance";
 import { emailIdZodSchema, passwordZodSchema } from "../utils/zodSchema";
 import { ZodError } from "zod";
-import { RootState } from "../utils/appStore";
 const Login = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [emailId, setEmailId] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
-	const [isLogin, setIsLogin] = useState(true);
+	// const [isLogin, setIsLogin] = useState(true);
 	const [loading, setLoading] = useState(false);
 	// const loading = useAppSelector((store: RootState) => store.user.loading);
-	const isAuthenticated = useAppSelector(
-		(store: RootState) => store.user.isAuthenticated,
-	);
+	const isAuthenticated = useAppSelector((store) => store.user.isAuthenticated);
+
+	const isLogin = location.pathname === "/login";
 	const handleLogin = async () => {
 		try {
 			emailIdZodSchema.parse(emailId);
@@ -54,7 +58,7 @@ const Login = (): React.JSX.Element => {
 						dispatch(setUser(userData));
 						// dispatch(clearLoading());
 						setLoading(false);
-						navigate("/");
+						// navigate("/profile");
 					}
 				})
 				.catch((err) => {
@@ -96,7 +100,7 @@ const Login = (): React.JSX.Element => {
 			)
 			.then((res) => {
 				dispatch(setUser(res.data.data));
-				navigate("/profile");
+				navigate("/profile", { replace: true });
 			})
 			.catch((err) => {
 				console.error(err);
@@ -108,9 +112,21 @@ const Login = (): React.JSX.Element => {
 				}
 			});
 	};
-	useEffect(() => {
-		if (isAuthenticated) navigate("/");
-	}, [isAuthenticated, navigate]);
+	if (!isLogin && isAuthenticated) {
+		return (
+			// <div className="min-h-screen flex flex-col items-center justify-center">
+			// 	<p>You already have an account.</p>
+			// 	<button
+			// 		className="btn btn-primary on"
+			// 		onClick={() => navigate("/profile")}
+			// 	>
+			// 		Go to profile
+			// 	</button>
+			// </div>
+			<YouAreIn />
+		);
+	}
+
 	//TODO: when user is loggedIn and visits the /login page it should not come to Login Page redirect to home(feed)
 	return (
 		<form className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box mx-auto my-20">
@@ -248,8 +264,8 @@ const Login = (): React.JSX.Element => {
 					className="btn btn-link p-0 my-0 mx-1 no-underline hover:underline"
 					// className="text-primary cursor-pointer hover:underline ml-1"
 					onClick={() => {
-						setIsLogin((prev) => !prev);
 						setError("");
+						navigate(isLogin ? "/signup" : "/login");
 					}}
 				>
 					{isLogin ? "Sign Up" : "Login"}
