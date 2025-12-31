@@ -18,9 +18,6 @@ const RefundPolicy = lazy(() => import("./components/RefundPolicy"));
 const TermsOfService = lazy(() => import("./components/TermsOfService"));
 const NotFound = lazy(() => import("./components/NotFound"));
 const ErrorPage = lazy(() => import("./components/ErrorPage"));
-const UploadAndDisplayImage = lazy(
-	() => import("./components/UploadAndDisplayImage"),
-);
 
 function App() {
 	const [bootstrapped, setBootstrapped] = useState(false);
@@ -73,10 +70,6 @@ function App() {
 
 					{/* APP ROUTES */}
 					<Route path="/" element={<Body />}>
-						<Route
-							path="upload-and-display-image"
-							element={<UploadAndDisplayImage />}
-						/>
 						{/* No suspense, loads instantly */}
 						<Route index element={<Feed />} />
 						<Route path="profile" element={<Profile />} />

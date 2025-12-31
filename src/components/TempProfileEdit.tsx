@@ -1,4 +1,4 @@
-import UploadAndDisplayImage2 from "./UploadAndDisplayImage2";
+import { UploadProfileImage } from "./index";
 import api from "../utils/axiosInstance";
 import { UserInterface } from "../interface/UserInterface";
 import { useEffect, useState } from "react";
@@ -269,11 +269,7 @@ export default function TempProfileEdit({ user }: UserProps) {
 						<label className="fieldset-label" htmlFor="profileImage">
 							Photo
 						</label>
-						<UploadAndDisplayImage2
-						// onPreviewReady={setPhotoUrl}
-						// onImageReady={setProfileImageMeta}
-						/>
-						{/*<input type="file" className="file-input" id="photo" name="photo" />*/}
+						<UploadProfileImage />
 					</fieldset>
 					{errorMsg && errorMsg.length > 0 && (
 						<div role="alert" className="alert alert-error alert-soft">
@@ -312,7 +308,6 @@ export default function TempProfileEdit({ user }: UserProps) {
 							gender,
 							about,
 							skills,
-							// photoUrl,
 							age,
 							dateOfBirth: fullDate,
 							profileImageMeta: user.profileImageMeta,
@@ -329,14 +324,6 @@ export default function TempProfileEdit({ user }: UserProps) {
 					</div>
 				</div>
 			) : null}
-
-			{/* SINGLE preview surface */}
-
-			{/* Upload component (headless) */}
-
-			{/* Profile fields */}
-
-			{/* Single commit button */}
 		</>
 	);
 }

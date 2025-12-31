@@ -1,17 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import api from "../utils/axiosInstance";
-// type UploadedImageMeta = {
-// 	key: string;
-// 	contentType: string;
-// };
 import { setUser } from "../utils/userSlice";
 
 import { useAppDispatch } from "../utils/hooks";
-// type Props = {
-// 	onPreviewReady: React.Dispatch<React.SetStateAction<string | null>>;
-// 	onImageReady: React.Dispatch<React.SetStateAction<UploadedImageMeta | null>>;
-// };
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
@@ -25,9 +17,7 @@ function validateImage(file: File) {
 	}
 }
 
-// onPreviewReady,
-// onImageReady,
-const UploadAndDisplayImage2 = () => {
+const UploadProfileImage = () => {
 	const [status, setStatus] = useState<
 		"idle" | "uploading" | "error" | "uploaded"
 	>("idle");
@@ -36,13 +26,9 @@ const UploadAndDisplayImage2 = () => {
 		try {
 			validateImage(file);
 
-			// STEP 3 — local preview immediately
-			// const localPreviewUrl = URL.createObjectURL(file);
-			// onPreviewReady(localPreviewUrl);
-
 			setStatus("uploading");
 
-			// STEP 4 — get presigned PUT
+			// get presigned PUT
 			const presignRes = await api.post(
 				"/profile/upload-url",
 				{
@@ -51,7 +37,7 @@ const UploadAndDisplayImage2 = () => {
 				{ withCredentials: true },
 			);
 			const { s3UploadUrl, key, contentType } = presignRes.data.data;
-			// STEP 5 — upload to S3
+			// upload to S3
 			const s3Res = await axios.put(s3UploadUrl, file, {
 				headers: {
 					"Content-Type": contentType,
@@ -67,10 +53,6 @@ const UploadAndDisplayImage2 = () => {
 				);
 				dispatch(setUser(confirmRes.data.data));
 			}
-			// STEP 7 — switch preview to S3 + notify parent
-
-			// onImageReady({ key, contentType });
-
 			setStatus("uploaded");
 		} catch (err) {
 			console.error(err);
@@ -98,4 +80,4 @@ const UploadAndDisplayImage2 = () => {
 		</>
 	);
 };
-export default UploadAndDisplayImage2;
+export default UploadProfileImage;
