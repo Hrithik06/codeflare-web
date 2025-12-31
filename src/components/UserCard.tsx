@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { UserInterface } from "../interface/UserInterface";
 import api from "../utils/axiosInstance";
 import { useAppDispatch, useProfileImage } from "../utils/hooks";
@@ -6,7 +6,6 @@ import { removeUserFromFeed } from "../utils/feedSlice";
 type UserProps = {
 	user: UserInterface;
 };
-const DEFAULT_IMAGE = "/DEFAULT_PROFILE_IMG.png";
 
 const UserCard = ({ user }: UserProps): React.JSX.Element => {
 	const dispatch = useAppDispatch();
