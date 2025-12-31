@@ -1,6 +1,10 @@
 import React from "react";
 import { RootState } from "../utils/appStore";
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useProfileImage,
+} from "../utils/hooks";
 import { clearUser } from "../utils/userSlice";
 import { clearFeed } from "../utils/feedSlice";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +35,9 @@ const NavBar = (): React.ReactElement => {
 	const handleLogin = () => {
 		navigate("/login");
 	};
-
+	// if (isAuthenticated) {
+	const imageUrl = useProfileImage(userData?.profileImageMeta);
+	// }
 	return (
 		<div className="navbar bg-base-100 shadow-sm px-10 ">
 			<div className="flex-1">
@@ -54,10 +60,11 @@ const NavBar = (): React.ReactElement => {
 									<img
 										alt="Tailwind CSS Navbar component"
 										src={
-											userData?.photoUrl
-												? `${userData?.photoUrl}`
-												: "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000"
+											// userData?.photoUrl
+											// 	? `${userData?.photoUrl}`
+											// 	: "https://img.icons8.com/?size=100&id=tZuAOUGm9AuS&format=png&color=000000"
 											// "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+											imageUrl
 										}
 									/>
 								</div>

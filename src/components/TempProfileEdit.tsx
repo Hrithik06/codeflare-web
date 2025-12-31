@@ -1,17 +1,18 @@
+import UploadAndDisplayImage2 from "./UploadAndDisplayImage2";
+import api from "../utils/axiosInstance";
+import { UserInterface } from "../interface/UserInterface";
 import { useEffect, useState } from "react";
 import { ZodError } from "zod";
 import { setError, setUser } from "../utils/userSlice";
 import { MultiSelectSearch, UserCard } from "./index";
 import { userZodSchema } from "../utils/zodSchema";
-import { UserInterface } from "../interface/UserInterface";
 import { validateDOB, ageCalculate } from "../utils/helper";
-import api from "../utils/axiosInstance";
 import { AxiosError } from "axios";
 
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
 type UserProps = { user: UserInterface };
 
-const ProfileEdit = ({ user }: UserProps) => {
+export default function TempProfileEdit({ user }: UserProps) {
 	const dispatch = useAppDispatch();
 	const dateOfBirthString: string =
 		user.dateOfBirth?.toString().split("T")[0] || "";
@@ -31,7 +32,6 @@ const ProfileEdit = ({ user }: UserProps) => {
 	const [gender, setGender] = useState<string>(user.gender);
 	const [about, setAbout] = useState<string>(user.about);
 	const [skills, setSkills] = useState<string[]>(user.skills);
-	// const [photoUrl, setPhotoUrl] = useState(user.photoUrl);//TODO: photoUrl
 
 	const [showToast, setShowToast] = useState(false);
 
@@ -47,11 +47,7 @@ const ProfileEdit = ({ user }: UserProps) => {
 		// }
 	}, [dayStr, monthStr, yearStr, fullDate]);
 
-	// useEffect(() => {
-	//   const newAge = ageCalculate(fullDate);
-	//   console.log(newAge);
-	// }, [fullDate]);
-	const handleSave = async () => {
+	const handleSaveProfile = async () => {
 		try {
 			const userUpdateZodSchema = userZodSchema.omit({
 				emailId: true,
@@ -92,7 +88,6 @@ const ProfileEdit = ({ user }: UserProps) => {
 				dateOfBirth: `${yearStr}-${monthStr}-${dayStr}`,
 				gender: gender,
 				about: about,
-				photoUrl: user.photoUrl, //TODO: photoUrl
 				skills: skills,
 			};
 			userUpdateZodSchema.parse(updatedUser);
@@ -271,10 +266,14 @@ const ProfileEdit = ({ user }: UserProps) => {
 							setSkills={setSkills}
 						/>
 
-						<label className="fieldset-label" htmlFor="photo">
+						<label className="fieldset-label" htmlFor="profileImage">
 							Photo
 						</label>
-						<input type="file" className="file-input" id="photo" name="photo" />
+						<UploadAndDisplayImage2
+						// onPreviewReady={setPhotoUrl}
+						// onImageReady={setProfileImageMeta}
+						/>
+						{/*<input type="file" className="file-input" id="photo" name="photo" />*/}
 					</fieldset>
 					{errorMsg && errorMsg.length > 0 && (
 						<div role="alert" className="alert alert-error alert-soft">
@@ -294,10 +293,11 @@ const ProfileEdit = ({ user }: UserProps) => {
 							<span>{errorMsg}</span>
 						</div>
 					)}
+
 					<button
 						className="btn btn-primary mt-4 w-1/3 mx-auto"
 						type="button"
-						onClick={handleSave}
+						onClick={handleSaveProfile}
 					>
 						Save
 					</button>
@@ -312,9 +312,11 @@ const ProfileEdit = ({ user }: UserProps) => {
 							gender,
 							about,
 							skills,
-							photoUrl: user.photoUrl,
+							// photoUrl,
 							age,
 							dateOfBirth: fullDate,
+							profileImageMeta: user.profileImageMeta,
+							updatedAt: user.updatedAt,
 						}}
 					/>
 				</div>
@@ -327,7 +329,14 @@ const ProfileEdit = ({ user }: UserProps) => {
 					</div>
 				</div>
 			) : null}
+
+			{/* SINGLE preview surface */}
+
+			{/* Upload component (headless) */}
+
+			{/* Profile fields */}
+
+			{/* Single commit button */}
 		</>
 	);
-};
-export default ProfileEdit;
+}
