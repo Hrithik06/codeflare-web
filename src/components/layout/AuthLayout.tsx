@@ -1,4 +1,4 @@
-import { useAppSelector } from "../utils/hooks";
+import { useAppSelector } from "../../utils/hooks";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {

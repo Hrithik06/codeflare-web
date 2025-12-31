@@ -1,8 +1,9 @@
 import React from "react";
-import { UserInterface } from "../interface/UserInterface";
-import { ActionButtons } from "./index";
+import { UserInterface } from "../../interface/UserInterface";
+// import { ActionButtons } from "./index";
+import ActionButtons from "./ActionButtons";
 import { ButtonAction } from "./ActionButtons";
-import { useProfileImage } from "../utils/hooks";
+import { useProfileImage } from "../../utils/hooks";
 
 type ConnectionCardProps = {
 	user: UserInterface;

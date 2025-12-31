@@ -1,8 +1,8 @@
 import { useState } from "react";
 // import { Link } from "react-router-dom";
-import api from "../utils/axiosInstance";
-import { useAppSelector } from "../utils/hooks";
-import { RootState } from "../utils/appStore";
+import api from "../../utils/axiosInstance";
+import { useAppSelector } from "../../utils/hooks";
+import { RootState } from "../../utils/appStore";
 export default function Example() {
 	const [subjectTxt, setSubjectTxt] = useState("");
 	const [messageTxt, setMessageTxt] = useState("");

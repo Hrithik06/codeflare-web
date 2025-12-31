@@ -1,8 +1,8 @@
 import React from "react";
-import { UserInterface } from "../interface/UserInterface";
-import api from "../utils/axiosInstance";
-import { useAppDispatch, useProfileImage } from "../utils/hooks";
-import { removeUserFromFeed } from "../utils/feedSlice";
+import { UserInterface } from "../../interface/UserInterface";
+import api from "../../utils/axiosInstance";
+import { useAppDispatch, useProfileImage } from "../../utils/hooks";
+import { removeUserFromFeed } from "../../utils/feedSlice";
 type UserProps = {
 	user: UserInterface;
 };

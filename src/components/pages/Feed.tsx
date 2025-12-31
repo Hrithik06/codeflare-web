@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
-import api from "../utils/axiosInstance";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import api from "../../utils/axiosInstance";
 
-import { UserCard } from "./index";
-import { addFeed } from "../utils/feedSlice";
-import { RootState } from "../utils/appStore";
-// import { setLoading, clearLoading } from "../utils/userSlice";
+// import { UserCard } from "../ui";
+import UserCard from "../ui/UserCard";
+import { addFeed } from "../../utils/feedSlice";
+import { RootState } from "../../utils/appStore";
+// import { setLoading, clearLoading } from "../../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const Feed = (): React.JSX.Element => {

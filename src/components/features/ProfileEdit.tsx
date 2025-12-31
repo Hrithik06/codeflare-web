@@ -1,14 +1,14 @@
 // import { useEffect, useState } from "react";
 // import { ZodError } from "zod";
-// import { setError, setUser } from "../utils/userSlice";
+// import { setError, setUser } from "../../utils/userSlice";
 // import { MultiSelectSearch, UserCard } from "./index";
-// import { userZodSchema } from "../utils/zodSchema";
+// import { userZodSchema } from "../../utils/zodSchema";
 // import { UserInterface } from "../interface/UserInterface";
-// import { validateDOB, ageCalculate } from "../utils/helper";
-// import api from "../utils/axiosInstance";
+// import { validateDOB, ageCalculate } from "../../utils/helper";
+// import api from "../../utils/axiosInstance";
 // import { AxiosError } from "axios";
 
-// import { useAppDispatch, useAppSelector } from "../utils/hooks";
+// import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 // type UserProps = { user: UserInterface };
 
 // const ProfileEdit = ({ user }: UserProps) => {
@@ -333,17 +333,19 @@
 // export default ProfileEdit;
 
 import { UploadProfileImage } from "./index";
-import api from "../utils/axiosInstance";
-import { UserInterface } from "../interface/UserInterface";
+import api from "../../utils/axiosInstance";
+import { UserInterface } from "../../interface/UserInterface";
 import { useEffect, useState } from "react";
 import { ZodError } from "zod";
-import { setError, setUser } from "../utils/userSlice";
-import { MultiSelectSearch, UserCard } from "./index";
-import { userZodSchema } from "../utils/zodSchema";
-import { validateDOB, ageCalculate } from "../utils/helper";
+import { setError, setUser } from "../../utils/userSlice";
+// import { MultiSelectSearch, UserCard } from "../ui";
+import MultiSelectSearch from "../ui/MultiSelectSearch";
+import UserCard from "../ui/UserCard";
+import { userZodSchema } from "../../utils/zodSchema";
+import { validateDOB, ageCalculate } from "../../utils/helper";
 import { AxiosError } from "axios";
 
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 type UserProps = { user: UserInterface };
 
 export default function ProfileEdit({ user }: UserProps) {
