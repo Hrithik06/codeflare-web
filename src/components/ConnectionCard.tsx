@@ -2,6 +2,7 @@ import React from "react";
 import { UserInterface } from "../interface/UserInterface";
 import { ActionButtons } from "./index";
 import { ButtonAction } from "./ActionButtons";
+import { useProfileImage } from "../utils/hooks";
 
 type ConnectionCardProps = {
 	user: UserInterface;
@@ -10,13 +11,13 @@ type ConnectionCardProps = {
 };
 const ConnectionCard = ({
 	user,
-
 	actions,
 }: ConnectionCardProps): React.JSX.Element => {
-	const { firstName, lastName, about, photoUrl } = user;
+	const { firstName, lastName, about, profileImageMeta } = user;
+	const imageUrl = useProfileImage(profileImageMeta);
 	return (
 		<div className="flex items-center justify-around py-2 px-4 m-2 border-2 border-black/40 rounded-xl gap-4">
-			<img src={photoUrl} className="avatar w-24 h-24 rounded-full " />
+			<img src={imageUrl} className="avatar w-24 h-24 rounded-full " />
 
 			<div className="flex flex-col justify-center min-w-64">
 				<p className="text-2xl">{`${firstName} ${lastName}`}</p>

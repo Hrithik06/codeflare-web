@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserInterface } from "../interface/UserInterface";
 import api from "../utils/axiosInstance";
-import { useAppDispatch } from "../utils/hooks";
+import { useAppDispatch, useProfileImage } from "../utils/hooks";
 import { removeUserFromFeed } from "../utils/feedSlice";
 type UserProps = {
 	user: UserInterface;
@@ -20,47 +20,46 @@ const UserCard = ({ user }: UserProps): React.JSX.Element => {
 		skills,
 		profileImageMeta,
 	} = user;
-	const [profileImageURL, setProfileImageURL] = useState<string>(DEFAULT_IMAGE);
+	// const [profileImageURL, setProfileImageURL] = useState<string>(DEFAULT_IMAGE);
 
-	const downloadProfileImg = async () => {
-		if (!profileImageMeta || !profileImageMeta.isUserUploaded) return;
+	// const downloadProfileImg = async () => {
+	// 	if (!profileImageMeta || !profileImageMeta.isUserUploaded) return;
 
-		const { key, contentType } = profileImageMeta;
-		const previewRes = await api.post("/profile/download-url", {
-			key,
-			contentType,
-		});
-		setProfileImageURL(previewRes.data.data.s3DownloadUrl);
-	};
+	// 	const { key, contentType } = profileImageMeta;
+	// 	const previewRes = await api.post("/profile/download-url", {
+	// 		key,
+	// 		contentType,
+	// 	});
+	// 	setProfileImageURL(previewRes.data.data.s3DownloadUrl);
+	// };
 	const handleSendRequest = async (status: string) => {
 		await api
 			.post(`/request/send/${status}/${_id}`, {}, { withCredentials: true })
-			.then((res) => {
+			.then(() => {
 				dispatch(removeUserFromFeed(_id));
-				console.log(res);
 			})
 			.catch((err) => console.error(err));
 	};
+	const imageUrl = useProfileImage(profileImageMeta);
+	// useEffect(() => {
+	// 	// if (!profileImageMeta || !profileImageMeta.isUserUploaded) {
+	// 	// 	// default avatar path
+	// 	// 	setProfileImageURL(DEFAULT_IMAGE);
+	// 	// 	return;
+	// 	// }
+	// 	if (!profileImageMeta?.key) {
+	// 		setProfileImageURL(DEFAULT_IMAGE);
+	// 		return;
+	// 	}
 
-	useEffect(() => {
-		// if (!profileImageMeta || !profileImageMeta.isUserUploaded) {
-		// 	// default avatar path
-		// 	setProfileImageURL(DEFAULT_IMAGE);
-		// 	return;
-		// }
-		if (!profileImageMeta?.key) {
-			setProfileImageURL(DEFAULT_IMAGE);
-			return;
-		}
-
-		downloadProfileImg();
-		// key is stable by backend contract; imageVersion is the invalidation signal
-	}, [profileImageMeta?.imageVersion]);
+	// 	downloadProfileImg();
+	// 	// key is stable by backend contract; imageVersion is the invalidation signal
+	// }, [profileImageMeta?.imageVersion]);
 
 	return (
 		<div className="card w-80 shadow-sm m-4 bg-white dark:bg-zinc-900">
 			<figure className="h-3/4">
-				<img src={profileImageURL} alt="photo" className="w-full bg-gray-400" />
+				<img src={imageUrl} alt="photo" className="w-full bg-gray-400" />
 			</figure>
 			<div className="card-body h-1/4">
 				<h2 className="card-title">{`${firstName} ${lastName}`}</h2>

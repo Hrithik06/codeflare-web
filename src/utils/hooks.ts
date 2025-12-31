@@ -20,9 +20,8 @@ const DEFAULT_IMAGE = "/DEFAULT_PROFILE_IMG.png";
 
 export function useProfileImage(meta?: ProfileImageMeta) {
 	const [imageUrl, setImageUrl] = useState<string>(DEFAULT_IMAGE);
-
 	useEffect(() => {
-		if (!meta.isUserUploaded || !meta.key) {
+		if (!meta?.isUserUploaded || !meta?.key) {
 			setImageUrl(DEFAULT_IMAGE);
 			return;
 		}
@@ -31,8 +30,8 @@ export function useProfileImage(meta?: ProfileImageMeta) {
 
 		async function fetchImage() {
 			const res = await api.post("/profile/download-url", {
-				key: meta.key,
-				contentType: meta.contentType,
+				key: meta?.key,
+				contentType: meta?.contentType,
 			});
 
 			if (!cancelled) {
