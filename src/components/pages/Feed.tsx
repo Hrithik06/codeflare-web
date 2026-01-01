@@ -8,7 +8,7 @@ import { addFeed } from "../../utils/feedSlice";
 import { RootState } from "../../utils/appStore";
 // import { setLoading, clearLoading } from "../../utils/userSlice";
 import { useNavigate } from "react-router-dom";
-
+const EMPTY_FEED = "/EmptyFeed.svg";
 const Feed = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
@@ -98,17 +98,18 @@ const Feed = (): React.JSX.Element => {
 	}
 
 	return (
-		<div className="flex justify-center mx-auto">
+		<div className="flex justify-center mx-auto min-h-screen">
 			<div className="">
 				{feed.length > 0 ? (
 					feed.map((profile) => {
 						return <UserCard user={profile} key={profile._id} />;
 					})
 				) : (
-					<div>
-						<p className="text-3xl text-center my-6">
-							No New Users available right now...
+					<div className="w-full h-10/12 sm:h-full flex flex-col items-center justify-center">
+						<p className="text-2xl sm:text-3xl text-center m-2 xl:mt-10">
+							No New Recommendation available right now...
 						</p>
+						<img src={EMPTY_FEED} alt="EMPTY FEED" />
 					</div>
 				)}
 			</div>

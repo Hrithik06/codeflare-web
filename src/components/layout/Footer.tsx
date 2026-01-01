@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Footer = (): React.ReactElement => {
 	return (
-		<footer className="footer bottom-0  sm:footer-horizontal bg-neutral text-neutral-content p-10">
+		<footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10 sticky top-[100vh]">
 			<aside>
 				<svg
 					width="50"
@@ -20,8 +20,8 @@ const Footer = (): React.ReactElement => {
 					GitTogether <br />
 				</p>
 			</aside>
-			<nav className="flex w-full">
-				<div className="w-1/4">
+			<nav className="flex flex-col gap-10 sm:flex-row sm:justify-between sm:gap-0 w-full">
+				<div className="sm:w-1/4">
 					<h6 className="footer-title">Social</h6>
 					<div className="grid grid-flow-col gap-4">
 						<a>

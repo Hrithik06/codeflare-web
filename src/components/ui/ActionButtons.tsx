@@ -20,7 +20,7 @@ const ActionButtons = ({ actions }: ActionButtonsProps): React.JSX.Element => {
 						key={action.label}
 					>
 						<button
-							className={`btn btn-${action.type || "primary"} rounded-full`}
+							className={`btn btn-${action.type || "primary"} btn-sm sm:btn-xl rounded-full`}
 							onClick={action.onClick}
 						>
 							{action.label}

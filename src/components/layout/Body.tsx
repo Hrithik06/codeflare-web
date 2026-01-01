@@ -5,7 +5,7 @@ import { NavBar, Footer } from "./index";
 
 const Body = (): React.JSX.Element => {
 	return (
-		<div>
+		<div className="min-h-screen">
 			<NavBar />
 			<Outlet />
 			<Footer />

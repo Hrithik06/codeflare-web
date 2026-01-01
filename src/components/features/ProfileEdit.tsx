@@ -131,8 +131,8 @@ export default function ProfileEdit({ user }: UserProps) {
 
 	return (
 		<>
-			<div className="p-4 flex justify-evenly">
-				<form className="fieldset w-md bg-base-200 border border-base-300 p-4 rounded-box">
+			<div className="p-4 flex flex-col sm:flex-row justify-evenly">
+				<form className="fieldset xl:w-md bg-base-200 border border-base-300 p-4 rounded-box">
 					<legend className="fieldset-legend text-xl">Profile</legend>
 
 					<label className="fieldset-label" htmlFor="firstName">

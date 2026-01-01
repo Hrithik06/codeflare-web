@@ -39,17 +39,19 @@ const NavBar = (): React.ReactElement => {
 	const imageUrl = useProfileImage(userData?.profileImageMeta);
 	// }
 	return (
-		<div className="navbar bg-base-100 shadow-sm px-10 ">
+		<div className="navbar bg-base-100 shadow-sm px-4 sm:px-10 ">
 			<div className="flex-1">
-				<Link className="text-xl" to="/">
+				<Link className="text-md sm:text-xl" to="/">
 					GitTogether
 				</Link>
 			</div>
 
 			<>
 				{isAuthenticated && userData ? (
-					<div className="flex gap-2 items-center">
-						<div>Hi 👋, {userData?.firstName} </div>
+					<div className="flex gap-2 items-center text-sm sm:text-base">
+						<div>
+							Hi {String.fromCodePoint(0x1f44b)},{userData?.firstName}{" "}
+						</div>
 						<div className="dropdown dropdown-end">
 							<div
 								tabIndex={0}

@@ -17,12 +17,17 @@ const ConnectionCard = ({
 	const { firstName, lastName, about, profileImageMeta } = user;
 	const imageUrl = useProfileImage(profileImageMeta);
 	return (
-		<div className="flex items-center justify-around py-2 px-4 m-2 border-2 border-black/40 rounded-xl gap-4">
-			<img src={imageUrl} className="avatar w-24 h-24 rounded-full " />
+		<div className="flex items-center justify-around px-2 py-1 sm:py-2 sm:px-4 m-2 border-2 border-black/40 rounded-xl gap-2 sm:gap-4">
+			<img
+				src={imageUrl}
+				className="avatar w-12 h-12 sm:w-24 sm:h-24 rounded-full "
+			/>
 
-			<div className="flex flex-col justify-center min-w-64">
-				<p className="text-2xl">{`${firstName} ${lastName}`}</p>
-				<p className="text-gray-600 line-clamp-2">{about}</p>
+			<div className="flex flex-col justify-center mid:min-w-64">
+				<p className="text-xs sm:text-2xl">{`${firstName} ${lastName}`}</p>
+				<p className="text-xs sm:text-base text-gray-600 line-clamp-2">
+					{about}
+				</p>
 			</div>
 			{/* <button className="btn btn-sm btn-primary rounded-full">{btnType}</button>
       <button className="btn btn-sm btn-primary rounded-full">

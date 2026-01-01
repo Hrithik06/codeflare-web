@@ -75,7 +75,6 @@ const UserCard = ({ user }: UserProps): JSX.Element => {
 
 				console.error("ERROR: ", err);
 				const message = err.response?.data?.message;
-
 				showToast(message, "error");
 			});
 	};
@@ -84,7 +83,7 @@ const UserCard = ({ user }: UserProps): JSX.Element => {
 
 	return (
 		<>
-			<div className="card w-80 shadow-sm m-4 bg-white dark:bg-zinc-900">
+			<div className="card sm:w-80 shadow-sm m-4 bg-white dark:bg-zinc-900">
 				<figure className="h-3/4">
 					<img src={imageUrl} alt="photo" className="w-full bg-gray-400" />
 				</figure>
