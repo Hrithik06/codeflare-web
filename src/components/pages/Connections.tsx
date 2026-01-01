@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import api from "../utils/axiosInstance";
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
-import { addConnections } from "../utils/connectionSlice";
-// import { clearLoading, setLoading } from "../utils/userSlice";
-import { RootState } from "../utils/appStore";
-import { ConnectionCard } from "./";
+import api from "../../utils/axiosInstance";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { addConnections } from "../../utils/connectionSlice";
+// import { clearLoading, setLoading } from "../../utils/userSlice";
+import { RootState } from "../../utils/appStore";
+// import { ConnectionCard } from "../ui";
+import ConnectionCard from "../ui/ConnectionCard";
 
 const Connection = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();

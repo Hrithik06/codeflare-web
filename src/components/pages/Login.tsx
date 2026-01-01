@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAppSelector } from "../utils/hooks";
+import { useAppSelector } from "../../utils/hooks";
 
-import { setUser } from "../utils/userSlice";
-// import { clearLoading, setLoading } from "../utils/userSlice";	setIsLogin((prev) => !prev);
-import { YouAreIn } from "./index";
-import { useAppDispatch } from "../utils/hooks";
-import api from "../utils/axiosInstance";
-import { emailIdZodSchema, passwordZodSchema } from "../utils/zodSchema";
+import { setUser } from "../../utils/userSlice";
+// import { clearLoading, setLoading } from "../../utils/userSlice";	setIsLogin((prev) => !prev);
+// import { YouAreIn } from "../features";
+import YouAreIn from "../features/YouAreIn";
+import { useAppDispatch } from "../../utils/hooks";
+import api from "../../utils/axiosInstance";
+import { emailIdZodSchema, passwordZodSchema } from "../../utils/zodSchema";
 import { ZodError } from "zod";
 const Login = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();

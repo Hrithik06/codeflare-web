@@ -2,22 +2,23 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
 import { isAxiosError } from "axios";
 
-import { Body, Login, Loader, AuthLayout } from "./components"; // These load instantly
+import { Body, Loader, AuthLayout } from "./components/layout"; // These load instantly
+import Login from "./components/pages/Login";
 import { useAppDispatch } from "./utils/hooks";
 import { clearUser, setUser } from "./utils/userSlice";
 import api from "./utils/axiosInstance";
 
 // Lazy-loaded components
-const Feed = lazy(() => import("./components/Feed"));
-const Profile = lazy(() => import("./components/Profile"));
-const Connections = lazy(() => import("./components/Connections"));
-const Requests = lazy(() => import("./components/Requests"));
-const ContactUs = lazy(() => import("./components/ContactUs"));
-const PrivacyPolicy = lazy(() => import("./components/PrivacyPolicy"));
-const RefundPolicy = lazy(() => import("./components/RefundPolicy"));
-const TermsOfService = lazy(() => import("./components/TermsOfService"));
-const NotFound = lazy(() => import("./components/NotFound"));
-const ErrorPage = lazy(() => import("./components/ErrorPage"));
+const Feed = lazy(() => import("./components/pages/Feed"));
+const Profile = lazy(() => import("./components/pages/Profile"));
+const Connections = lazy(() => import("./components/pages/Connections"));
+const Requests = lazy(() => import("./components/pages/Requests"));
+const ContactUs = lazy(() => import("./components/pages/ContactUs"));
+const PrivacyPolicy = lazy(() => import("./components/pages/PrivacyPolicy"));
+const RefundPolicy = lazy(() => import("./components/pages/RefundPolicy"));
+const TermsOfService = lazy(() => import("./components/pages/TermsOfService"));
+const NotFound = lazy(() => import("./components/pages/NotFound"));
+const ErrorPage = lazy(() => import("./components/pages/ErrorPage"));
 
 function App() {
 	const [bootstrapped, setBootstrapped] = useState(false);

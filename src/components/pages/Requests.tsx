@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/axiosInstance";
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
-import { addRequests, removeRequest } from "../utils/requestSlice";
-import { RootState } from "../utils/appStore";
-import { ConnectionCard } from "./index";
-// import { clearLoading, setLoading } from "../utils/userSlice";
+import api from "../../utils/axiosInstance";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { addRequests, removeRequest } from "../../utils/requestSlice";
+import { RootState } from "../../utils/appStore";
+// import { ConnectionCard } from "../ui";
+import ConnectionCard from "../ui/ConnectionCard";
+// import { clearLoading, setLoading } from "../../utils/userSlice";
 const Requests = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const requests = useAppSelector((store: RootState) => store.requests);

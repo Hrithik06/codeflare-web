@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
-import api from "../utils/axiosInstance";
-import { setUser } from "../utils/userSlice";
+import api from "../../utils/axiosInstance";
+import { setUser } from "../../utils/userSlice";
 
-import { useAppDispatch } from "../utils/hooks";
+import { useAppDispatch } from "../../utils/hooks";
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];

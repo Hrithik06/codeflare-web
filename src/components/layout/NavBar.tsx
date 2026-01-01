@@ -1,16 +1,16 @@
 import React from "react";
-import { RootState } from "../utils/appStore";
+import { RootState } from "../../utils/appStore";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useProfileImage,
-} from "../utils/hooks";
-import { clearUser } from "../utils/userSlice";
-import { clearFeed } from "../utils/feedSlice";
+} from "../../utils/hooks";
+import { clearUser } from "../../utils/userSlice";
+import { clearFeed } from "../../utils/feedSlice";
 import { useNavigate } from "react-router-dom";
-import api from "../utils/axiosInstance";
+import api from "../../utils/axiosInstance";
 import { Link } from "react-router-dom";
-import { clearConnections } from "../utils/connectionSlice";
+import { clearConnections } from "../../utils/connectionSlice";
 
 const NavBar = (): React.ReactElement => {
 	const userData = useAppSelector((store: RootState) => store.user.user);
