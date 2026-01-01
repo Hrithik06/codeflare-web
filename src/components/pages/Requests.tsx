@@ -6,6 +6,9 @@ import { RootState } from "../../utils/appStore";
 // import { ConnectionCard } from "../ui";
 import ConnectionCard from "../ui/ConnectionCard";
 // import { clearLoading, setLoading } from "../../utils/userSlice";
+//
+const EMPTY_FEED = "/EmptyFeed.svg";
+//
 const Requests = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const requests = useAppSelector((store: RootState) => store.requests);
@@ -54,7 +57,12 @@ const Requests = (): React.JSX.Element => {
 				{loading ? (
 					<span className="loading loading-bars loading-xl"></span>
 				) : requests.length === 0 ? (
-					<p>No New Requests</p>
+					<div className="w-full h-10/12 sm:h-full flex flex-col items-center justify-center">
+						<p className="text-2xl sm:text-3xl text-center m-2 xl:mt-10">
+							No New Requests{" "}
+						</p>
+						<img src={EMPTY_FEED} alt="EMPTY FEED" />
+					</div>
 				) : (
 					requests.map((connReq) => (
 						<ConnectionCard

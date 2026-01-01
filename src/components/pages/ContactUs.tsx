@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import { Link } from "react-router-dom";
 import api from "../../utils/axiosInstance";
 import { useAppSelector } from "../../utils/hooks";
 import { RootState } from "../../utils/appStore";
@@ -48,7 +47,8 @@ export default function Example() {
 					Contact
 				</h2>
 				<p className="mt-2 text-lg/8 text-gray-600">
-					Have a question? or just want to say hi👋
+					Have a question? or just want to say hi
+					{String.fromCodePoint(0x1f44b)}
 				</p>
 			</div>
 			{(errorMsg.length > 0 || !isAuthenticated) && (
@@ -77,7 +77,6 @@ export default function Example() {
 				</div>
 			)}
 			<form className="mx-auto max-w-xl sm:mt-12" onSubmit={handleSubmit}>
-				{" "}
 				<fieldset>
 					<div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 						<div className="sm:col-span-2">
@@ -119,40 +118,12 @@ export default function Example() {
 									value={messageTxt}
 									disabled={!isAuthenticated}
 									onChange={(e) => setMessageTxt(e.target.value)}
-									placeholder="Hi👋"
+									placeholder={`Hi${String.fromCodePoint(0x1f44b)}`}
 									minLength={10}
 									maxLength={300}
 								/>
 							</div>
 						</div>
-						{/* <div className="flex gap-x-4 sm:col-span-2">
-            <div className="flex h-6 items-center">
-              <div className="group relative inline-flex w-8 shrink-0 rounded-full bg-gray-200 p-px inset-ring inset-ring-gray-900/5 outline-offset-2 outline-indigo-600 transition-colors duration-200 ease-in-out has-checked:bg-indigo-600 has-focus-visible:outline-2">
-                <span className="size-4 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-3.5" />
-                <input
-                  id="agree-to-policies"
-                  name="agree-to-policies"
-                  type="checkbox"
-                  aria-label="Agree to policies"
-                  disabled={!isAuthenticated}
-                  className="absolute inset-0 appearance-none focus:outline-hidden"
-                />
-              </div>
-            </div>
-            <label
-              htmlFor="agree-to-policies"
-              className="text-sm/6 text-gray-600"
-            >
-              By selecting this, you agree to our{" "}
-              <Link
-                to={"/privacy-policy"}
-                className="font-semibold whitespace-nowrap text-indigo-600"
-              >
-                privacy policy
-              </Link>
-              .
-            </label>
-          </div> */}
 					</div>
 					<div className="mt-10">
 						<button
