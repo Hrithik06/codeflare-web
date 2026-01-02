@@ -1,5 +1,7 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { createSocketConnection } from "../../utils/socketIO";
+import { useAppSelector } from "../../utils/hooks";
 
 // interface ComponentNameProps {
 //   propName: type;
@@ -11,6 +13,15 @@ import { useParams } from "react-router-dom";
 const ComponentName: FC = () => {
 	const { targetUserId } = useParams();
 	const [messages, setMessages] = useState(["hi , hello"]);
+	const user = useAppSelector((store) => store.user.user);
+	const userId = user?._id;
+	useEffect(() => {
+		const socket = createSocketConnection();
+		socket.emit("joinChat", { userId, targetUserId });
+		return () => {
+			socket.disconnect();
+		};
+	}, []);
 	return (
 		<div className="h-[75vh] w-1/3 mx-auto border border-gray-500 rounded-xl m-5 flex flex-col">
 			<h1 className="border-b border-gray-500 p-4">Chat</h1>
