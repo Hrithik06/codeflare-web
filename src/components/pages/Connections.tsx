@@ -44,20 +44,6 @@ const Connection = (): React.JSX.Element => {
 		fetchConnection();
 	}, []);
 
-	// if (loading) {
-	//   return (
-	//     <div className="flex justify-center m-10">
-	//       <span className="loading loading-bars loading-xl bg-primary"></span>
-	//     </div>
-	//   );
-	// }
-	// if (connections.length === 0)
-	//   return (
-	//     <div className="m-10">
-	//       <h3 className="text-4xl text-center">No Connections Found</h3>
-	//     </div>
-	//   );
-
 	return (
 		<div className="flex flex-col items-center">
 			<h3 className="text-5xl text-center my-6">Connections</h3>
@@ -80,7 +66,12 @@ const Connection = (): React.JSX.Element => {
 							btnType={"Message"}
 							key={connection._id}
 							actions={[
-								{ label: "Message", onClick: handleMessage, type: "success" },
+								{
+									label: "Message",
+									onClick: handleMessage,
+									type: "success",
+									navigateTo: `/chat/${connection._id}`,
+								},
 								{
 									label: "Remove",
 									onClick: handleRemoveConnection,

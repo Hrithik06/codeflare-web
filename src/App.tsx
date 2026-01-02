@@ -19,6 +19,7 @@ const RefundPolicy = lazy(() => import("./components/pages/RefundPolicy"));
 const TermsOfService = lazy(() => import("./components/pages/TermsOfService"));
 const NotFound = lazy(() => import("./components/pages/NotFound"));
 const ErrorPage = lazy(() => import("./components/pages/ErrorPage"));
+const Chat = lazy(() => import("./components/pages/Chat"));
 
 function App() {
 	const [bootstrapped, setBootstrapped] = useState(false);
@@ -76,11 +77,13 @@ function App() {
 						<Route path="profile" element={<Profile />} />
 						<Route path="connections" element={<Connections />} />
 						<Route path="requests" element={<Requests />} />
+						<Route path="chat/:targetUserId" element={<Chat />} />
+
 						<Route path="contact-us" element={<ContactUs />} />
 						<Route path="privacy-policy" element={<PrivacyPolicy />} />
 						<Route path="refunds" element={<RefundPolicy />} />
 						<Route path="terms-of-service" element={<TermsOfService />} />
-						<Route path="/error" element={<ErrorPage />} />
+						<Route path="error" element={<ErrorPage />} />
 
 						<Route path="*" element={<NotFound />} />
 					</Route>
