@@ -1,18 +1,19 @@
 import { UploadProfileImage } from "./index";
 import api from "../../utils/axiosInstance";
-import { UserInterface } from "../../interface/UserInterface";
+import { AuthUser } from "../../interface/UserInterface";
+
 import { useEffect, useState } from "react";
 import { ZodError } from "zod";
 import { setError, setUser } from "../../utils/userSlice";
 // import { MultiSelectSearch, UserCard } from "../ui";
 import MultiSelectSearch from "../ui/MultiSelectSearch";
 import UserCard from "../ui/UserCard";
-import { userZodSchema } from "../../utils/zodSchema";
+import { profileEditZodSchema } from "../../utils/zodSchema";
 import { validateDOB, ageCalculate } from "../../utils/helper";
 import { isAxiosError } from "axios";
 
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-type UserProps = { user: UserInterface };
+type UserProps = { user: AuthUser };
 
 export default function ProfileEdit({ user }: UserProps) {
 	const dispatch = useAppDispatch();
@@ -51,12 +52,6 @@ export default function ProfileEdit({ user }: UserProps) {
 
 	const handleSaveProfile = async () => {
 		try {
-			const userUpdateZodSchema = userZodSchema.omit({
-				emailId: true,
-				password: true,
-			}); // do not let user to update emailId and password here
-			//  .partial();
-
 			dispatch(setError(""));
 			const isValidDOB = validateDOB(yearStr, monthStr, dayStr);
 
@@ -64,14 +59,15 @@ export default function ProfileEdit({ user }: UserProps) {
 				dispatch(setError("Please enter a valid date."));
 				return;
 			}
-			if (!["Man", "Woman", "Non-binary"].includes(gender)) {
-				dispatch(
-					setError(
-						"Invalid gender. Allowed values: 'Man', 'Woman', 'Non-binary'.",
-					),
-				);
-				return;
-			}
+			//NOT NEEDED AS ZOD IS HANDLING IT
+			// if (!["Man", "Woman", "Non-binary"].includes(gender)) {
+			// 	dispatch(
+			// 		setError(
+			// 			"Invalid gender. Allowed values: 'Man', 'Woman', 'Non-binary'.",
+			// 		),
+			// 	);
+			// 	return;
+			// }
 
 			if (about === undefined || about.length < 10 || about?.length > 200) {
 				dispatch(setError("About must be between 10-200 characters"));
@@ -83,19 +79,19 @@ export default function ProfileEdit({ user }: UserProps) {
 				return;
 			}
 
-			const updatedUser: UserInterface = {
-				_id: user._id,
-				firstName: firstName,
-				lastName: lastName,
+			const formData = {
+				firstName,
+				lastName,
 				dateOfBirth: `${yearStr}-${monthStr}-${dayStr}`,
-				gender: gender,
-				about: about,
-				skills: skills,
+				gender,
+				about,
+				skills,
 			};
-			userUpdateZodSchema.parse(updatedUser);
+
+			const parsedData = profileEditZodSchema.parse(formData);
 
 			await api
-				.patch("/profile/edit", updatedUser, {
+				.patch("/profile/edit", parsedData, {
 					withCredentials: true,
 				})
 				.then((res) => {

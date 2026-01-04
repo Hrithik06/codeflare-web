@@ -19,75 +19,77 @@ const RefundPolicy = lazy(() => import("./components/pages/RefundPolicy"));
 const TermsOfService = lazy(() => import("./components/pages/TermsOfService"));
 const NotFound = lazy(() => import("./components/pages/NotFound"));
 const ErrorPage = lazy(() => import("./components/pages/ErrorPage"));
+const Chat = lazy(() => import("./components/pages/Chat"));
 
 function App() {
-	const [bootstrapped, setBootstrapped] = useState(false);
+  const [bootstrapped, setBootstrapped] = useState(false);
 
-	const dispatch = useAppDispatch();
-	const fetchUser = async () => {
-		try {
-			const res = await api.get("profile/view", {
-				withCredentials: true,
-			});
+  const dispatch = useAppDispatch();
+  const fetchUser = async () => {
+    try {
+      const res = await api.get("profile/view", {
+        withCredentials: true,
+      });
 
-			dispatch(setUser(res.data.data));
-		} catch (err) {
-			if (isAxiosError(err) && err.response?.status === 401) {
-				dispatch(clearUser());
-			} else {
-				console.error("Auth bootstrap error:", err);
-			}
-		}
-	};
-	useEffect(() => {
-		fetchUser().finally(() => setBootstrapped(true));
-	}, []);
-	if (!bootstrapped) {
-		return (
-			<div className="flex p-10 w-full justify-around">
-				<Loader />
-			</div>
-		);
-	}
-	return (
-		<BrowserRouter>
-			{/* Suspense for all lazy-loaded routes */}
-			<Suspense
-				fallback={
-					<div className="flex p-10 w-full justify-around ">
-						<Loader />
-					</div>
-				}
-			>
-				<Routes>
-					{/* PUBLIC AUTH ROUTES */}
-					{/* LOGIN ONLY (guarded) */}
-					<Route element={<AuthLayout />}>
-						<Route path="/login" element={<Login />} />
-					</Route>
+      dispatch(setUser(res.data.data));
+    } catch (err) {
+      if (isAxiosError(err) && err.response?.status === 401) {
+        dispatch(clearUser());
+      } else {
+        console.error("Auth bootstrap error:", err);
+      }
+    }
+  };
+  useEffect(() => {
+    fetchUser().finally(() => setBootstrapped(true));
+  }, []);
+  if (!bootstrapped) {
+    return (
+      <div className="flex p-10 w-full justify-around">
+        <Loader />
+      </div>
+    );
+  }
+  return (
+    <BrowserRouter>
+      {/* Suspense for all lazy-loaded routes */}
+      <Suspense
+        fallback={
+          <div className="flex p-10 w-full justify-around ">
+            <Loader />
+          </div>
+        }
+      >
+        <Routes>
+          {/* PUBLIC AUTH ROUTES */}
+          {/* LOGIN ONLY (guarded) */}
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+          </Route>
 
-					{/* SIGNUP (unguarded transition) */}
-					<Route path="/signup" element={<Login />} />
+          {/* SIGNUP (unguarded transition) */}
+          <Route path="/signup" element={<Login />} />
 
-					{/* APP ROUTES */}
-					<Route path="/" element={<Body />}>
-						{/* No suspense, loads instantly */}
-						<Route index element={<Feed />} />
-						<Route path="profile" element={<Profile />} />
-						<Route path="connections" element={<Connections />} />
-						<Route path="requests" element={<Requests />} />
-						<Route path="contact-us" element={<ContactUs />} />
-						<Route path="privacy-policy" element={<PrivacyPolicy />} />
-						<Route path="refunds" element={<RefundPolicy />} />
-						<Route path="terms-of-service" element={<TermsOfService />} />
-						<Route path="/error" element={<ErrorPage />} />
-
-						<Route path="*" element={<NotFound />} />
-					</Route>
-				</Routes>
-			</Suspense>
-		</BrowserRouter>
-	);
+          {/* APP ROUTES */}
+          <Route path="/" element={<Body />}>
+            //FIXME: Feed, Profile, Connections, Requests, Chat should be
+            protected, should not be accessible to unauthorised users
+            <Route index element={<Feed />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="connections" element={<Connections />} />
+            <Route path="requests" element={<Requests />} />
+            <Route path="chat/:targetUserId" element={<Chat />} />
+            <Route path="contact-us" element={<ContactUs />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="refunds" element={<RefundPolicy />} />
+            <Route path="terms-of-service" element={<TermsOfService />} />
+            <Route path="error" element={<ErrorPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
 }
 
 export default App;

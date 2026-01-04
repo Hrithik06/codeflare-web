@@ -16,11 +16,7 @@ export default defineConfig({
 			brotliSize: true,
 		}),
 	],
-	// });
-
 	//NOTE:Here vite is proxying in prod nginx does the proxying
-
-	// export default defineConfig({
 	server: {
 		proxy: {
 			"/api": {

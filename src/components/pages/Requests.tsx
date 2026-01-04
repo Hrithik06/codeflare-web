@@ -51,15 +51,17 @@ const Requests = (): React.JSX.Element => {
 		fetchRequests();
 	}, []);
 	return (
-		<>
-			<div className="flex flex-col items-center">
-				<h3 className="text-5xl text-center my-6">Connection Requests</h3>
+		<div className="flex flex-col items-center">
+			<h3 className="text-5xl text-center my-6">Requests</h3>
+			<div>
 				{loading ? (
 					<span className="loading loading-bars loading-xl"></span>
 				) : requests.length === 0 ? (
+					// <p>No Connections Found</p>
+
 					<div className="w-full h-10/12 sm:h-full flex flex-col items-center justify-center">
 						<p className="text-2xl sm:text-3xl text-center m-2 xl:mt-10">
-							No New Requests{" "}
+							No Requests Found
 						</p>
 						<img src={EMPTY_FEED} alt="EMPTY FEED" />
 					</div>
@@ -84,7 +86,7 @@ const Requests = (): React.JSX.Element => {
 					))
 				)}
 			</div>
-		</>
+		</div>
 	);
 };
 export default Requests;

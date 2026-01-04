@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import api from "../../utils/axiosInstance";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { addConnections } from "../../utils/connectionSlice";
@@ -11,6 +12,7 @@ const EMPTY_FEED = "/EmptyFeed.svg";
 const Connection = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const connections = useAppSelector((store: RootState) => store.connections);
+
 	// const loading = useAppSelector((store: RootState) => store.user.loading);
 	const [loading, setLoading] = useState(false);
 
@@ -34,29 +36,13 @@ const Connection = (): React.JSX.Element => {
 				setLoading(false);
 			});
 	};
-	const handleMessage = async () => {
-		console.log("handleMessage");
-	};
+
 	const handleRemoveConnection = async () => {
 		console.log("handleRemoveConnection");
 	};
 	useEffect(() => {
 		fetchConnection();
 	}, []);
-
-	// if (loading) {
-	//   return (
-	//     <div className="flex justify-center m-10">
-	//       <span className="loading loading-bars loading-xl bg-primary"></span>
-	//     </div>
-	//   );
-	// }
-	// if (connections.length === 0)
-	//   return (
-	//     <div className="m-10">
-	//       <h3 className="text-4xl text-center">No Connections Found</h3>
-	//     </div>
-	//   );
 
 	return (
 		<div className="flex flex-col items-center">
@@ -80,7 +66,11 @@ const Connection = (): React.JSX.Element => {
 							btnType={"Message"}
 							key={connection._id}
 							actions={[
-								{ label: "Message", onClick: handleMessage, type: "success" },
+								{
+									label: "Message",
+									type: "success",
+									navigateTo: `/chat/${connection._id}`,
+								},
 								{
 									label: "Remove",
 									onClick: handleRemoveConnection,

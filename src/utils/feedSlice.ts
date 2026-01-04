@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserInterface } from "../interface/UserInterface";
+import { UserBase } from "../interface/UserInterface";
 
-type FeedState = UserInterface[];
+type FeedState = UserBase[];
 const initialState: FeedState = [];
 const feedSlice = createSlice({
 	name: "feed",
 	initialState,
 	reducers: {
 		addFeed: (state: FeedState, action: PayloadAction<FeedState>) => {
-			// state = Array.from(new Set<UserInterface>([...state, ...action.payload]));
+			// state = Array.from(new Set<UserBase>([...state, ...action.payload]));
 			state = action.payload;
 			return state;
 		},

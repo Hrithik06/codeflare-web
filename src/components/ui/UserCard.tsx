@@ -1,10 +1,10 @@
 import { useState, JSX, useRef } from "react";
-import { UserInterface } from "../../interface/UserInterface";
+import { UserBase } from "../../interface/UserInterface";
 import api from "../../utils/axiosInstance";
 import { useAppDispatch, useProfileImage } from "../../utils/hooks";
 import { removeUserFromFeed } from "../../utils/feedSlice";
 type UserProps = {
-	user: UserInterface;
+	user: UserBase;
 };
 import { isAxiosError } from "axios";
 type ToastProps = { message: string; type: string };
