@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import api from "../../utils/axiosInstance";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { addConnections } from "../../utils/connectionSlice";
@@ -11,6 +12,7 @@ const EMPTY_FEED = "/EmptyFeed.svg";
 const Connection = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const connections = useAppSelector((store: RootState) => store.connections);
+
 	// const loading = useAppSelector((store: RootState) => store.user.loading);
 	const [loading, setLoading] = useState(false);
 
@@ -34,9 +36,7 @@ const Connection = (): React.JSX.Element => {
 				setLoading(false);
 			});
 	};
-	const handleMessage = async () => {
-		console.log("handleMessage");
-	};
+
 	const handleRemoveConnection = async () => {
 		console.log("handleRemoveConnection");
 	};
@@ -68,7 +68,6 @@ const Connection = (): React.JSX.Element => {
 							actions={[
 								{
 									label: "Message",
-									onClick: handleMessage,
 									type: "success",
 									navigateTo: `/chat/${connection._id}`,
 								},

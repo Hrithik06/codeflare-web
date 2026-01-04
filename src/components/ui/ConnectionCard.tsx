@@ -1,12 +1,12 @@
 import React from "react";
-import { UserInterface } from "../../interface/UserInterface";
+import { UserBase } from "../../interface/UserInterface";
 // import { ActionButtons } from "./index";
 import ActionButtons from "./ActionButtons";
 import { ButtonAction } from "./ActionButtons";
 import { useProfileImage } from "../../utils/hooks";
 
 type ConnectionCardProps = {
-	user: UserInterface;
+	user: UserBase;
 	btnType: string;
 	actions: [ButtonAction, ButtonAction];
 };

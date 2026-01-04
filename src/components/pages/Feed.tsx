@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import api from "../../utils/axiosInstance";
 
-// import { UserCard } from "../ui";
 import UserCard from "../ui/UserCard";
 import { addFeed } from "../../utils/feedSlice";
 import { RootState } from "../../utils/appStore";
@@ -109,7 +108,7 @@ const Feed = (): React.JSX.Element => {
 						<p className="text-2xl sm:text-3xl text-center m-2 xl:mt-10">
 							No New Recommendation available right now...
 						</p>
-						<img src={EMPTY_FEED} alt="EMPTY FEED" />
+						<img src={EMPTY_FEED} alt="EMPTY FEED" className="w-3/4" />
 					</div>
 				)}
 			</div>

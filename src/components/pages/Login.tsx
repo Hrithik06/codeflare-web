@@ -8,7 +8,7 @@ import { setUser } from "../../utils/userSlice";
 import YouAreIn from "../features/YouAreIn";
 import { useAppDispatch } from "../../utils/hooks";
 import api from "../../utils/axiosInstance";
-import { emailIdZodSchema, passwordZodSchema } from "../../utils/zodSchema";
+import { loginZodSchema, signupZodSchema } from "../../utils/zodSchema";
 import { ZodError } from "zod";
 const Login = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
@@ -29,8 +29,8 @@ const Login = (): React.JSX.Element => {
 	const isLogin = location.pathname === "/login";
 	const handleLogin = async () => {
 		try {
-			emailIdZodSchema.parse(emailId);
-			passwordZodSchema.parse(password);
+			loginZodSchema.parse({ emailId, password });
+
 			setShowPassword(false);
 			// dispatch(setLoading());
 			setLoading(true);
@@ -93,6 +93,8 @@ const Login = (): React.JSX.Element => {
 		}
 	};
 	const handleSignUp = async () => {
+		signupZodSchema.parse({ emailId, password, firstName, lastName });
+
 		await api
 			.post(
 				"/signup",
