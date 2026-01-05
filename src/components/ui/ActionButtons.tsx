@@ -1,30 +1,54 @@
+import { Link } from "react-router-dom";
+
 export type ButtonAction = {
 	label: string;
-	onClick: (
+	onClick?: (
 		event?: React.MouseEvent<HTMLButtonElement>,
 	) => void | Promise<void>;
-	type?: string;
+	type?: "primary" | "secondary" | "error" | "success";
 	toolTipLabel?: string | null;
+	navigateTo?: string | null;
 };
+
 type ActionButtonsProps = {
-	actions: [ButtonAction, ButtonAction];
+	actions: ButtonAction[];
 };
+
 const ActionButtons = ({ actions }: ActionButtonsProps): React.JSX.Element => {
 	return (
 		<div className="flex gap-2">
 			{actions.map((action) => {
+				const {
+					label,
+					onClick,
+					type = "primary",
+					toolTipLabel,
+					navigateTo,
+				} = action;
+
+				const button = (
+					<button
+						className={`btn btn-${type} btn-sm sm:btn-md rounded-full`}
+						onClick={onClick}
+						type="button"
+					>
+						{label}
+					</button>
+				);
+
+				const content = navigateTo ? (
+					<Link to={navigateTo}>{button}</Link>
+				) : (
+					button
+				);
+
 				return (
 					<div
-						className={action.toolTipLabel ? "tooltip tooltip-top" : ""}
-						data-tip={action.toolTipLabel}
-						key={action.label}
+						key={label}
+						className={toolTipLabel ? "tooltip tooltip-top" : undefined}
+						data-tip={toolTipLabel ?? undefined}
 					>
-						<button
-							className={`btn btn-${action.type || "primary"} btn-sm sm:btn-xl rounded-full`}
-							onClick={action.onClick}
-						>
-							{action.label}
-						</button>
+						{content}
 					</div>
 				);
 			})}

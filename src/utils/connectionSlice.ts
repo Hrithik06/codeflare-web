@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserInterface } from "../interface/UserInterface";
+import { UserBase } from "../interface/UserInterface";
 
-type ConnectionState = UserInterface[];
+type ConnectionState = UserBase[];
 const initialState: ConnectionState = [];
 const connectionSlice = createSlice({
 	name: "connections",

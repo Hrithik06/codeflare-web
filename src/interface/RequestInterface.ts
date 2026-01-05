@@ -1,5 +1,5 @@
-import { UserInterface } from "./UserInterface";
+import { UserBase } from "./UserInterface";
 export default interface RequestInterface {
-	fromUserId: UserInterface;
+	fromUserId: UserBase;
 	_id: string;
 }
