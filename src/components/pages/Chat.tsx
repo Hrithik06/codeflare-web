@@ -24,7 +24,6 @@ const Chat: FC = () => {
 	const [newMessage, setNewMessage] = useState("");
 	const user = useAppSelector((store) => store.user.user);
 	const userId = user?._id;
-	//TODO: Write Zod for joinChat and sendMessage
 	//TODO: Handle error emitted from socket serverside
 	//TODO: Show green dot when online
 	//TODO: last seen by storing the information about the connection that timestamp can tell u last seen and keep  updating that
@@ -63,12 +62,8 @@ const Chat: FC = () => {
 		}
 		const socket = createSocketConnection();
 		socket.emit("joinChat", {
-			firstName: user?.firstName?.trim(),
-			lastName: user?.lastName?.trim(),
-			senderUserId: userId?.trim(),
 			targetUserId: targetUserId?.trim(),
 		});
-
 		socket.on(
 			"messageReceived",
 			({ senderUserId, firstName, lastName, text }) => {
@@ -78,6 +73,16 @@ const Chat: FC = () => {
 				]);
 			},
 		);
+		socket.on("auth:error", (payload) => {
+			console.log(payload);
+		});
+		socket.on("connect_error", (err) => {
+			console.log(err.message); // "NO_TOKEN"
+		});
+
+		socket.on("err", (payload) => {
+			console.log(payload);
+		});
 
 		return () => {
 			socket.disconnect();
@@ -94,9 +99,6 @@ const Chat: FC = () => {
 		if (!userId || !targetUserId) return;
 
 		socket.emit("sendMessage", {
-			firstName: user.firstName,
-			lastName: user.lastName,
-			senderUserId: userId,
 			targetUserId,
 			text: newMessage.trim(),
 		});
@@ -107,7 +109,7 @@ const Chat: FC = () => {
 	return (
 		<div className="w-3/4 mx-auto border border-gray-600 m-5 h-[70vh] rounded-xl flex flex-col">
 			<h1 className="p-5 border-b border-gray-600">Chat</h1>
-			<div className="flex-1 overflow-scroll p-5">
+			<div className="flex-1 overflow-y-scroll p-5">
 				{messages.map((msg, index) => {
 					return (
 						<div
