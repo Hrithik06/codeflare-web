@@ -26,6 +26,12 @@ const Chat: FC = () => {
 	const userId = user?._id;
 	//TODO: Write Zod for joinChat and sendMessage
 	//TODO: Handle error emitted from socket serverside
+	//TODO: Show green dot when online
+	//TODO: last seen by storing the information about the connection that timestamp can tell u last seen and keep  updating that
+	//TODO: Scroll down auto when new messages arrive in chat area
+	//TODO: Project Idea tictactoe game using socketIO
+	//TODO: Project Idea chess game using socketIO
+	//TODO: Games like typeracer socketIo
 	const getChatHistory = async () => {
 		const res = await api.get(`/chat/${targetUserId}`, {
 			withCredentials: true,
@@ -33,7 +39,6 @@ const Chat: FC = () => {
 		if (!res.status) {
 			console.error("ERROR"); //TODO: TOAST not error 403 not a connection yet
 		}
-		//TODO: msg type
 		const oldMessages = res.data.data.map((msg: MessageInteface) => {
 			return {
 				senderUserId: msg.senderId._id,
