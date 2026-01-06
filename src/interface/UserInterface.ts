@@ -5,13 +5,6 @@ export interface UploadedImageMetaInterface {
 	imageVersion: number;
 }
 
-export interface UploadedImageMetaInterface {
-	key: string;
-	contentType: string;
-	isUserUploaded: boolean;
-	imageVersion: number;
-}
-
 /**
  * User shape as RECEIVED from backend
  */

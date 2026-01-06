@@ -24,8 +24,8 @@ const ActionButtons = ({ actions }: ActionButtonsProps): React.JSX.Element => {
 					type = "primary",
 					toolTipLabel,
 					navigateTo,
+					// data,
 				} = action;
-
 				const button = (
 					<button
 						className={`btn btn-${type} btn-sm sm:btn-md rounded-full`}
