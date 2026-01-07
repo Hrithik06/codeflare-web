@@ -17,6 +17,7 @@ type MessageObj = {
 	firstName: string;
 	lastName: string;
 	text: string;
+	createdAt: string;
 };
 
 const Chat: FC = () => {
@@ -55,6 +56,7 @@ const Chat: FC = () => {
 					firstName: msg.senderId.firstName,
 					lastName: msg.senderId.lastName,
 					text: msg.text,
+					createdAt: msg?.createdAt,
 				};
 			});
 			// if (oldMessages.length > 0) {
@@ -79,24 +81,29 @@ const Chat: FC = () => {
 			// targetUserId: targetUserId?.trim(),
 			chatId: chatDetails?._id,
 		});
-		socket.on(
-			"messageReceived",
-			({ senderUserId, firstName, lastName, text }) => {
-				setMessages((prevMessages) => [
-					...prevMessages,
-					{ senderUserId, firstName, lastName, text },
-				]);
-			},
-		);
-		socket.on("app_error", (payload) => {
+		socket.on("messageReceived", (payload) => {
+			const { senderUserId, firstName, lastName, text, createdAt } = payload;
 			console.log(payload);
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{
+					senderUserId,
+					firstName,
+					lastName,
+					text,
+					createdAt,
+				},
+			]);
+		});
+		socket.on("app_error", (payload) => {
+			console.error(payload);
 		});
 		socket.on("connect_error", (err) => {
-			console.log(err.message); // "NO_TOKEN"
+			console.error(err.message); // "NO_TOKEN"
 		});
 
 		socket.on("err", (payload) => {
-			console.log(payload);
+			console.error(payload);
 		});
 
 		return () => {
@@ -128,6 +135,22 @@ const Chat: FC = () => {
 		});
 	};
 
+	const localTime = (ISOString: string) => {
+		const time = new Date(ISOString).toLocaleTimeString([], {
+			hour: "2-digit",
+			minute: "2-digit",
+		});
+
+		return time;
+	};
+	const localDate = (ISOString: string) => {
+		const date = new Date(ISOString).toLocaleDateString(undefined, {
+			month: "short",
+			day: "numeric",
+			year: "numeric",
+		});
+		return date;
+	};
 	return (
 		<div className="w-3/4 mx-auto border border-gray-600 m-5 h-[70vh] rounded-xl flex flex-col">
 			<h1 className="p-5 border-b border-gray-600">
@@ -144,7 +167,14 @@ const Chat: FC = () => {
 						>
 							<div className="chat-header">
 								{`${msg.firstName}  ${msg.lastName}`}
-								<time className="text-xs opacity-50"> 2 hours ago</time>
+								{/*<time className="text-xs opacity-50"> 2 hours ago</time>*/}
+								<time className="text-xs opacity-50">
+									{localTime(msg?.createdAt)}
+									{/*{msg?.createdAt?.toLocaleTimeString([], {
+										hour: "2-digit",
+										minute: "2-digit",
+									})}*/}
+								</time>
 							</div>
 							<div className="chat-bubble">{msg.text}</div>
 							<div className="chat-footer opacity-50">Seen</div>

@@ -6,8 +6,8 @@ export interface Message {
 	};
 	text: string;
 	_id: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string;
+	createdAt?: string;
+	updatedAt?: string;
 }
 export interface ChatParticipant {
 	_id: string;
