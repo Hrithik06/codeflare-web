@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
+import LegalLayout from "../layout/LegalLayout";
+
 const TermsOfService = () => {
 	return (
-		<div className="max-w-4xl mx-auto p-6">
-			<h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
-
+		<LegalLayout title="Terms of Service">
 			<p className="mb-4">
 				Welcome to <strong>GitTogether</strong>. By using our website and
 				services, you agree to comply with and be bound by the following Terms
@@ -49,12 +49,15 @@ const TermsOfService = () => {
 			<h2 className="text-xl font-semibold mt-6 mb-2">6. Contact Us</h2>
 			<p>
 				For questions about these Terms & Conditions, please contact us at{" "}
-				<Link to={"/contact-us"} className="text-blue-600 underline">
+				<Link
+					to={"/contact-us"}
+					className="text-violet-600 underline hover:text-violet-700"
+				>
 					contact us
 				</Link>
 				.
 			</p>
-		</div>
+		</LegalLayout>
 	);
 };
 

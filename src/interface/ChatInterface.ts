@@ -1,3 +1,5 @@
+import { UploadedImageMetaInterface } from "./UserInterface";
+
 export interface Message {
 	senderId: {
 		_id: string;
@@ -13,6 +15,7 @@ export interface ChatParticipant {
 	_id: string;
 	firstName: string;
 	lastName: string;
+	profileImageMeta?: UploadedImageMetaInterface;
 }
 export interface ChatDetails {
 	_id: string;

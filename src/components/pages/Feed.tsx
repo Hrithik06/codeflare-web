@@ -124,10 +124,14 @@ import api from "../../utils/axiosInstance";
 import UserCard from "../ui/UserCard";
 import { addFeed } from "../../utils/feedSlice";
 import { RootState } from "../../utils/appStore";
-// import { setLoading, clearLoading } from "../../utils/userSlice";
+import { useRef } from "react";
+import type { UserCardHandle } from "../ui/UserCard";
+
 import { useNavigate } from "react-router-dom";
 const EMPTY_IMAGE = "/EmptyImage.svg";
 const Feed = (): React.JSX.Element => {
+	const cardRef = useRef<UserCardHandle>(null);
+
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const feed = useAppSelector((store: RootState) => store.feed);
@@ -136,7 +140,6 @@ const Feed = (): React.JSX.Element => {
 	const isAuthenticated = useAppSelector(
 		(store: RootState) => store.user.isAuthenticated,
 	);
-	const [currentIndex, setCurrentIndex] = useState(0);
 
 	const [error, setError] = useState(""); //TODO: Implement error handling and proper UI feedback
 	const getFeed = async () => {
@@ -212,31 +215,35 @@ const Feed = (): React.JSX.Element => {
 			</div>
 		);
 	}
-	if (currentIndex >= feed.length) {
-		return (
-			<div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
-				<p className="text-2xl mb-2">You’re all caught up 🎉</p>
-				<p className="text-gray-500">Check back later for new people.</p>
-			</div>
-		);
-	}
 
 	return (
 		<div className="max-w-5xl mx-auto px-4 py-8">
 			<div className="flex justify-center items-center min-h-[70vh]">
 				<div>
 					{feed.length > 0 ? (
-						<div className="flex justify-center items-center min-h-[70vh]">
-							<UserCard
-								user={feed[currentIndex]}
-								onDecision={() => setCurrentIndex((i) => i + 1)}
-							/>
-						</div>
+						<>
+							<UserCard key={feed[0]._id} ref={cardRef} user={feed[0]} />
+
+							<div className="flex justify-center gap-12 mt-8">
+								<button
+									onClick={() => cardRef.current?.swipeLeft()}
+									className="w-14 h-14 rounded-full bg-gray-200 text-xl"
+								>
+									❌
+								</button>
+
+								<button
+									onClick={() => cardRef.current?.swipeRight()}
+									className="w-14 h-14 rounded-full bg-green-200 text-xl"
+								>
+									✔️
+								</button>
+							</div>
+						</>
 					) : (
 						<div className="w-full flex flex-col items-center justify-center">
-							<p className="text-2xl text-center mb-4">
-								No new recommendations right now
-							</p>
+							<p className="text-2xl mb-2">You’re all caught up 🎉</p>
+							<p className="text-gray-500">Check back later for new people.</p>
 							<img
 								src={EMPTY_IMAGE}
 								alt="EMPTY FEED"

@@ -39,10 +39,15 @@ const NotFound = (): React.JSX.Element => {
 					<div className="mx-auto max-w-screen-sm text-center m-10">
 						<img src={NOT_FOUND} className="w-1/2 m-auto" />
 						<p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-							Redirecting to home in {redirectIn}
+							Taking you back home in {redirectIn}s
 						</p>
-						<button className="btn btn-primary" onClick={() => navigate("/")}>
-							Go back to Home
+						<button
+							className="bg-violet-600 text-white border border-violet-600 hover:bg-violet-700 px-4 py-1.5 rounded-full text-sm font-medium
+              transition-all
+              hover:scale-105 active:scale-95"
+							onClick={() => navigate("/")}
+						>
+							Go back Home
 						</button>
 					</div>
 				</div>

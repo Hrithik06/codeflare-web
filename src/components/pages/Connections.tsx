@@ -37,9 +37,9 @@ const Connection = (): React.JSX.Element => {
 			});
 	};
 
-	const handleRemoveConnection = async () => {
-		console.log("handleRemoveConnection");
-	};
+	// const handleRemoveConnection = async () => {
+	// 	console.log("handleRemoveConnection");
+	// };
 	useEffect(() => {
 		fetchConnection();
 	}, []);
@@ -55,11 +55,10 @@ const Connection = (): React.JSX.Element => {
 
 					<div className="mt-16">
 						<p className="text-center text-lg text-gray-700 mb-2">
-							No pending requests right now
+							No connections yet
 						</p>
 						<p className="text-center text-sm text-gray-500 max-w-md mx-auto">
-							That’s okay — new people may reach out as you stay active. Check
-							back later.
+							Once you start connecting with people, they’ll show up here.
 						</p>
 						<img
 							src={EMPTY_IMAGE}
@@ -68,30 +67,32 @@ const Connection = (): React.JSX.Element => {
 						/>
 					</div>
 				) : (
-					// <div>
-					// <p className="text-center text-sm text-gray-500 mb-8">
-					// 	People who want to connect with you
-					// </p>
-					// <div className="mt-8 space-y-4">
-					connections.map((connection) => (
-						<ConnectionCard
-							user={connection}
-							key={connection._id}
-							actions={[
-								{
-									label: "Message",
-									type: "primary",
-									navigateTo: `/chat/${connection._id}`,
-								},
-								{
-									label: "Remove",
-									onClick: handleRemoveConnection,
-									toolTipLabel: "Remove Connection",
-									type: "danger",
-								},
-							]}
-						/>
-					))
+					<div>
+						<p className="text-center text-sm text-gray-500 mb-8">
+							People who want to connect with you
+						</p>
+						<div className="mt-8 space-y-4">
+							{connections.map((connection) => (
+								<ConnectionCard
+									user={connection}
+									key={connection._id}
+									actions={[
+										{
+											label: "Message",
+											type: "primary",
+											navigateTo: `/chat/${connection._id}`,
+										},
+										// {
+										// 	label: "Remove",
+										// 	onClick: handleRemoveConnection,
+										// 	toolTipLabel: "Remove Connection",
+										// 	type: "danger",
+										// },
+									]}
+								/>
+							))}
+						</div>
+					</div>
 				)}
 			</div>
 		</div>

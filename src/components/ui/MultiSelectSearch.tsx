@@ -74,7 +74,6 @@ type MultiSelectSearchProps = {
 };
 
 const MultiSelectSearch = ({
-	label,
 	initialSkills,
 	setSkills,
 }: MultiSelectSearchProps): React.JSX.Element => {
@@ -146,25 +145,28 @@ const MultiSelectSearch = ({
 
 	return (
 		<div className="mb-4">
-			<label
+			{/*<label
 				className="block text-sm font-medium text-gray-700 mb-1"
 				htmlFor="skills"
 			>
 				{label}
-			</label>
+			</label>*/}
 			<div className="outline-1 outline-gray-500 rounded-xl p-2">
 				<span className="inline-block">
 					{state.userSkills.length > 0 && (
 						<div className="flex flex-wrap gap-1 mb-2">
 							{state.userSkills.map((skill) => (
 								<div
-									className="btn btn-sm text-xs btn-primary rounded-full "
+									className="bg-violet-100 text-violet-700 border border-violet-200
+   rounded-full px-3 py-1 text-sm
+   flex items-center gap-1"
+									// className="btn btn-sm text-xs btn-primary rounded-full "
 									key={skill}
 								>
 									{skill}
 									<button
 										onClick={() => handleRemoveSkill(skill)}
-										className="hover:cursor-pointer"
+										className="hover:cursor-pointer text-violet-500 hover:text-violet-700"
 									>
 										<svg
 											className="swap-on fill-current "
