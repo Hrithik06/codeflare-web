@@ -69,7 +69,7 @@ const Connection = (): React.JSX.Element => {
 				) : (
 					<div>
 						<p className="text-center text-sm text-gray-500 mb-8">
-							People who want to connect with you
+							People you’re connected with
 						</p>
 						<div className="mt-8 space-y-4">
 							{connections.map((connection) => (
