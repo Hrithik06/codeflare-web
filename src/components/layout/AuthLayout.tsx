@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../utils/hooks";
 import { Navigate, Outlet } from "react-router-dom";
+import Footer from "./Footer";
 
 const AuthLayout = () => {
 	const isAuthenticated = useAppSelector((store) => store.user.isAuthenticated);
@@ -8,6 +9,11 @@ const AuthLayout = () => {
 		return <Navigate to="/" replace />;
 	}
 
-	return <Outlet />;
+	return (
+		<>
+			<Outlet />
+			<Footer />
+		</>
+	);
 };
 export default AuthLayout;

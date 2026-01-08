@@ -7,7 +7,7 @@ import { RootState } from "../../utils/appStore";
 import ConnectionCard from "../ui/ConnectionCard";
 // import { clearLoading, setLoading } from "../../utils/userSlice";
 //
-const EMPTY_FEED = "/EmptyFeed.svg";
+const EMPTY_IMAGE = "/EmptyImage.svg";
 //
 const Requests = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
@@ -51,39 +51,54 @@ const Requests = (): React.JSX.Element => {
 		fetchRequests();
 	}, []);
 	return (
-		<div className="flex flex-col items-center">
-			<h3 className="text-5xl text-center my-6">Requests</h3>
+		<div className="max-w-3xl mx-auto px-4 py-8">
+			<h1 className="text-3xl text-center font-semibold">Requests</h1>
 			<div>
 				{loading ? (
 					<span className="loading loading-bars loading-xl"></span>
 				) : requests.length === 0 ? (
-					// <p>No Connections Found</p>
-
-					<div className="w-full h-10/12 sm:h-full flex flex-col items-center justify-center">
-						<p className="text-2xl sm:text-3xl text-center m-2 xl:mt-10">
-							No Requests Found
+					<div className="mt-16">
+						<p className="text-center text-lg text-gray-700 mb-2">
+							No pending requests right now
 						</p>
-						<img src={EMPTY_FEED} alt="EMPTY FEED" />
+						<p className="text-sm text-gray-500 max-w-md mx-auto">
+							That’s okay — new people may reach out as you stay active. Check
+							back later.
+						</p>
+						<img
+							src={EMPTY_IMAGE}
+							alt=""
+							className="w-48 mx-auto mt-8 opacity-90"
+						/>
 					</div>
 				) : (
-					requests.map((connReq) => (
-						<ConnectionCard
-							user={connReq.fromUserId}
-							btnType={"Accept"}
-							key={connReq._id}
-							actions={[
-								{
-									label: "Accept",
-									onClick: () => handleReviewRequest("accepted", connReq._id),
-									type: "success",
-								},
-								{
-									label: "Reject",
-									onClick: () => handleReviewRequest("rejected", connReq._id),
-								},
-							]}
-						/>
-					))
+					<div>
+						<p className="text-sm text-gray-500 mb-8">
+							People who want to connect with you
+						</p>
+						<div className="mt-8 space-y-4">
+							{requests.map((connReq) => (
+								<ConnectionCard
+									user={connReq.fromUserId}
+									key={connReq._id}
+									actions={[
+										{
+											label: "Accept",
+											onClick: () =>
+												handleReviewRequest("accepted", connReq._id),
+											type: "primary",
+										},
+										{
+											label: "Reject",
+											onClick: () =>
+												handleReviewRequest("rejected", connReq._id),
+											type: "danger",
+										},
+									]}
+								/>
+							))}
+						</div>
+					</div>
 				)}
 			</div>
 		</div>
