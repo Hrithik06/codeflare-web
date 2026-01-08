@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
+import LegalLayout from "../layout/LegalLayout";
+
 const PrivacyPolicy = () => {
 	return (
-		<div className="max-w-4xl mx-auto p-6">
-			<h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
-
+		<LegalLayout title="Privacy Policy">
 			<p className="mb-4">
 				At <strong>GitTogether</strong>, we value your privacy and are committed
 				to protecting your personal information. This Privacy Policy outlines
@@ -80,7 +80,10 @@ const PrivacyPolicy = () => {
 			<p className="mb-4">
 				You have the right to access, modify, or request deletion of your
 				personal data. To exercise these rights, please contact us at{" "}
-				<Link to={"/contact-us"} className="text-blue-600 underline">
+				<Link
+					to={"/contact-us"}
+					className="text-violet-600 underline hover:text-violet-700"
+				>
 					contact us
 				</Link>
 				.
@@ -99,12 +102,15 @@ const PrivacyPolicy = () => {
 			<p>
 				If you have any questions about this Privacy Policy, please reach out to
 				us at{" "}
-				<Link to={"/contact-us"} className="text-blue-600 underline">
+				<Link
+					to={"/contact-us"}
+					className="text-violet-600 underline hover:text-violet-700"
+				>
 					contact us
 				</Link>
 				.
 			</p>
-		</div>
+		</LegalLayout>
 	);
 };
 

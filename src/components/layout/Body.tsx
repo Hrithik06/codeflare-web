@@ -5,11 +5,21 @@ import { NavBar, Footer } from "./index";
 
 const Body = (): React.JSX.Element => {
 	return (
-		<div className="min-h-screen">
+		<div className="min-h-screen flex flex-col">
 			<NavBar />
-			<Outlet />
+
+			<main className="flex-1">
+				<Outlet />
+			</main>
+
 			<Footer />
 		</div>
+
+		// <div className="min-h-screen">
+		// 	<NavBar />
+		// 	<Outlet />
+		// 	<Footer />
+		// </div>
 	);
 };
 

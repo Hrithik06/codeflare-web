@@ -7,7 +7,7 @@ import { addConnections } from "../../utils/connectionSlice";
 import { RootState } from "../../utils/appStore";
 // import { ConnectionCard } from "../ui";
 import ConnectionCard from "../ui/ConnectionCard";
-const EMPTY_FEED = "/EmptyFeed.svg";
+const EMPTY_IMAGE = "/EmptyImage.svg";
 
 const Connection = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
@@ -37,48 +37,62 @@ const Connection = (): React.JSX.Element => {
 			});
 	};
 
-	const handleRemoveConnection = async () => {
-		console.log("handleRemoveConnection");
-	};
+	// const handleRemoveConnection = async () => {
+	// 	console.log("handleRemoveConnection");
+	// };
 	useEffect(() => {
 		fetchConnection();
 	}, []);
 
 	return (
-		<div className="flex flex-col items-center">
-			<h3 className="text-5xl text-center my-6">Connections</h3>
+		<div className="max-w-3xl mx-auto px-4 py-8">
+			<h1 className="text-3xl text-center font-semibold">Connections</h1>
 			<div>
 				{loading ? (
 					<span className="loading loading-bars loading-xl"></span>
 				) : connections.length === 0 ? (
 					// <p>No Connections Found</p>
 
-					<div className="w-full h-10/12 sm:h-full flex flex-col items-center justify-center">
-						<p className="text-2xl sm:text-3xl text-center m-2 xl:mt-10">
-							No Connections Found
+					<div className="mt-16">
+						<p className="text-center text-lg text-gray-700 mb-2">
+							No connections yet
 						</p>
-						<img src={EMPTY_FEED} alt="EMPTY FEED" />
+						<p className="text-center text-sm text-gray-500 max-w-md mx-auto">
+							Once you start connecting with people, they’ll show up here.
+						</p>
+						<img
+							src={EMPTY_IMAGE}
+							alt=""
+							className="w-48 mx-auto mt-8 opacity-90"
+						/>
 					</div>
 				) : (
-					connections.map((connection) => (
-						<ConnectionCard
-							user={connection}
-							btnType={"Message"}
-							key={connection._id}
-							actions={[
-								{
-									label: "Message",
-									type: "success",
-									navigateTo: `/chat/${connection._id}`,
-								},
-								{
-									label: "Remove",
-									onClick: handleRemoveConnection,
-									toolTipLabel: "Remove Connection",
-								},
-							]}
-						/>
-					))
+					<div>
+						<p className="text-center text-sm text-gray-500 mb-8">
+							People who want to connect with you
+						</p>
+						<div className="mt-8 space-y-4">
+							{connections.map((connection) => (
+								<ConnectionCard
+									user={connection}
+									key={connection._id}
+									actions={[
+										{
+											label: "Message",
+											type: "primary",
+											navigateTo: `/chat/${connection._id}`,
+										},
+										// {
+										// 	label: "Remove",
+										// 	onClick: handleRemoveConnection,
+										// 	toolTipLabel: "Remove Connection",
+										// 	type: "danger",
+										// },
+									]}
+								/>
+							))}
+						</div>
+					</div>
 				)}
 			</div>
 		</div>

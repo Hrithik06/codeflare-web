@@ -74,7 +74,6 @@ type MultiSelectSearchProps = {
 };
 
 const MultiSelectSearch = ({
-	label,
 	initialSkills,
 	setSkills,
 }: MultiSelectSearchProps): React.JSX.Element => {
@@ -145,23 +144,29 @@ const MultiSelectSearch = ({
 	};
 
 	return (
-		<fieldset className="fieldset">
-			<label className="fieldset-label" htmlFor="skills">
+		<div className="mb-4">
+			{/*<label
+				className="block text-sm font-medium text-gray-700 mb-1"
+				htmlFor="skills"
+			>
 				{label}
-			</label>
-			<div className="outline-1 outline-gray-500 rounded p-2">
+			</label>*/}
+			<div className="outline-1 outline-gray-500 rounded-xl p-2">
 				<span className="inline-block">
 					{state.userSkills.length > 0 && (
 						<div className="flex flex-wrap gap-1 mb-2">
 							{state.userSkills.map((skill) => (
 								<div
-									className="btn btn-sm text-xs btn-primary rounded-full "
+									className="bg-violet-100 text-violet-700 border border-violet-200
+   rounded-full px-3 py-1 text-sm
+   flex items-center gap-1"
+									// className="btn btn-sm text-xs btn-primary rounded-full "
 									key={skill}
 								>
 									{skill}
 									<button
 										onClick={() => handleRemoveSkill(skill)}
-										className="hover:cursor-pointer"
+										className="hover:cursor-pointer text-violet-500 hover:text-violet-700"
 									>
 										<svg
 											className="swap-on fill-current "
@@ -185,7 +190,10 @@ const MultiSelectSearch = ({
 				<input
 					type="text"
 					placeholder="Add at least 2 skill"
-					className="py-1 focus:outline-0 w-full bg-transparent"
+					// className="py-1 focus:outline-0 w-full bg-transparent"
+					className="w-full px-4 py-3 rounded-xl border border-gray-300
+           focus:border-violet-500 focus:ring-2 focus:ring-violet-400
+           transition-all duration-200"
 					value={searchTxt}
 					onChange={(e) => {
 						handleSearch(e);
@@ -214,7 +222,7 @@ const MultiSelectSearch = ({
 					))}
 				</ul>
 			)}
-		</fieldset>
+		</div>
 	);
 };
 

@@ -28,12 +28,12 @@ const YouAreIn = (): React.JSX.Element => {
 			clearInterval(intervalId);
 			clearTimeout(timeOutId);
 		};
-	}, []);
+	}, [navigate]);
 
 	return (
 		<>
-			<section className="bg-white dark:bg-gray-900">
-				<div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+			<section className=" bg-white dark:bg-gray-900">
+				<div className="py-8 px-4 mx-auto max-w-7xl lg:py-16 lg:px-6">
 					<div className="mx-auto max-w-screen-sm text-center">
 						{/* <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">
         500
@@ -43,10 +43,12 @@ const YouAreIn = (): React.JSX.Element => {
       </p> */}
 						<img src="/You_Are_Already_Inside.svg" className="w-1/2 m-auto" />
 						<p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-							Redirecting to profile in {redirectIn}
+							Taking you back to profile in {redirectIn}s
 						</p>
 						<button
-							className="btn btn-primary"
+							className="bg-violet-600 text-white border border-violet-600 hover:bg-violet-700 px-4 py-1.5 rounded-full text-sm font-medium
+              transition-all
+              hover:scale-105 active:scale-95"
 							onClick={() => navigate("/profile")}
 						>
 							Go to Profile

@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
+import LegalLayout from "../layout/LegalLayout";
 
 const RefundPolicy = () => {
 	return (
-		<div className="max-w-4xl mx-auto p-6">
-			<h1 className="text-3xl font-bold mb-6">Refund & Cancellation Policy</h1>
-
+		<LegalLayout title="Refund & Cancellation Policy">
 			<p className="mb-4">
 				At <strong>GitTogether</strong>, all sales are final. Once a payment is
 				made, it is <strong>non-refundable</strong> and{" "}
@@ -21,12 +20,15 @@ const RefundPolicy = () => {
 			<h2 className="text-xl font-semibold mt-6 mb-2">Contact Us</h2>
 			<p>
 				For any queries related to payments, you can reach us at{" "}
-				<Link to={"/contact-us"} className="text-blue-600 underline">
+				<Link
+					to={"/contact-us"}
+					className="text-violet-600 underline hover:text-violet-700"
+				>
 					contact us
 				</Link>
 				.
 			</p>
-		</div>
+		</LegalLayout>
 	);
 };
 
