@@ -245,110 +245,110 @@ import { ChatDetails, Message } from "../../interface/ChatInterface";
 // };
 
 type MessageObj = {
-	senderUserId: string;
-	firstName: string;
-	lastName: string;
-	text: string;
-	createdAt: string;
+  senderUserId: string;
+  firstName: string;
+  lastName: string;
+  text: string;
+  createdAt: string;
 };
 
 const Chat: FC = () => {
-	const { targetUserId } = useParams();
-	const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const { targetUserId } = useParams();
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
-	const [messages, setMessages] = useState<Array<MessageObj>>([]);
-	const [newMessage, setNewMessage] = useState("");
-	const [chatDetails, setChatDetails] = useState<ChatDetails | null>(null);
-	const user = useAppSelector((store) => store.user.user);
-	const userId = user?._id;
-	//TODO: while api call is being made show loader/shimmer
-	//TODO: Handle error emitted from socket serverside
-	//TODO: Show green dot when online
-	//TODO: last seen by storing the information about the connection that timestamp can tell u last seen and keep  updating that
-	//TODO: Scroll down auto when new messages arrive in chat area
-	//TODO: Project Idea tictactoe game using socketIO
-	//TODO: Project Idea chess game using socketIO
-	//TODO: Games like typeracer socketIo
+  const [messages, setMessages] = useState<Array<MessageObj>>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [chatDetails, setChatDetails] = useState<ChatDetails | null>(null);
+  const user = useAppSelector((store) => store.user.user);
+  const userId = user?._id;
+  //TODO: while api call is being made show loader/shimmer
+  //TODO: Handle error emitted from socket serverside
+  //TODO: Show green dot when online
+  //TODO: last seen by storing the information about the connection that timestamp can tell u last seen and keep  updating that
+  //TODO: Scroll down auto when new messages arrive in chat area
+  //TODO: Project Idea tictactoe game using socketIO
+  //TODO: Project Idea chess game using socketIO
+  //TODO: Games like typeracer socketIo
 
-	// const selectConnectionByUserId = user?.connections.filter();
-	const getChatHistory = async () => {
-		const res = await api.get(`/chat/${targetUserId}`, {
-			withCredentials: true,
-		});
-		if (!res.status) {
-			console.error("ERROR"); //TODO: TOAST not error 403 not a connection yet
-		}
-		/**
-		 *Participants other than loggedInUser currently its only one cuz current setup is 2 person chat but scalable if goroup chats is used
-		 */
-		setChatDetails(res.data.data);
-		if (res.data.data?.messages.length !== 0) {
-			const oldMessages = res.data.data?.messages.map((msg: Message) => {
-				return {
-					senderUserId: msg.senderId._id,
-					firstName: msg.senderId.firstName,
-					lastName: msg.senderId.lastName,
-					text: msg.text,
-					createdAt: msg?.createdAt,
-				};
-			});
-			// if (oldMessages.length > 0) {
-			setMessages(oldMessages);
-			// }
-		}
-	};
+  // const selectConnectionByUserId = user?.connections.filter();
+  const getChatHistory = async () => {
+    const res = await api.get(`/chat/${targetUserId}`, {
+      withCredentials: true,
+    });
+    if (!res.status) {
+      console.error("ERROR"); //TODO: TOAST not error 403 not a connection yet
+    }
+    /**
+     *Participants other than loggedInUser currently its only one cuz current setup is 2 person chat but scalable if goroup chats is used
+     */
+    setChatDetails(res.data.data);
+    if (res.data.data?.messages.length !== 0) {
+      const oldMessages = res.data.data?.messages.map((msg: Message) => {
+        return {
+          senderUserId: msg.senderId._id,
+          firstName: msg.senderId.firstName,
+          lastName: msg.senderId.lastName,
+          text: msg.text,
+          createdAt: msg?.createdAt,
+        };
+      });
+      // if (oldMessages.length > 0) {
+      setMessages(oldMessages);
+      // }
+    }
+  };
 
-	useEffect(() => {
-		if (!userId) {
-			return;
-		}
-		getChatHistory();
-	}, []);
-	useEffect(() => {
-		if (!userId || !chatDetails) {
-			return;
-		}
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    getChatHistory();
+  }, []);
+  useEffect(() => {
+    if (!userId || !chatDetails) {
+      return;
+    }
 
-		const socket = createSocketConnection();
-		socket.emit("joinChat", {
-			// targetUserId: targetUserId?.trim(),
-			chatId: chatDetails?._id,
-		});
-		socket.on("messageReceived", (payload) => {
-			const { senderUserId, firstName, lastName, text, createdAt } = payload;
-			setMessages((prevMessages) => [
-				...prevMessages,
-				{
-					senderUserId,
-					firstName,
-					lastName,
-					text,
-					createdAt,
-				},
-			]);
-		});
-		socket.on("app_error", (payload) => {
-			console.error(payload);
-		});
-		socket.on("connect_error", (err) => {
-			console.error(err.message); // "NO_TOKEN"
-		});
+    const socket = createSocketConnection();
+    socket.emit("joinChat", {
+      // targetUserId: targetUserId?.trim(),
+      chatId: chatDetails?._id,
+    });
+    socket.on("messageReceived", (payload) => {
+      const { senderUserId, firstName, lastName, text, createdAt } = payload;
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          senderUserId,
+          firstName,
+          lastName,
+          text,
+          createdAt,
+        },
+      ]);
+    });
+    socket.on("app_error", (payload) => {
+      console.error(payload);
+    });
+    socket.on("connect_error", (err) => {
+      console.error(err.message); // "NO_TOKEN"
+    });
 
-		socket.on("err", (payload) => {
-			console.error(payload);
-		});
+    socket.on("err", (payload) => {
+      console.error(payload);
+    });
 
-		return () => {
-			socket.disconnect();
-		};
-	}, [userId, targetUserId, chatDetails]);
+    return () => {
+      socket.disconnect();
+    };
+  }, [userId, targetUserId, chatDetails]);
 
-	const sendMessage = () => {
-		if (newMessage.length === 0) {
-			return;
-		}
+  const sendMessage = () => {
+    if (newMessage.length === 0) {
+      return;
+    }
 
-		/**
+    /**
  * Very important architecture note (non-visual)
 
  Right now, you are creating a new socket on every send:
@@ -367,124 +367,126 @@ const Chat: FC = () => {
 
  reuse for send + receive
  */
-		const socket = createSocketConnection();
-		if (!newMessage.trim()) return;
-		if (!userId || !targetUserId) return;
+    const socket = createSocketConnection();
+    if (!newMessage.trim()) return;
+    if (!userId || !targetUserId) return;
 
-		socket.emit("sendMessage", {
-			chatId: chatDetails?._id,
-			// targetUserId,
-			text: newMessage.trim(),
-		});
+    socket.emit("sendMessage", {
+      chatId: chatDetails?._id,
+      // targetUserId,
+      text: newMessage.trim(),
+    });
 
-		setNewMessage("");
-		socket.on("app_error", (payload) => {
-			console.log(payload);
-		});
-		socket.on("connect_error", (err) => {
-			console.log(err.message); // "NO_TOKEN"
-		});
-	};
+    setNewMessage("");
+    socket.on("app_error", (payload) => {
+      console.log(payload);
+    });
+    socket.on("connect_error", (err) => {
+      console.log("connect_error");
+      console.log("message:", err.message);
+      console.log(err);
+    });
+  };
 
-	const localTime = (ISOString: string) => {
-		const time = new Date(ISOString).toLocaleTimeString([], {
-			hour: "2-digit",
-			minute: "2-digit",
-		});
+  const localTime = (ISOString: string) => {
+    const time = new Date(ISOString).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-		return time;
-	};
-	// const localDate = (ISOString: string) => {
-	// 	const date = new Date(ISOString).toLocaleDateString(undefined, {
-	// 		month: "short",
-	// 		day: "numeric",
-	// 		year: "numeric",
-	// 	});
-	// 	return date;
-	// };
+    return time;
+  };
+  // const localDate = (ISOString: string) => {
+  // 	const date = new Date(ISOString).toLocaleDateString(undefined, {
+  // 		month: "short",
+  // 		day: "numeric",
+  // 		year: "numeric",
+  // 	});
+  // 	return date;
+  // };
 
-	const imageUrl = useProfileImage(
-		chatDetails?.participants[0]?.profileImageMeta,
-	);
+  const imageUrl = useProfileImage(
+    chatDetails?.participants[0]?.profileImageMeta,
+  );
 
-	useEffect(() => {
-		const container = messagesContainerRef.current;
-		if (!container) return;
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
 
-		container.scrollTop = container.scrollHeight;
-	}, [messages]);
+    container.scrollTop = container.scrollHeight;
+  }, [messages]);
 
-	return (
-		<div className="min-h-screen bg-gray-50">
-			<div className="max-w-4xl mx-auto px-4 py-6 h-[calc(100vh-120px)] flex flex-col">
-				<div className="bg-white px-4 py-6 rounded-2xl shadow-sm flex flex-col h-full border border-gray-100">
-					<div className="flex items-center gap-3 pb-4 border-b border-gray-200">
-						<img
-							src={imageUrl}
-							alt="profile"
-							className="w-10 h-10 rounded-full object-center"
-						/>
-						<div>
-							<p className="font-medium text-gray-900">
-								{chatDetails?.participants[0]?.firstName}{" "}
-								{chatDetails?.participants[0]?.lastName}
-							</p>
-							<p className="text-xs text-gray-500">Active now</p>
-						</div>
-					</div>
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-4 py-6 h-[calc(100vh-120px)] flex flex-col">
+        <div className="bg-white px-4 py-6 rounded-2xl shadow-sm flex flex-col h-full border border-gray-100">
+          <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+            <img
+              src={imageUrl}
+              alt="profile"
+              className="w-10 h-10 rounded-full object-center"
+            />
+            <div>
+              <p className="font-medium text-gray-900">
+                {chatDetails?.participants[0]?.firstName}{" "}
+                {chatDetails?.participants[0]?.lastName}
+              </p>
+              <p className="text-xs text-gray-500">Active now</p>
+            </div>
+          </div>
 
-					<div
-						className="flex-1 overflow-y-auto py-4 space-y-2 overscroll-contain
+          <div
+            className="flex-1 overflow-y-auto py-4 space-y-2 overscroll-contain
 "
-						ref={messagesContainerRef}
-					>
-						{messages.map((msg, index) => {
-							return (
-								<div
-									key={index}
-									className={`flex ${
-										userId === msg.senderUserId
-											? "justify-end"
-											: "justify-start"
-									}`}
-								>
-									<div
-										className={`max-w-xs sm:max-w-md px-4 py-2 rounded-2xl text-sm
+            ref={messagesContainerRef}
+          >
+            {messages.map((msg, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`flex ${
+                    userId === msg.senderUserId
+                      ? "justify-end"
+                      : "justify-start"
+                  }`}
+                >
+                  <div
+                    className={`max-w-xs sm:max-w-md px-4 py-2 rounded-2xl text-sm
       ${
-				userId === msg.senderUserId
-					? "bg-violet-600 text-white rounded-br-md"
-					: "bg-gray-100 text-gray-900 rounded-bl-md"
-			}`}
-									>
-										{msg.text}
-										<div className="text-[10px] mt-1 opacity-60 text-right">
-											{localTime(msg.createdAt)}
-										</div>
-									</div>
-								</div>
-							);
-						})}
-					</div>
-					<div className="pt-4 px-4 border-t border-gray-200 flex items-center gap-2">
-						<input
-							value={newMessage}
-							onChange={(e) => setNewMessage(e.target.value)}
-							placeholder="Type a message…"
-							className="flex-1 min-w-0 px-4 py-2 rounded-xl border border-gray-300
+        userId === msg.senderUserId
+          ? "bg-violet-600 text-white rounded-br-md"
+          : "bg-gray-100 text-gray-900 rounded-bl-md"
+      }`}
+                  >
+                    {msg.text}
+                    <div className="text-[10px] mt-1 opacity-60 text-right">
+                      {localTime(msg.createdAt)}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="pt-4 px-4 border-t border-gray-200 flex items-center gap-2">
+            <input
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Type a message…"
+              className="flex-1 min-w-0 px-4 py-2 rounded-xl border border-gray-300
                focus:border-violet-500 focus:ring-2 focus:ring-violet-400
                outline-none"
-						/>
-						<button
-							onClick={sendMessage}
-							className="shrink-0 px-4 py-2 rounded-xl bg-violet-600 text-white
+            />
+            <button
+              onClick={sendMessage}
+              className="shrink-0 px-4 py-2 rounded-xl bg-violet-600 text-white
                hover:bg-violet-700 transition"
-						>
-							Send
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 export default Chat;
